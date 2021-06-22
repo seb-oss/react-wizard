@@ -23,6 +23,7 @@
     "node_modules",
     "dist",
     "**/.*",
-    "src/stories/**"
+    "src/stories/**",
+    "src/**/*.test.*"
   ]
 }
