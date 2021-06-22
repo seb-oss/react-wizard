@@ -5,15 +5,24 @@ import postcss from 'rollup-plugin-postcss';
 import typescript from 'rollup-plugin-typescript2';
 import pkg from './package.json';
 
-const input = ['src/index.ts'];
-const external = [
-  ...Object.keys(pkg.dependencies || {}),
-  ...Object.keys(pkg.peerDependencies || {}),
-];
 const globals = {
   react: 'React',
   'react-dom': 'ReactDOM',
 };
+const input = ['src/index.ts'];
+const output = {
+  entryFileNames: '[name].js',
+  esModule: true,
+  exports: 'auto',
+  globals,
+  preserveModules: true,
+  preserveModulesRoot: 'src',
+  sourcemap: true,
+};
+const external = [
+  ...Object.keys(pkg.dependencies || {}),
+  ...Object.keys(pkg.peerDependencies || {}),
+];
 const commonjsOptions = {};
 const nodeResolveOptions = {
   extensions: ['.js', '.tsx', '.ts'],
@@ -23,61 +32,45 @@ const rollupConfig = [
   {
     input,
     output: {
+      ...output,
       dir: 'dist/cjs',
-      entryFileNames: '[name].js',
-      esModule: true,
-      exports: 'auto',
       format: 'cjs',
-      globals,
-      preserveModules: true,
-      preserveModulesRoot: 'src',
-      sourcemap: true,
     },
     external,
     plugins: [
       peerDepsExternal(),
+      nodeResolve(nodeResolveOptions),
+      commonjs(commonjsOptions),
       typescript({
-        rollupCommonJSResolveHack: true,
         tsconfigOverride: {
           compilerOptions: {
-            declaration: true,
             declarationDir: 'dist/cjs',
           },
         },
       }),
       postcss(),
-      nodeResolve(nodeResolveOptions),
-      commonjs(commonjsOptions),
     ],
   },
   {
     input,
     output: {
+      ...output,
       dir: 'dist/esm',
-      entryFileNames: '[name].js',
-      esModule: true,
-      exports: 'auto',
       format: 'esm',
-      globals,
-      preserveModules: true,
-      preserveModulesRoot: 'src',
-      sourcemap: true,
     },
     external,
     plugins: [
       peerDepsExternal(),
+      nodeResolve(nodeResolveOptions),
+      commonjs(commonjsOptions),
       typescript({
-        rollupCommonJSResolveHack: true,
         tsconfigOverride: {
           compilerOptions: {
-            declaration: true,
             declarationDir: 'dist/esm',
           },
         },
       }),
       postcss(),
-      nodeResolve(nodeResolveOptions),
-      commonjs(commonjsOptions),
     ],
   },
 ];
