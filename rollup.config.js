@@ -30,13 +30,12 @@ const rollupConfig = [
       format: 'cjs',
       globals,
       preserveModules: true,
+      preserveModulesRoot: 'src',
       sourcemap: true,
     },
     external,
     plugins: [
       peerDepsExternal(),
-      nodeResolve(nodeResolveOptions),
-      commonjs(commonjsOptions),
       typescript({
         rollupCommonJSResolveHack: true,
         tsconfigOverride: {
@@ -47,6 +46,8 @@ const rollupConfig = [
         },
       }),
       postcss(),
+      nodeResolve(nodeResolveOptions),
+      commonjs(commonjsOptions),
     ],
   },
   {
@@ -59,13 +60,12 @@ const rollupConfig = [
       format: 'esm',
       globals,
       preserveModules: true,
+      preserveModulesRoot: 'src',
       sourcemap: true,
     },
     external,
     plugins: [
       peerDepsExternal(),
-      nodeResolve(nodeResolveOptions),
-      commonjs(commonjsOptions),
       typescript({
         rollupCommonJSResolveHack: true,
         tsconfigOverride: {
@@ -76,6 +76,8 @@ const rollupConfig = [
         },
       }),
       postcss(),
+      nodeResolve(nodeResolveOptions),
+      commonjs(commonjsOptions),
     ],
   },
 ];
