@@ -1,46 +1,56 @@
-# Getting Started with Create React App
+# React Wizard
+
+<!-- [![https://img.shields.io/npm/v/@sebgroup/react-wizard](https://img.shields.io/npm/v/@sebgroup/react-wizard)](https://www.npmjs.com/package/@sebgroup/react-wizard)
+![Deployment](https://github.com/sebgroup/react-wizard/workflows/Deployment/badge.svg)
+![Github Pages](https://github.com/sebgroup/react-wizard/workflows/Github%20Pages/badge.svg) -->
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+[![Coverage Status](https://coveralls.io/repos/github/sebgroup/react-wizard/badge.svg?branch=master)](https://coveralls.io/github/sebgroup/react-wizard?branch=master)
+<!-- [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=sebgroup/react-wizard)](https://dependabot.com) -->
+
+This is a set of react wizard components some of which are based on SEB's bootstrap. The plan for this project is to increase and improve components for future usage.
+
+- The package name: `@sebgroup/react-wizard`
+- The package documentation: [Documentation](https://sebgroup.github.io/react-wizard)
+- The package sourcecode: [Github Source Code](https://github.com/sebgroup/react-wizard)
+- NPM package: [@sebgroup/react-wizard](https://www.npmjs.com/package/@sebgroup/react-wizard)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Minimum requirements
 
-In the project directory, you can run:
+This version of components has been developed with:
 
-### `npm start`
+-   React
+-   Typescript
+-   SEB Bootstrap
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Installation
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+You should be able to install the NPM package.
 
-### `npm test`
+```bash
+npm install @sebgroup/react-wizard --save
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+This project is based on SEB Bootstrap which includes `fonts`, `colors` and `variables`, to make sure everything works fine, please install these dependencies on your project:
 
-### `npm run build`
+```bash
+npm install @sebgroup/bootstrap --save
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Then make sure you add the Main SEB bootstrap package in your main style.SCSS or index.ts as follows
+`@import '~@sebgroup/bootstrap/scss/bootstrap';`.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+For `Visual Studio Code` users, please install the [recommended plugins](.vscode/extensions.json)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Development
 
-### `npm run eject`
+This project uses `prettier` for a more consistent (less annoying) coding. The `src` folder is where the actual components exist with all their necessary dependencies.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. Development: `npm start`
+2. Check formatting rules, Compile components and Create Docs folder: `npm run build`
+3. Build and create the Documentation pages only: `npm run docs`
+4. To run the unit tests, run: `npm test`
+5. To run a unit test for a specific component you have to pass the name of the component, example: `npm test Wizard`. It can also be chained with multiple specific components, e.g. `npm test Wizard WizardHeader`
+6. To commit your changes run: `npm run commit` and follow the steps
