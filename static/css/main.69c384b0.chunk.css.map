@@ -1,1 +1,0 @@
-{"version":3,"file":"static/css/main.69c384b0.chunk.css","sources":["webpack:///src/components/Wizard/Wizard.scss","webpack:///src/components/WizardHeader/WizardHeader.scss"],"sourcesContent":[".wizard {\r\n  background-color: greenyellow;\r\n}\r\n",".wizard-header {\r\n  color: black;\r\n}\r\n"],"mappings":"AAAA;ACAA;","sourceRoot":""}
