@@ -1,7 +1,6 @@
+import { Meta, Story } from '@storybook/react';
 import React from 'react';
-import { Story, Meta } from '@storybook/react';
-
-import { Wizard, WizardProps } from '../components/Wizard';
+import Wizard, { WizardProps } from '../Wizard';
 
 export default {
   title: 'components/Wizard',
