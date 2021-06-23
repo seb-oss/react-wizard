@@ -5,6 +5,6 @@ import Wizard from './Wizard';
 describe('Component: Wizard', () => {
   it('Should render correctly', () => {
     const { container } = render(<Wizard />);
-    expect(container.children[0].className).toContain('wizard');
+    expect(container.children[0]).toHaveClass('wizard');
   });
 });
