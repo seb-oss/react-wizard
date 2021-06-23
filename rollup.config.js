@@ -4,12 +4,13 @@ import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import postcss from 'rollup-plugin-postcss';
 import typescript from 'rollup-plugin-typescript2';
 import pkg from './package.json';
+import componentsIndexes from './src/index.json'; // compiled during prebuild
 
 const globals = {
   react: 'React',
   'react-dom': 'ReactDOM',
 };
-const input = ['src/index.ts'];
+const input = ['src/index.ts', ...componentsIndexes];
 const output = {
   entryFileNames: '[name].js',
   esModule: true,

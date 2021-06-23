@@ -71,7 +71,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "prebuild": "rimraf dist/*",
+    "prebuild": "rimraf dist/* && node scripts/indexer.js",
     "build": "rollup -c",
     "build:watch": "rollup -c -w",
     "postbuild": "node scripts/postBuild.js",
