@@ -2,8 +2,8 @@
   "name": "@sebgroup/react-wizard",
   "version": "0.1.0",
   "private": true,
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
+  "main": "cjs/index.js",
+  "module": "esm/index.js",
   "homepage": "https://sebgroup.github.io/react-wizard",
   "repository": {
     "type": "git",
@@ -74,6 +74,7 @@
     "prebuild": "rimraf dist/*",
     "build": "rollup -c",
     "build:watch": "rollup -c -w",
+    "postbuild": "node scripts/postBuild.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006",
