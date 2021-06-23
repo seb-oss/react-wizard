@@ -70,17 +70,16 @@
     "typescript": "^4.1.3"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "start-storybook -p 6006",
     "prebuild": "rimraf dist/* && node scripts/indexer.js",
     "build": "rollup -c",
     "build:watch": "rollup -c -w",
     "postbuild": "node scripts/postBuild.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
-    "predeploy": "npm run build-storybook",
-    "deploy-storybook": "gh-pages -d storybook-static"
+    "docs": "build-storybook",
+    "predeploy-docs": "npm run docs",
+    "deploy-docs": "gh-pages -d storybook-static"
   },
   "eslintConfig": {
     "extends": [
