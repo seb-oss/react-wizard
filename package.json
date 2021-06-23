@@ -12,6 +12,7 @@
   "bugs": {
     "url": "https://github.com/sebgroup/react-wizard/issues"
   },
+  "license": "Apache License 2.0",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
