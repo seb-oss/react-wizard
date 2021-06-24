@@ -2,11 +2,30 @@ import React from 'react';
 import './WizardHeader.scss';
 
 export type WizardHeaderProps = {
+  /** Heading/text on the header. */
   heading: string;
+  /** Controls/actions to be displayed on the right of the header. */
+  actions?: React.ReactNodeArray;
 };
 
-const WizardHeader: React.FC<WizardHeaderProps> = ({ heading }) => {
-  return <div className="wizard-header">{heading}</div>;
+const WizardHeader: React.FC<WizardHeaderProps> = ({
+  actions,
+  heading,
+}: WizardHeaderProps) => {
+  return (
+    <div className="wizard-header">
+      <nav className="navbar navbar-light bg-white">
+        <span className="navbar-brand">{heading}</span>
+        <div className="wizard-actions">
+          <div className="d-flex align-items-center">
+            {actions?.map((action: React.ReactNode, i: number) => (
+              <React.Fragment key={i}>{action}</React.Fragment>
+            ))}
+          </div>
+        </div>
+      </nav>
+    </div>
+  );
 };
 
-export default WizardHeader;
+export default React.memo(WizardHeader);
