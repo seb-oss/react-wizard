@@ -8,8 +8,15 @@
 # testing
 /coverage
 
+# build
+/src/index.json
+
 # production
 /build
+/dist
+
+# storybook
+/storybook-static
 
 # misc
 .DS_Store
