@@ -30,6 +30,9 @@
     "node": ">=15.0.0",
     "npm": ">=7.0.0"
   },
+  "dependencies": {
+    "classnames": "^2.3.1"
+  },
   "devDependencies": {
     "@babel/cli": "^7.14.5",
     "@babel/core": "^7.14.6",
@@ -50,6 +53,7 @@
     "@types/react": "^17.0.11",
     "@types/react-dom": "^17.0.8",
     "babel-loader": "^8.2.2",
+    "css-loader": "^3.6.0",
     "gh-pages": "^3.2.3",
     "postcss": "^8.3.5",
     "react": "^17.0.2",
@@ -61,10 +65,13 @@
     "rollup-plugin-postcss": "^4.0.0",
     "rollup-plugin-typescript2": "^0.30.0",
     "sass": "^1.35.1",
-    "typescript": "~4.1.6",
+    "style-loader": "^1.3.0",
+    "typescript": "^4.1.3",
     "web-vitals": "^1.1.2"
   },
   "peerDependencies": {
+    "@sebgroup/bootstrap": "^5.4.1",
+    "@sebgroup/react-components": "^5.0.0-beta.15",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "typescript": "^4.1.3"
@@ -85,6 +92,35 @@
     "extends": [
       "react-app",
       "react-app/jest"
+    ]
+  },
+  "jest": {
+    "clearMocks": true,
+    "collectCoverageFrom": [
+      "src/**/*.(j|t)s?(x)",
+      "!src/**/*.d.ts",
+      "!src/**/index.(j|t)s?(x)",
+      "!src/**/*.stories.(j|t)s?(x)",
+      "!src/index.(j|t)s?(x)",
+      "!src/reportWebVitals.ts"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
+      }
+    },
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text",
+      "clover",
+      "cobertura"
+    ],
+    "transformIgnorePatterns": [
+      "/node_modules/(?!(react|@sebgroup/react-components|@sebgroup/frontend-tools)/)"
     ]
   },
   "browserslist": {

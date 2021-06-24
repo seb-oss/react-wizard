@@ -33,10 +33,12 @@ You should be able to install the NPM package.
 npm install @sebgroup/react-wizard --save
 ```
 
-This project is based on SEB Bootstrap which includes `fonts`, `colors` and `variables`, to make sure everything works fine, please install these dependencies on your project:
+This project is based on SEB Bootstrap and SEB React Components, to make sure everything works fine, please install these dependencies on your project:
 
 ```bash
 npm install @sebgroup/bootstrap --save
+
+npm install @sebgroup/react-components --save
 ```
 
 Then make sure you add the Main SEB bootstrap package in your main style.SCSS or index.ts as follows
@@ -48,9 +50,10 @@ For `Visual Studio Code` users, please install the [recommended plugins](.vscode
 
 This project uses `prettier` for a more consistent (less annoying) coding. The `src` folder is where the actual components exist with all their necessary dependencies.
 
+1. Installation `npm ci` or `npm i --legacy-peer-deps && npm i`
 1. Development: `npm start`
-2. Check formatting rules, Compile components and Create Docs folder: `npm run build`
-3. Build and create the Documentation pages only: `npm run docs`
-4. To run the unit tests, run: `npm test`
-5. To run a unit test for a specific component you have to pass the name of the component, example: `npm test Wizard`. It can also be chained with multiple specific components, e.g. `npm test Wizard WizardHeader`
-6. To commit your changes run: `npm run commit` and follow the steps
+1. Check formatting rules, Compile components: `npm run build`
+1. Build and create the Documentation pages only: `npm run docs`
+1. To run the unit tests, run: `npm test`
+1. To run a unit test for a specific component you have to pass the name of the component, example: `npm test Wizard`. It can also be chained with multiple specific components, e.g. `npm test Wizard WizardHeader`
+1. To commit your changes run: `npm run commit` and follow the steps
