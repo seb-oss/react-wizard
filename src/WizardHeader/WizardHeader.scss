@@ -1,3 +1,13 @@
 .wizard-header {
-  color: black;
+  .navbar {
+    height: 3.5rem;
+  }
+}
+
+.wizard-actions {
+  button {
+    &:nth-of-type(n + 2) {
+      margin-left: 1rem;
+    }
+  }
 }
