@@ -9,11 +9,11 @@
 
 @include media-breakpoint-up(md) {
   $wizard-controls-height: 2.75rem;
-  $wizard-step-spacing: 3rem;
+  $wizard-step-spacing: 2rem;
 
   .wizard-step {
     max-height: calc(
-      100vh - #{$wizard-controls-height} - #{$wizard-step-spacing}
+      100vh - #{$wizard-header-height} - #{$wizard-step-spacing} - #{$wizard-controls-height}
     );
     overflow-y: auto;
   }
