@@ -1,6 +1,8 @@
+@import 'src/styles';
+
 .wizard-header {
   .navbar {
-    height: 3.5rem;
+    height: $wizard-header-height;
   }
 }
 
