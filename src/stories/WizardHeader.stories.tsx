@@ -23,12 +23,12 @@ export default {
 
 const Template: Story<WizardHeaderProps> = (args) => <WizardHeader {...args} />;
 
-export const Default = Template.bind({});
+export const Default: Story<WizardHeaderProps> = Template.bind({});
 Default.args = {
   heading: 'Wizard header',
 };
 
-export const WithActions = Template.bind({});
+export const WithActions: Story<WizardHeaderProps> = Template.bind({});
 WithActions.args = {
   heading: 'Wizard header with actions',
   actions: [

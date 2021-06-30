@@ -36,7 +36,7 @@ const Template: Story<WizardProps> = ({ ref, ...args }) => {
   );
 };
 
-export const Default = Template.bind({});
+export const Default: Story<WizardProps> = Template.bind({});
 Default.args = {
   toggle: false,
   onDismissed: action('dismissed'),
