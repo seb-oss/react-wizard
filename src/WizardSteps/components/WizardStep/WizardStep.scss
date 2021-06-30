@@ -1,0 +1,38 @@
+@import 'src/styles';
+
+.wizard-main {
+  max-width: $wizard-content-max-width;
+}
+
+.wizard-secondary-content {
+}
+
+@include media-breakpoint-up(md) {
+  $wizard-controls-height: 2.75rem;
+  $wizard-step-spacing: 3rem;
+
+  .wizard-step {
+    max-height: calc(
+      100vh - #{$wizard-controls-height} - #{$wizard-step-spacing}
+    );
+    overflow-y: auto;
+  }
+
+  // increase selector specificity to avoid storybook namespace clutter
+  .container-fluid {
+    .wizard-controls {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      left: $wizard-navigation-width;
+      padding: $spacer;
+      border-top: 1px solid $gray-300;
+      background: $white;
+      transition: all 0.4s ease-out;
+
+      .form-row {
+        max-width: $wizard-content-max-width;
+      }
+    }
+  }
+}
