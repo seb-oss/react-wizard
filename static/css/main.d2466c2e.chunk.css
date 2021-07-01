@@ -1,0 +1,7 @@
+
+.wizard-header .navbar{height:3.5rem}.wizard-actions button:nth-of-type(n + 2){margin-left:1rem}
+.wizard-controls .btn{text-transform:capitalize}
+.wizard-main{max-width:768px}@media(min-width: 768px){.wizard-step{max-height:calc( 100vh - 3.5rem - 2rem - 2.75rem );overflow-y:auto}.container-fluid .wizard-controls{position:fixed;right:0;bottom:0;left:20rem;padding:1rem;border-top:1px solid #dedede;background:#fff;transition:all .4s ease-out}.container-fluid .wizard-controls .form-row{max-width:768px}}
+.wizard-navigations{width:20rem}
+
+/*# sourceMappingURL=main.d2466c2e.chunk.css.map*/
