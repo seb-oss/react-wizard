@@ -10,13 +10,13 @@ import * as WizardStepsStories from './WizardSteps.stories';
 export default {
   title: 'components/Wizard',
   component: Wizard,
+  subcomponents: {
+    WizardHeader,
+    WizardSteps,
+  },
   argTypes: {},
   decorators: [
-    (Story) => (
-      <MemoryRouter initialEntries={['/']}>
-        <Story />
-      </MemoryRouter>
-    ),
+    (Story) => <MemoryRouter initialEntries={['/']}>{Story()}</MemoryRouter>,
   ],
 } as Meta;
 
@@ -44,6 +44,8 @@ const Template: Story<WizardProps> = ({ ref, ...args }) => {
           ]}
         />
         <WizardSteps
+          navigationMobileHeading="Introduction"
+          navigationMobileDescription="Step {activeStep} of {totalSteps}"
           steps={[
             ...WizardStepsStories.Default.args.steps,
             ...WizardStepsStories.WithSecondaryContent.args.steps,
