@@ -1,0 +1,83 @@
+import React from 'react';
+import { useNavigationContext } from '../../../contexts/navigationContext';
+import WizardControls, { WizardControl } from '../WizardControls';
+import './WizardStep.scss';
+
+export type WizardStepData = {
+  /**
+   * Heading text in each step. If no page header is defined the heading will
+   * be used as page heading too.
+   * */
+  heading: string;
+  /**
+   * Page heading for step. If no page heading is defined the wizard will
+   * fall back to heading instead.
+   * */
+  pageHeading?: string;
+  /**
+   * Add controls/actions in the footer of the step, if no controls were
+   * provided, controls for previous and next will be added by default.
+   * */
+  controls?: Array<WizardControl>;
+  /**
+   * Set state for a step (adds icon and highlights state in navigation),
+   * it can be used to highlight and clarify wizard progress - completed
+   * steps, errors etc. By default steps will be marked as finished or
+   * completed when you've passed them.
+   * */
+  state?: WizardStepState;
+  /** Add secondary content to the step. */
+  secondaryContent?: React.ReactNode;
+};
+
+export type WizardStepProps = WizardStepData & {
+  /** The step number of the current step */
+  step: number;
+};
+
+export type WizardControlType = 'next' | 'prev' | 'cancel' | 'save' | 'close';
+
+export type WizardStepState = 'success' | 'warning' | 'danger' | 'info';
+
+const WizardStep: React.FC<WizardStepProps> = ({
+  children,
+  heading,
+  pageHeading,
+  secondaryContent,
+  step,
+  controls,
+}) => {
+  const { setStep } = useNavigationContext();
+
+  React.useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
+  React.useEffect(() => {
+    setStep(step);
+  }, [step, setStep]);
+
+  return (
+    <>
+      <div className="container-fluid p-3 p-md-4 px-xl-5 wizard-step">
+        <h2 className="h5 font-weight-normal">{heading}</h2>
+        <h3 className="h2">{pageHeading || heading}</h3>
+        <div className="row no-gutters">
+          <div className="col-12 col-lg order-1 order-md-0 mr-lg-3 wizard-main">
+            {children}
+          </div>
+          {secondaryContent && (
+            <div className="col-12 col-lg-auto order-last ml-lg-3 mb-3 wizard-secondary-content">
+              {secondaryContent}
+            </div>
+          )}
+        </div>
+      </div>
+      <div className="container-fluid">
+        <WizardControls controls={controls} />
+      </div>
+    </>
+  );
+};
+
+export default React.memo(WizardStep);

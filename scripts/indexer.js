@@ -9,7 +9,9 @@ const components = fs
     (name) =>
       fs.lstatSync(path.resolve(source, name)).isDirectory() &&
       !name.startsWith('__') &&
-      !name.startsWith('stories')
+      !name.startsWith('contexts') &&
+      !name.startsWith('stories') &&
+      !name.startsWith('styles')
   );
 
 const indexes = components.map((name) => `./src/${name}/index.ts`);

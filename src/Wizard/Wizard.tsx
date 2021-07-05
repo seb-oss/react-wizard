@@ -17,6 +17,7 @@ const Wizard = React.forwardRef(
   ) => {
     return (
       <Modal
+        className={classnames({ hide: !toggle })}
         toggle={toggle}
         onBackdropDismiss={onDismissed}
         onEscape={onDismissed}

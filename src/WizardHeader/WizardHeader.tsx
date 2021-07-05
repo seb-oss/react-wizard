@@ -8,13 +8,10 @@ export type WizardHeaderProps = {
   actions?: React.ReactNodeArray;
 };
 
-const WizardHeader: React.FC<WizardHeaderProps> = ({
-  actions,
-  heading,
-}: WizardHeaderProps) => {
+const WizardHeader: React.FC<WizardHeaderProps> = ({ actions, heading }) => {
   return (
     <div className="wizard-header">
-      <nav className="navbar navbar-light bg-white">
+      <nav className="navbar navbar-light border-bottom bg-white">
         <span className="navbar-brand">{heading}</span>
         <div className="wizard-actions">
           <div className="d-flex align-items-center">

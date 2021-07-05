@@ -1,12 +1,23 @@
 import { action } from '@storybook/addon-actions';
 import { Meta, Story } from '@storybook/react';
 import React from 'react';
+import { MemoryRouter } from 'react-router-dom';
 import Wizard, { WizardProps } from '../Wizard';
+import WizardHeader from '../WizardHeader';
+import WizardSteps from '../WizardSteps';
+import * as WizardStepsStories from './WizardSteps.stories';
 
 export default {
   title: 'components/Wizard',
   component: Wizard,
   argTypes: {},
+  decorators: [
+    (Story) => (
+      <MemoryRouter initialEntries={['/']}>
+        <Story />
+      </MemoryRouter>
+    ),
+  ],
 } as Meta;
 
 const Template: Story<WizardProps> = ({ ref, ...args }) => {
@@ -24,19 +35,27 @@ const Template: Story<WizardProps> = ({ ref, ...args }) => {
         </button>
       </div>
       <Wizard {...args} toggle={toggle}>
-        <div className="d-flex justify-content-between">
-          <h2>Wizard Title</h2>
-          <button className="btn" onClick={() => setToggle(false)}>
-            X
-          </button>
-        </div>
-        <div>Wizard content</div>
+        <WizardHeader
+          heading="Wizard Title"
+          actions={[
+            <button className="btn" onClick={() => setToggle(false)}>
+              X
+            </button>,
+          ]}
+        />
+        <WizardSteps
+          steps={[
+            ...WizardStepsStories.Default.args.steps,
+            ...WizardStepsStories.WithSecondaryContent.args.steps,
+            ...WizardStepsStories.WithCustomControls.args.steps,
+          ]}
+        />
       </Wizard>
     </>
   );
 };
 
-export const Default = Template.bind({});
+export const Default: Story<WizardProps> = Template.bind({});
 Default.args = {
   toggle: false,
   onDismissed: action('dismissed'),
