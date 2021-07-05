@@ -1,0 +1,75 @@
+@import 'src/styles';
+
+$animation-duration: 400ms;
+$animation-timing: ease-in-out;
+
+.wizard-navigations {
+  &__toggle {
+    cursor: pointer;
+
+    &::after {
+      content: '';
+      width: 1.5rem;
+      height: 1.5rem;
+      margin-top: 3px;
+      margin-right: 1rem;
+      background: url('../../../assets/icons/chevron-down.svg') no-repeat center;
+      transform: rotate(0deg);
+      transition: all $animation-duration $animation-timing;
+    }
+
+    &--active {
+      &::after {
+        transform: rotate(-180deg);
+      }
+    }
+  }
+
+  .list-group {
+    &.list-group-ordered {
+      counter-reset: list-order;
+    }
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .wizard-navigations {
+    width: $wizard-navigation-width;
+  }
+}
+
+@include media-breakpoint-down(md) {
+  .wizard-navigations {
+    .list-group {
+      &-enter {
+        opacity: 0;
+        transform: scaleY(0.5);
+      }
+
+      &-enter-active {
+        opacity: 1;
+        transform: scaleY(1);
+        transform-origin: top;
+        transition: opacity $animation-duration $animation-timing,
+          transform $animation-duration $animation-timing;
+      }
+
+      &-exit {
+        opacity: 1;
+        transform: scaleY(1);
+      }
+
+      &-exit-active {
+        opacity: 0;
+        transform: scaleY(0);
+        transform-origin: top;
+        transition: opacity $animation-duration $animation-timing,
+          transform $animation-duration $animation-timing;
+      }
+
+      &-exit-done {
+        display: none;
+      }
+    }
+  }
+}
