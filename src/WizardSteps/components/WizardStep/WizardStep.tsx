@@ -37,25 +37,35 @@ export type WizardStepProps = WizardStepData & {
 
 export type WizardControlType = 'next' | 'prev' | 'cancel' | 'save' | 'close';
 
-export type WizardStepState = 'success' | 'warning' | 'danger' | 'info';
+export type WizardStepState =
+  | 'success'
+  | 'warning'
+  | 'danger'
+  | 'info'
+  | undefined;
 
 const WizardStep: React.FC<WizardStepProps> = ({
   children,
   heading,
   pageHeading,
   secondaryContent,
+  state,
   step,
   controls,
 }) => {
-  const { setStep } = useNavigationContext();
+  const { setActiveState, setActiveStep } = useNavigationContext();
 
   React.useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
   React.useEffect(() => {
-    setStep(step);
-  }, [step, setStep]);
+    setActiveStep(step);
+  }, [step, setActiveStep]);
+
+  React.useEffect(() => {
+    setActiveState(state);
+  }, [state, setActiveState]);
 
   return (
     <>

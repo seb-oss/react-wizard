@@ -17,17 +17,22 @@ describe('Component: WizardStep', () => {
     step: 1,
     heading: 'Step heading',
     pageHeading: 'Step page heading',
+    state: 'info',
   };
-  let mockSetStep: jest.Mock;
+  let mockSetActiveState: jest.Mock;
+  let mockSetActiveStep: jest.Mock;
 
   beforeEach(() => {
-    mockSetStep = jest.fn();
+    mockSetActiveState = jest.fn();
+    mockSetActiveStep = jest.fn();
     mockedUseNavigationContext.mockImplementation(() => ({
+      activeState: undefined,
       activeStep: 0,
       isValidStep: jest.fn(),
       nextStep: jest.fn(),
       previousStep: jest.fn(),
-      setStep: mockSetStep,
+      setActiveState: mockSetActiveState,
+      setActiveStep: mockSetActiveStep,
     }));
   });
 
@@ -56,8 +61,17 @@ describe('Component: WizardStep', () => {
   });
 
   it('Should configured current step as active step', () => {
-    expect(mockSetStep).not.toHaveBeenCalled();
+    expect(mockSetActiveStep).not.toHaveBeenCalled();
     render(<WizardStep {...wizardStepProps} />);
-    expect(mockSetStep).toHaveBeenNthCalledWith(1, wizardStepProps.step);
+    expect(mockSetActiveStep).toHaveBeenNthCalledWith(1, wizardStepProps.step);
+  });
+
+  it('Should configured current state as active state', () => {
+    expect(mockSetActiveState).not.toHaveBeenCalled();
+    render(<WizardStep {...wizardStepProps} />);
+    expect(mockSetActiveState).toHaveBeenNthCalledWith(
+      1,
+      wizardStepProps.state
+    );
   });
 });
