@@ -21,7 +21,7 @@ export type WizardNavigationsProps = {
    *  </tr>
    *  <tr>
    *    <td>activeStep</td>
-   *    <td>the current active step index</td>
+   *    <td>the current active step number</td>
    *  </tr>
    *  <tr>
    *    <td>totalSteps</td>
@@ -51,46 +51,44 @@ const WizardNavigations: React.FC<WizardNavigationsProps> = ({
   const { activeStep, isValidStep } = useNavigationContext();
   const [toggle, setToggle] = React.useState<boolean>(true);
   return (
-    <nav className="wizard-navigations">
-      <div className="bg-secondary py-3">
-        <div
-          className={classnames(
-            'd-md-none d-flex justify-content-between',
-            'wizard-navigations__toggle',
-            {
-              'wizard-navigations__toggle--active': toggle,
-            }
-          )}
-          onClick={() => setToggle(!toggle)}
-          role="button"
-        >
-          <div className="pl-3 pl-md-0 toggle-content">
-            <h2 className="mb-1">{mobileHeading}</h2>
-            <span className="small">
-              {pupa(mobileDescription, {
-                [PlaceholderTokens.ACTIVE_STEP]: activeStep + 1,
-                [PlaceholderTokens.TOTAL_STEP]: navigations.length,
-              })}
-            </span>
-          </div>
+    <nav className="wizard-navigations bg-secondary py-3">
+      <div
+        className={classnames(
+          'd-md-none d-flex justify-content-between',
+          'wizard-navigations__toggle',
+          {
+            'wizard-navigations__toggle--active': toggle,
+          }
+        )}
+        onClick={() => setToggle(!toggle)}
+        role="button"
+      >
+        <div className="pl-3 pl-md-0 toggle-content">
+          <h2 className="mb-1">{mobileHeading}</h2>
+          <span className="small">
+            {pupa(mobileDescription, {
+              [PlaceholderTokens.ACTIVE_STEP]: activeStep + 1,
+              [PlaceholderTokens.TOTAL_STEP]: navigations.length,
+            })}
+          </span>
         </div>
-        {
-          <CSSTransition classNames="list-group" in={toggle} timeout={400}>
-            <ol className="list-group list-group-ordered d-md-flex mt-3">
-              {navigations.map((props: WizardNavigationData, step: number) => {
-                return (
-                  <WizardNavigation
-                    key={`${props.path}_${props.label}`}
-                    {...props}
-                    step={step}
-                    onClick={() => isValidStep(step) && setToggle(false)}
-                  />
-                );
-              })}
-            </ol>
-          </CSSTransition>
-        }
       </div>
+      {
+        <CSSTransition classNames="list-group" in={toggle} timeout={400}>
+          <ol className="list-group list-group-ordered d-md-flex mt-3">
+            {navigations.map((props: WizardNavigationData, step: number) => {
+              return (
+                <WizardNavigation
+                  key={`${props.path}_${props.label}`}
+                  {...props}
+                  step={step}
+                  onClick={() => isValidStep(step) && setToggle(false)}
+                />
+              );
+            })}
+          </ol>
+        </CSSTransition>
+      }
     </nav>
   );
 };

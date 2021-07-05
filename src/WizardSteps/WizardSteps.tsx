@@ -24,7 +24,7 @@ export type WizardStepsProps = {
    *  </tr>
    *  <tr>
    *    <td>activeStep</td>
-   *    <td>the current active step index</td>
+   *    <td>the current active step number</td>
    *  </tr>
    *  <tr>
    *    <td>totalSteps</td>
@@ -106,7 +106,7 @@ const WizardSteps: React.FC<WizardStepsProps> = (props) => {
   );
   return (
     <NavigationProvider routes={routes}>
-      <div className="row no-gutters">
+      <div className="row no-gutters wizard-steps">
         <div className="col-12 col-md-auto">
           <WizardNavigations
             mobileHeading={navigationMobileHeading}
@@ -114,7 +114,7 @@ const WizardSteps: React.FC<WizardStepsProps> = (props) => {
             navigations={navigations}
           />
         </div>
-        <div className="col-12 col-md bg-white">
+        <div className="col-12 col-md bg-white wizard-main-container">
           <Switch>
             <WizardRoutes steps={steps} />
           </Switch>

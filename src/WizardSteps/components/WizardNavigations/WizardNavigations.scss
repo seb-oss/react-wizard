@@ -32,13 +32,7 @@ $animation-timing: ease-in-out;
   }
 }
 
-@include media-breakpoint-up(md) {
-  .wizard-navigations {
-    width: $wizard-navigation-width;
-  }
-}
-
-@include media-breakpoint-down(md) {
+@include media-breakpoint-down(sm) {
   .wizard-navigations {
     .list-group {
       &-enter {
