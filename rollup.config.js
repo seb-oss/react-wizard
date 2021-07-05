@@ -1,7 +1,7 @@
 import commonjs from '@rollup/plugin-commonjs';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
-import postcss from 'rollup-plugin-postcss';
+import styles from 'rollup-plugin-styles';
 import typescript from 'rollup-plugin-typescript2';
 import pkg from './package.json';
 import componentsIndexes from './src/index.json'; // compiled during prebuild
@@ -49,7 +49,7 @@ const rollupConfig = [
           },
         },
       }),
-      postcss(),
+      styles(),
     ],
   },
   {
@@ -71,7 +71,7 @@ const rollupConfig = [
           },
         },
       }),
-      postcss(),
+      styles(),
     ],
   },
 ];
