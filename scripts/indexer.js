@@ -9,6 +9,7 @@ const components = fs
     (name) =>
       fs.lstatSync(path.resolve(source, name)).isDirectory() &&
       !name.startsWith('__') &&
+      !name.startsWith('assets') &&
       !name.startsWith('contexts') &&
       !name.startsWith('stories') &&
       !name.startsWith('styles')
