@@ -12,9 +12,7 @@ export default {
   argTypes: {},
   decorators: [
     (Story) => (
-      <NavigationProvider routes={['/']}>
-        <Story />
-      </NavigationProvider>
+      <NavigationProvider routes={['/']}>{Story()}</NavigationProvider>
     ),
   ],
 } as Meta;
@@ -32,17 +30,17 @@ WithCustomControls.args = {
     {
       type: 'prev',
       label: 'backward',
-      onClicked: action('previous-button-click'),
+      onClick: action('previous-button-click'),
     },
     {
       type: 'cancel',
       label: 'cancel',
-      onClicked: action('cancel-button-click'),
+      onClick: action('cancel-button-click'),
     },
     {
       type: 'next',
       label: 'Forward',
-      onClicked: action('next-button-click'),
+      onClick: action('next-button-click'),
     },
   ],
 };

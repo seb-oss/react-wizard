@@ -21,10 +21,12 @@ describe('Component: WizardControls', () => {
     mockPreviousStep = jest.fn();
     mockedUseNavigationContext.mockImplementation(() => ({
       activeStep: 0,
+      activeState: undefined,
       isValidStep: jest.fn(),
       nextStep: mockNextStep,
       previousStep: mockPreviousStep,
-      setStep: jest.fn(),
+      setActiveState: jest.fn(),
+      setActiveStep: jest.fn(),
     }));
   });
 
@@ -53,17 +55,17 @@ describe('Component: WizardControls', () => {
       {
         type: 'prev',
         label: 'backward',
-        onClicked: jest.fn().mockReturnValue(true),
+        onClick: jest.fn().mockReturnValue(true),
       },
       {
         type: 'cancel',
         label: 'cancel',
-        onClicked: jest.fn().mockReturnValue(true),
+        onClick: jest.fn().mockReturnValue(true),
       },
       {
         type: 'next',
         label: 'forward',
-        onClicked: jest.fn().mockResolvedValue(true),
+        onClick: jest.fn().mockResolvedValue(true),
       },
     ];
     render(<WizardControls controls={controls} />);
@@ -71,29 +73,29 @@ describe('Component: WizardControls', () => {
     const backButton = screen.getByText('backward');
     expect(backButton).toBeInTheDocument();
     expect(mockPreviousStep).not.toHaveBeenCalled();
-    expect(controls[0].onClicked).not.toHaveBeenCalled();
+    expect(controls[0].onClick).not.toHaveBeenCalled();
     await waitFor(() => {
       fireEvent.click(backButton);
     });
-    expect(controls[0].onClicked).toHaveBeenCalledTimes(1);
+    expect(controls[0].onClick).toHaveBeenCalledTimes(1);
     expect(mockPreviousStep).toHaveBeenCalledTimes(1);
     // cancel button assertion
     const cancelButton = screen.getByText('cancel');
     expect(cancelButton).toBeInTheDocument();
-    expect(controls[1].onClicked).not.toHaveBeenCalled();
+    expect(controls[1].onClick).not.toHaveBeenCalled();
     await waitFor(() => {
       fireEvent.click(cancelButton);
     });
-    expect(controls[1].onClicked).toHaveBeenCalledTimes(1);
+    expect(controls[1].onClick).toHaveBeenCalledTimes(1);
     // next button assertion
     const nextButton = screen.getByText('forward');
     expect(nextButton).toBeInTheDocument();
     expect(mockNextStep).not.toHaveBeenCalled();
-    expect(controls[2].onClicked).not.toHaveBeenCalled();
+    expect(controls[2].onClick).not.toHaveBeenCalled();
     await waitFor(() => {
       fireEvent.click(nextButton);
     });
-    expect(controls[2].onClicked).toHaveBeenCalledTimes(1);
+    expect(controls[2].onClick).toHaveBeenCalledTimes(1);
     expect(mockNextStep).toHaveBeenCalledTimes(1);
   });
 
@@ -102,32 +104,32 @@ describe('Component: WizardControls', () => {
       {
         type: 'prev',
         label: 'backward',
-        onClicked: jest.fn().mockReturnValue(false),
+        onClick: jest.fn().mockReturnValue(false),
       },
       {
         type: 'next',
         label: 'forward',
-        onClicked: jest.fn().mockResolvedValue(false),
+        onClick: jest.fn().mockResolvedValue(false),
       },
     ];
     render(<WizardControls controls={controls} />);
     // back button assertion
     const backButton = screen.getByText('backward');
     expect(mockPreviousStep).not.toHaveBeenCalled();
-    expect(controls[0].onClicked).not.toHaveBeenCalled();
+    expect(controls[0].onClick).not.toHaveBeenCalled();
     await waitFor(() => {
       fireEvent.click(backButton);
     });
-    expect(controls[0].onClicked).toHaveBeenCalledTimes(1);
+    expect(controls[0].onClick).toHaveBeenCalledTimes(1);
     expect(mockPreviousStep).not.toHaveBeenCalled();
     // next button assertion
     const nextButton = screen.getByText('forward');
     expect(mockNextStep).not.toHaveBeenCalled();
-    expect(controls[1].onClicked).not.toHaveBeenCalled();
+    expect(controls[1].onClick).not.toHaveBeenCalled();
     await waitFor(() => {
       fireEvent.click(nextButton);
     });
-    expect(controls[1].onClicked).toHaveBeenCalledTimes(1);
+    expect(controls[1].onClick).toHaveBeenCalledTimes(1);
     expect(mockNextStep).not.toHaveBeenCalled();
   });
 });
