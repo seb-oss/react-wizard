@@ -1,14 +1,43 @@
 import React from 'react';
-import { Link, Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import {
   NavigationProvider,
   useNavigationContext,
 } from '../contexts/navigationContext';
+import { WizardNavigationData } from './components/WizardNavigation';
+import WizardNavigations from './components/WizardNavigations';
 import WizardStep, { WizardStepData } from './components/WizardStep';
 import './WizardSteps.scss';
 
 export type WizardStepsProps = {
-  /** A series of ordered steps to be managed by the wizard, it relies on react router for navigations */
+  /**
+   * Heading text for mobile navigations, it is only visible in mobile viewport.
+   */
+  navigationMobileHeading: string;
+  /**
+   * Description text for mobile navigations, it is only visible in mobile viewport.
+   * It supports tokens injection, the list of placeholders available are as follow:
+   * <table>
+   *  <tr>
+   *    <th>Placeholder</th>
+   *    <th>Description</th>
+   *  </tr>
+   *  <tr>
+   *    <td>activeStep</td>
+   *    <td>the current active step index</td>
+   *  </tr>
+   *  <tr>
+   *    <td>totalSteps</td>
+   *    <td>the total number of steps available</td>
+   *  </tr>
+   * </table>
+   * Example: `Step {activeStep} of {totalStep}`, @see PlaceholderTokens
+   */
+  navigationMobileDescription: string;
+  /**
+   * A series of ordered steps to be managed by the wizard, it relies on
+   * react router for navigations
+   * */
   steps: Array<WizardStepConfig>;
 };
 
@@ -21,17 +50,20 @@ export type WizardStepConfig = {
   /** The label of the step in the navigation links. */
   label: string;
   /** The component to be displayed when the route matches the step path. */
-  component: React.ReactNode;
+  component: React.ComponentType<any>;
   /** Additional data for the Step component */
   data: WizardStepData;
 };
 
-const WizardRoutes: React.FC<WizardStepsProps> = ({ steps }) => {
+const WizardRoutes: React.FC<Pick<WizardStepsProps, 'steps'>> = ({ steps }) => {
   const { activeStep, isValidStep } = useNavigationContext();
   return (
     <>
       {steps.map(
-        ({ path, component, data }: WizardStepConfig, step: number) => (
+        (
+          { path, component: StepComponent, data }: WizardStepConfig,
+          step: number
+        ) => (
           <Route
             key={path}
             exact
@@ -40,7 +72,9 @@ const WizardRoutes: React.FC<WizardStepsProps> = ({ steps }) => {
               // step guard, user can only navigate to previous and immediate next step
               if (isValidStep(step)) {
                 return (
-                  <WizardStep {...{ ...data, step }}>{component}</WizardStep>
+                  <WizardStep {...{ ...data, step }}>
+                    <StepComponent />
+                  </WizardStep>
                 );
               }
 
@@ -53,23 +87,32 @@ const WizardRoutes: React.FC<WizardStepsProps> = ({ steps }) => {
   );
 };
 
-const WizardSteps: React.FC<WizardStepsProps> = ({ steps }) => {
+const WizardSteps: React.FC<WizardStepsProps> = (props) => {
+  const { navigationMobileHeading, navigationMobileDescription, steps } = props;
+  const navigations: Array<WizardNavigationData> = React.useMemo(
+    () =>
+      steps.map<WizardNavigationData>(
+        ({ label, path, data: { state } }: WizardStepConfig) => ({
+          label,
+          path,
+          state,
+        })
+      ),
+    [steps]
+  );
   const routes: Array<string> = React.useMemo(
-    () => steps.map(({ path }: WizardStepConfig) => path),
+    () => steps.map<string>(({ path }: WizardStepConfig) => path),
     [steps]
   );
   return (
     <NavigationProvider routes={routes}>
       <div className="row no-gutters">
         <div className="col-12 col-md-auto">
-          {/* TODO: replace with WizardNavigations component */}
-          <div className="wizard-navigations">
-            {steps.map(({ path, label }) => (
-              <p key={path}>
-                <Link to={path}>{label}</Link>
-              </p>
-            ))}
-          </div>
+          <WizardNavigations
+            mobileHeading={navigationMobileHeading}
+            mobileDescription={navigationMobileDescription}
+            navigations={navigations}
+          />
         </div>
         <div className="col-12 col-md bg-white">
           <Switch>
