@@ -50,6 +50,11 @@ const WizardNavigations: React.FC<WizardNavigationsProps> = ({
 }) => {
   const { activeStep, isValidStep } = useNavigationContext();
   const [toggle, setToggle] = React.useState<boolean>(true);
+
+  React.useEffect(() => {
+    setToggle(false);
+  }, [activeStep]);
+
   return (
     <nav className="wizard-navigations bg-secondary py-3">
       <div

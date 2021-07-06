@@ -60,6 +60,27 @@ describe('Component: WizardNavigations', () => {
     );
   }
 
+  function navigateTo(index: number) {
+    const navLink = wizardNavigationsProps.navigations[index].label;
+    fireEvent.click(screen.getByText(navLink));
+  }
+
+  function toggleNavigations() {
+    fireEvent.click(screen.getByRole('button'));
+  }
+
+  function assertNavigationsVisibility(
+    container: HTMLElement,
+    visible: boolean
+  ) {
+    const activeToggle = '.wizard-navigations__toggle--active';
+    if (visible) {
+      expect(container.querySelector(activeToggle)).toBeInTheDocument();
+    } else {
+      expect(container.querySelector(activeToggle)).not.toBeInTheDocument();
+    }
+  }
+
   beforeEach(() => {
     mockedUseNavigationContext.mockImplementation(
       () => defaultNavigationContext
@@ -90,52 +111,38 @@ describe('Component: WizardNavigations', () => {
     ).toBeInTheDocument();
   });
 
-  it('Should expand navigation header when toggle is active', () => {
+  it('Should collapse navigations when toggle is inactive', () => {
     const { container } = renderWithRouter();
-    expect(
-      container.querySelector('.wizard-navigations__toggle--active')
-    ).toBeInTheDocument();
+    assertNavigationsVisibility(container, false);
   });
 
-  it('Should collapse navigation header when toggle is inactive', () => {
+  it('Should expand navigations when toggle is active', () => {
     const { container } = renderWithRouter();
-    fireEvent.click(screen.getByRole('button'));
-    expect(
-      container.querySelector('.wizard-navigations__toggle--active')
-    ).not.toBeInTheDocument();
+    toggleNavigations();
+    assertNavigationsVisibility(container, true);
   });
 
-  it('Should collapse navigation header when valid navigation link is clicked', () => {
+  it('Should collapse navigations when valid navigation link is clicked', () => {
     mockedUseNavigationContext.mockImplementation(() => ({
       ...defaultNavigationContext,
       isValidStep: jest.fn().mockReturnValueOnce(true),
     }));
     const { container } = renderWithRouter();
-    expect(
-      container.querySelector('.wizard-navigations__toggle--active')
-    ).toBeInTheDocument();
-    fireEvent.click(
-      screen.getByText(wizardNavigationsProps.navigations[1].label)
-    );
-    expect(
-      container.querySelector('.wizard-navigations__toggle--active')
-    ).not.toBeInTheDocument();
+    toggleNavigations();
+    assertNavigationsVisibility(container, true);
+    navigateTo(1);
+    assertNavigationsVisibility(container, false);
   });
 
-  it('Should retain navigation header expansion when an invalid navigation link is clicked', () => {
+  it('Should retain navigations expansion when an invalid navigation link is clicked', () => {
     mockedUseNavigationContext.mockImplementation(() => ({
       ...defaultNavigationContext,
       isValidStep: jest.fn().mockReturnValueOnce(false),
     }));
     const { container } = renderWithRouter();
-    expect(
-      container.querySelector('.wizard-navigations__toggle--active')
-    ).toBeInTheDocument();
-    fireEvent.click(
-      screen.getByText(wizardNavigationsProps.navigations[2].label)
-    );
-    expect(
-      container.querySelector('.wizard-navigations__toggle--active')
-    ).toBeInTheDocument();
+    toggleNavigations();
+    assertNavigationsVisibility(container, true);
+    navigateTo(2);
+    assertNavigationsVisibility(container, true);
   });
 });
