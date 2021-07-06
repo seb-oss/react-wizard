@@ -6,7 +6,7 @@ import WizardSteps, { WizardStepsProps } from './WizardSteps';
 describe('Component: WizardSteps', () => {
   const wizardStepsProps: WizardStepsProps = {
     navigationMobileHeading: 'Introduction',
-    navigationMobileDescription: 'Step {activeStep} of {totalStep}',
+    navigationMobileDescription: 'Step {activeStep} of {totalSteps}',
     steps: [
       {
         path: '/',

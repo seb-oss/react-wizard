@@ -31,7 +31,7 @@ export type WizardStepsProps = {
    *    <td>the total number of steps available</td>
    *  </tr>
    * </table>
-   * Example: `Step {activeStep} of {totalStep}`, @see PlaceholderTokens
+   * Example: `Step {activeStep} of {totalSteps}`, @see PlaceholderTokens
    */
   navigationMobileDescription: string;
   /**

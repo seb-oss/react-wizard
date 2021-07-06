@@ -82,11 +82,11 @@ describe('Component: WizardNavigations', () => {
 
   it('Should inject tokens into navigation description when placeholders exists', () => {
     const activeStep = 1;
-    const totalStep = wizardNavigationsProps.navigations.length;
-    const mobileDescription = `Step {${PlaceholderTokens.ACTIVE_STEP}} of {${PlaceholderTokens.TOTAL_STEP}}`;
+    const totalSteps = wizardNavigationsProps.navigations.length;
+    const mobileDescription = `Step {${PlaceholderTokens.ACTIVE_STEP}} of {${PlaceholderTokens.TOTAL_STEPS}}`;
     renderWithRouter({ mobileDescription });
     expect(
-      screen.getByText(`Step ${activeStep} of ${totalStep}`)
+      screen.getByText(`Step ${activeStep} of ${totalSteps}`)
     ).toBeInTheDocument();
   });
 

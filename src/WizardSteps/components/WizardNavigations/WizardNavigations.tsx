@@ -28,7 +28,7 @@ export type WizardNavigationsProps = {
    *    <td>the total number of steps available</td>
    *  </tr>
    * </table>
-   * Example: `Step {activeStep} of {totalStep}`, @see PlaceholderTokens
+   * Example: `Step {activeStep} of {totalSteps}`, @see PlaceholderTokens
    */
   mobileDescription: string;
   /**
@@ -40,7 +40,7 @@ export type WizardNavigationsProps = {
 
 export enum PlaceholderTokens {
   ACTIVE_STEP = 'activeStep',
-  TOTAL_STEP = 'totalStep',
+  TOTAL_STEPS = 'totalSteps',
 }
 
 const WizardNavigations: React.FC<WizardNavigationsProps> = ({
@@ -68,7 +68,7 @@ const WizardNavigations: React.FC<WizardNavigationsProps> = ({
           <span className="small">
             {pupa(mobileDescription, {
               [PlaceholderTokens.ACTIVE_STEP]: activeStep + 1,
-              [PlaceholderTokens.TOTAL_STEP]: navigations.length,
+              [PlaceholderTokens.TOTAL_STEPS]: navigations.length,
             })}
           </span>
         </div>
