@@ -7,25 +7,30 @@ import {
 import { createMemoryHistory, History } from 'history';
 import React from 'react';
 import { MemoryRouter, Router } from 'react-router-dom';
+import { WizardStepState } from '../WizardSteps/components/WizardStep';
 import { NavigationProvider, useNavigationContext } from './navigationContext';
 
 type DummyComponentProps = {
+  mockState?: WizardStepState;
   mockStep?: number;
   nextPath?: string;
   prevPath?: string;
 };
 
 function DummyComponent(props: DummyComponentProps) {
-  const { mockStep, nextPath, prevPath } = props;
+  const { mockState, mockStep, nextPath, prevPath } = props;
   const {
+    activeState,
     activeStep,
     isValidStep,
     nextStep,
     previousStep,
-    setStep,
+    setActiveState,
+    setActiveStep,
   } = useNavigationContext();
   return (
     <div>
+      <p data-testid="activeState">{activeState}</p>
       <p data-testid="activeStep">{activeStep}</p>
       <p data-testid="isValidStep">
         {isValidStep(mockStep) ? 'valid-next-step' : 'invalid-next-step'}
@@ -36,8 +41,11 @@ function DummyComponent(props: DummyComponentProps) {
       <button type="button" onClick={() => previousStep(prevPath)}>
         previous step
       </button>
-      <button type="button" onClick={() => setStep(mockStep)}>
-        set step
+      <button type="button" onClick={() => setActiveState(mockState)}>
+        set active state
+      </button>
+      <button type="button" onClick={() => setActiveStep(mockStep)}>
+        set active step
       </button>
     </div>
   );
@@ -76,8 +84,20 @@ describe('Context: NavigationContext', () => {
     fireEvent.click(screen.getByText('previous step'));
   }
 
-  function configureStep() {
-    fireEvent.click(screen.getByText('set step'));
+  function configureActiveState() {
+    fireEvent.click(screen.getByText('set active state'));
+  }
+
+  function configureActiveStep() {
+    fireEvent.click(screen.getByText('set active step'));
+  }
+
+  function assertActiveState(state: WizardStepState) {
+    if (state) {
+      expect(screen.getByTestId('activeState')).toHaveTextContent(`${state}`);
+    } else {
+      expect(screen.getByTestId('activeState')).toBeEmptyDOMElement();
+    }
   }
 
   function assertActiveStep(step: number) {
@@ -100,6 +120,11 @@ describe('Context: NavigationContext', () => {
     expect(() => render(<DummyComponent />)).toThrowError(
       'useNavigationContext must be used within a NavigationProvider'
     );
+  });
+
+  it('Should return active state', () => {
+    renderDummyComponent();
+    assertActiveState(undefined);
   });
 
   it('Should return active step', () => {
@@ -176,7 +201,7 @@ describe('Context: NavigationContext', () => {
         '/third',
       ]);
       // configure active step to final step
-      configureStep();
+      configureActiveStep();
       // assert current step is final step
       assertActiveStep(2);
       assertCurrentPath(history, '/third');
@@ -203,12 +228,21 @@ describe('Context: NavigationContext', () => {
     });
   });
 
-  describe('setStep', () => {
+  describe('setActiveStep', () => {
     it('Should configure step provided as active step', () => {
       renderDummyComponent({ mockStep: 2 });
       assertActiveStep(0);
-      configureStep();
+      configureActiveStep();
       assertActiveStep(2);
+    });
+  });
+
+  describe('setActiveState', () => {
+    it('Should configure state provided as active state', () => {
+      renderDummyComponent({ mockState: 'danger' });
+      assertActiveState(undefined);
+      configureActiveState();
+      assertActiveState('danger');
     });
   });
 });

@@ -1,3 +1,4 @@
+import '!style-loader!css-loader!@sebgroup/fonts/css/seb-fonts.css';
 import '!style-loader!css-loader!@sebgroup/bootstrap/css/bootstrap.css';
 
 export const parameters = {

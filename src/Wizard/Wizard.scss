@@ -1,2 +1,15 @@
-.wizard {
+@import 'src/styles';
+
+@include media-breakpoint-up(md) {
+  .wizard {
+    .wizard-navigations {
+      height: calc(100vh - #{$wizard-header-height});
+    }
+
+    .wizard-step {
+      max-height: calc(
+        100vh - #{$wizard-header-height} - #{$wizard-step-spacing} - #{$wizard-controls-height}
+      );
+    }
+  }
 }

@@ -1,12 +1,15 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { WizardStepState } from '../WizardSteps/components/WizardStep';
 
 export interface NavigationInterface {
+  activeState: WizardStepState;
   activeStep: number;
   isValidStep: (step: number) => boolean;
   nextStep: (path?: string) => void;
   previousStep: (path?: string) => void;
-  setStep: (step: number) => void;
+  setActiveState: React.Dispatch<React.SetStateAction<WizardStepState>>;
+  setActiveStep: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export type NavigationProviderProps = {
@@ -23,6 +26,7 @@ const NavigationProvider: React.FC<NavigationProviderProps> = ({
   routes,
 }) => {
   const history = useHistory();
+  const [activeState, setActiveState] = React.useState<WizardStepState>();
   const [activeStep, setActiveStep] = React.useState<number>(0);
 
   const isValidStep = React.useCallback(
@@ -54,18 +58,16 @@ const NavigationProvider: React.FC<NavigationProviderProps> = ({
     [activeStep, history, routes]
   );
 
-  const setStep = React.useCallback((step: number) => {
-    setActiveStep(step);
-  }, []);
-
   return (
     <NavigationContext.Provider
       value={{
+        activeState,
         activeStep,
         isValidStep,
         nextStep,
         previousStep,
-        setStep,
+        setActiveState,
+        setActiveStep,
       }}
     >
       {children}

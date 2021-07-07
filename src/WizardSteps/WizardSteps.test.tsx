@@ -5,11 +5,13 @@ import WizardSteps, { WizardStepsProps } from './WizardSteps';
 
 describe('Component: WizardSteps', () => {
   const wizardStepsProps: WizardStepsProps = {
+    navigationMobileHeading: 'Introduction',
+    navigationMobileDescription: 'Step {activeStep} of {totalSteps}',
     steps: [
       {
         path: '/',
         label: 'Step 1 link',
-        component: <div>Step 1 content</div>,
+        component: () => <div>Step 1 content</div>,
         data: {
           heading: 'Step 1 heading',
         },
@@ -17,7 +19,7 @@ describe('Component: WizardSteps', () => {
       {
         path: '/step2',
         label: 'Step 2 link',
-        component: <div>Step 2 content</div>,
+        component: () => <div>Step 2 content</div>,
         data: {
           heading: 'Step 2 heading',
         },
@@ -25,7 +27,7 @@ describe('Component: WizardSteps', () => {
       {
         path: '/step3',
         label: 'Step 3 link',
-        component: <div>Step 3 content</div>,
+        component: () => <div>Step 3 content</div>,
         data: {
           heading: 'Step 3 heading',
         },

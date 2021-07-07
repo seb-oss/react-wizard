@@ -24,11 +24,11 @@ export type WizardControl = {
   /** Add a custom class to the control/button. */
   className?: string;
   /**
-   * Event triggered when control is clicked. Steps navigation will be block when
+   * Event triggered when control is click. Steps navigation will be block when
    * the handler return a falsy value. This is useful when there's mandatory validation
    * on the step.
    * */
-  onClicked?: GenericHandler;
+  onClick?: GenericHandler;
 };
 
 export type WizardControlType = 'next' | 'prev' | 'cancel';
@@ -74,7 +74,7 @@ const WizardControls: React.FC<WizardControlsProps> = ({
             label,
             path,
             type,
-            onClicked = () => true,
+            onClick = () => true,
           } = control;
           const isNext = type === 'next';
           const isPrev = type === 'prev';
@@ -105,7 +105,7 @@ const WizardControls: React.FC<WizardControlsProps> = ({
                   /**
                    * custom control handler, blocks navigation if result is false
                    */
-                  if ((await onClicked(event)) !== false) {
+                  if ((await onClick(event)) !== false) {
                     controlHandler(path);
                   }
                 }}
