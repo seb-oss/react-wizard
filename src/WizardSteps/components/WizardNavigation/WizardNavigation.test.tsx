@@ -87,7 +87,7 @@ describe('Component: WizardNavigation', () => {
   it('Should render danger state', () => {
     const { container } = renderWithRouter({ state: 'danger' });
     expect(
-      container.querySelector('.wizard-navigation--disabled')
+      container.querySelector('.wizard-navigation--danger')
     ).toBeInTheDocument();
   });
 
