@@ -5,8 +5,7 @@ import WizardSteps, { WizardStepsProps } from './WizardSteps';
 
 describe('Component: WizardSteps', () => {
   const wizardStepsProps: WizardStepsProps = {
-    navigationMobileHeading: 'Introduction',
-    navigationMobileDescription: 'Step {activeStep} of {totalSteps}',
+    navigationDescription: 'Step {activeStep} of {totalSteps}',
     steps: [
       {
         path: '/',
@@ -43,11 +42,15 @@ describe('Component: WizardSteps', () => {
     );
   }
 
+  function assertLinkExist(name: string): void {
+    expect(screen.getByRole('link', { name })).toBeInTheDocument();
+  }
+
   it('Should render correctly', () => {
     renderWithRouter();
-    expect(screen.getByText('Step 1 link')).toBeInTheDocument();
-    expect(screen.getByText('Step 2 link')).toBeInTheDocument();
-    expect(screen.getByText('Step 3 link')).toBeInTheDocument();
+    assertLinkExist('Step 1 link');
+    assertLinkExist('Step 2 link');
+    assertLinkExist('Step 3 link');
     expect(screen.getByText('Step 1 content')).toBeInTheDocument();
   });
 

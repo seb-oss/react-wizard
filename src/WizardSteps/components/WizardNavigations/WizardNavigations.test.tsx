@@ -32,8 +32,7 @@ describe('Component: WizardNavigations', () => {
     setActiveStep: jest.fn(),
   };
   const wizardNavigationsProps: WizardNavigationsProps = {
-    mobileHeading: 'Introduction',
-    mobileDescription: 'Description',
+    navigationDescription: 'Description',
     navigations: [
       {
         label: 'Step 1',
@@ -89,13 +88,8 @@ describe('Component: WizardNavigations', () => {
 
   it('Should render correctly', () => {
     const { container } = renderWithRouter();
-    const {
-      mobileHeading,
-      mobileDescription,
-      navigations,
-    } = wizardNavigationsProps;
-    expect(screen.getByText(mobileHeading)).toBeInTheDocument();
-    expect(screen.getByText(mobileDescription)).toBeInTheDocument();
+    const { navigationDescription, navigations } = wizardNavigationsProps;
+    expect(screen.getByText(navigationDescription)).toBeInTheDocument();
     expect(container.querySelectorAll('.wizard-navigation')).toHaveLength(
       navigations.length
     );
@@ -104,8 +98,8 @@ describe('Component: WizardNavigations', () => {
   it('Should inject tokens into navigation description when placeholders exists', () => {
     const activeStep = 1;
     const totalSteps = wizardNavigationsProps.navigations.length;
-    const mobileDescription = `Step {${PlaceholderTokens.ACTIVE_STEP}} of {${PlaceholderTokens.TOTAL_STEPS}}`;
-    renderWithRouter({ mobileDescription });
+    const navigationDescription = `Step {${PlaceholderTokens.ACTIVE_STEP}} of {${PlaceholderTokens.TOTAL_STEPS}}`;
+    renderWithRouter({ navigationDescription });
     expect(
       screen.getByText(`Step ${activeStep} of ${totalSteps}`)
     ).toBeInTheDocument();
