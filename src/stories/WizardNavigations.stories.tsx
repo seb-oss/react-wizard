@@ -25,8 +25,7 @@ const Template: Story<WizardNavigationsProps> = (args) => (
 
 export const Default: Story<WizardNavigationsProps> = Template.bind({});
 Default.args = {
-  mobileHeading: 'Introduction',
-  mobileDescription: 'Step {activeStep} of {totalSteps}',
+  navigationDescription: 'Step {activeStep} of {totalSteps}',
   navigations: [
     {
       label: 'Step 1',

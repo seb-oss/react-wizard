@@ -44,8 +44,7 @@ const Template: Story<WizardProps> = ({ ref, ...args }) => {
           ]}
         />
         <WizardSteps
-          navigationMobileHeading="Introduction"
-          navigationMobileDescription="Step {activeStep} of {totalSteps}"
+          navigationDescription="Step {activeStep} of {totalSteps}"
           steps={[
             ...WizardStepsStories.Default.args.steps,
             ...WizardStepsStories.WithSecondaryContent.args.steps,
