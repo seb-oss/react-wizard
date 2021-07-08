@@ -8,10 +8,6 @@ import './WizardNavigations.scss';
 
 export type WizardNavigationsProps = {
   /**
-   * Heading text for mobile navigations, it is only visible in mobile viewport.
-   */
-  mobileHeading: string;
-  /**
    * Description text for mobile navigations, it is only visible in mobile viewport.
    * It supports tokens injection, the list of placeholders available are as follow:
    * <table>
@@ -30,7 +26,7 @@ export type WizardNavigationsProps = {
    * </table>
    * Example: `Step {activeStep} of {totalSteps}`, @see PlaceholderTokens
    */
-  mobileDescription: string;
+  navigationDescription: string;
   /**
    * A series of ordered navigations to be managed by the wizard, it relies on
    * react router for navigations
@@ -44,8 +40,7 @@ export enum PlaceholderTokens {
 }
 
 const WizardNavigations: React.FC<WizardNavigationsProps> = ({
-  mobileHeading,
-  mobileDescription,
+  navigationDescription,
   navigations,
 }) => {
   const { activeStep, isValidStep } = useNavigationContext();
@@ -69,9 +64,9 @@ const WizardNavigations: React.FC<WizardNavigationsProps> = ({
         role="button"
       >
         <div className="pl-3 pl-md-0 toggle-content">
-          <h2 className="mb-1">{mobileHeading}</h2>
+          <h2 className="mb-1">{navigations[activeStep].label}</h2>
           <span className="small">
-            {pupa(mobileDescription, {
+            {pupa(navigationDescription, {
               [PlaceholderTokens.ACTIVE_STEP]: activeStep + 1,
               [PlaceholderTokens.TOTAL_STEPS]: navigations.length,
             })}

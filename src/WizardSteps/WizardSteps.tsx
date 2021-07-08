@@ -11,10 +11,6 @@ import './WizardSteps.scss';
 
 export type WizardStepsProps = {
   /**
-   * Heading text for mobile navigations, it is only visible in mobile viewport.
-   */
-  navigationMobileHeading: string;
-  /**
    * Description text for mobile navigations, it is only visible in mobile viewport.
    * It supports tokens injection, the list of placeholders available are as follow:
    * <table>
@@ -33,7 +29,7 @@ export type WizardStepsProps = {
    * </table>
    * Example: `Step {activeStep} of {totalSteps}`, @see PlaceholderTokens
    */
-  navigationMobileDescription: string;
+  navigationDescription: string;
   /**
    * A series of ordered steps to be managed by the wizard, it relies on
    * react router for navigations
@@ -88,7 +84,7 @@ const WizardRoutes: React.FC<Pick<WizardStepsProps, 'steps'>> = ({ steps }) => {
 };
 
 const WizardSteps: React.FC<WizardStepsProps> = (props) => {
-  const { navigationMobileHeading, navigationMobileDescription, steps } = props;
+  const { navigationDescription, steps } = props;
   const navigations: Array<WizardNavigationData> = React.useMemo(
     () =>
       steps.map<WizardNavigationData>(
@@ -109,8 +105,7 @@ const WizardSteps: React.FC<WizardStepsProps> = (props) => {
       <div className="row no-gutters wizard-steps">
         <div className="col-12 col-md-auto">
           <WizardNavigations
-            mobileHeading={navigationMobileHeading}
-            mobileDescription={navigationMobileDescription}
+            navigationDescription={navigationDescription}
             navigations={navigations}
           />
         </div>
