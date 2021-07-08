@@ -10,6 +10,7 @@ import {
   NavigationInterface,
   useNavigationContext,
 } from '../../../contexts/navigationContext';
+import { WizardNavigationData } from '../WizardNavigation/WizardNavigation';
 import WizardNavigations, {
   PlaceholderTokens,
   WizardNavigationsProps,
@@ -68,6 +69,10 @@ describe('Component: WizardNavigations', () => {
     fireEvent.click(screen.getByRole('button'));
   }
 
+  function assertLinkExist(name: string): void {
+    expect(screen.getByRole('link', { name })).toBeInTheDocument();
+  }
+
   function assertNavigationsVisibility(
     container: HTMLElement,
     visible: boolean
@@ -89,6 +94,12 @@ describe('Component: WizardNavigations', () => {
   it('Should render correctly', () => {
     const { container } = renderWithRouter();
     const { navigationDescription, navigations } = wizardNavigationsProps;
+    expect(
+      screen.getByRole('heading', { name: navigations[0].label })
+    ).toBeInTheDocument();
+    navigations.forEach((navigation: WizardNavigationData) =>
+      assertLinkExist(navigation.label)
+    );
     expect(screen.getByText(navigationDescription)).toBeInTheDocument();
     expect(container.querySelectorAll('.wizard-navigation')).toHaveLength(
       navigations.length

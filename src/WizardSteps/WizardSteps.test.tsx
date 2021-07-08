@@ -1,7 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import WizardSteps, { WizardStepsProps } from './WizardSteps';
+import { WizardStepData } from './components/WizardStep';
+import WizardSteps, { WizardStepConfig, WizardStepsProps } from './WizardSteps';
 
 describe('Component: WizardSteps', () => {
   const wizardStepsProps: WizardStepsProps = {
@@ -48,9 +49,9 @@ describe('Component: WizardSteps', () => {
 
   it('Should render correctly', () => {
     renderWithRouter();
-    assertLinkExist('Step 1 link');
-    assertLinkExist('Step 2 link');
-    assertLinkExist('Step 3 link');
+    wizardStepsProps.steps.forEach((step: WizardStepConfig) =>
+      assertLinkExist(step.label)
+    );
     expect(screen.getByText('Step 1 content')).toBeInTheDocument();
   });
 
