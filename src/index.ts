@@ -3,3 +3,5 @@ export * from './Wizard';
 
 export { default as WizardHeader } from './WizardHeader';
 export * from './WizardHeader';
+
+export * from './contexts/navigationContext';
