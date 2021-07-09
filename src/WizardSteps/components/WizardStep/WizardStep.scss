@@ -4,9 +4,6 @@
   max-width: $wizard-content-max-width;
 }
 
-.wizard-secondary-content {
-}
-
 @include media-breakpoint-up(md) {
   .wizard-step {
     max-height: calc(
@@ -31,5 +28,11 @@
         max-width: $wizard-content-max-width;
       }
     }
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .wizard-secondary-content {
+    max-width: $wizard-secondary-content-max-width;
   }
 }

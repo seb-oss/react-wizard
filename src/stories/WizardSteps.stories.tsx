@@ -109,8 +109,7 @@ const StepComponent: React.FC = () => {
 
 export const Default: Story<WizardStepsProps> = Template.bind({});
 Default.args = {
-  navigationMobileHeading: 'Introduction',
-  navigationMobileDescription: 'Step {activeStep} of {totalSteps}',
+  navigationDescription: 'Step {activeStep} of {totalSteps}',
   steps: [
     {
       path: '/',

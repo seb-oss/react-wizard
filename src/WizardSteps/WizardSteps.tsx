@@ -1,5 +1,11 @@
 import React from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import {
+  Redirect,
+  Route,
+  Switch,
+  useLocation,
+  useRouteMatch,
+} from 'react-router-dom';
 import {
   NavigationProvider,
   useNavigationContext,
@@ -10,10 +16,6 @@ import WizardStep, { WizardStepData } from './components/WizardStep';
 import './WizardSteps.scss';
 
 export type WizardStepsProps = {
-  /**
-   * Heading text for mobile navigations, it is only visible in mobile viewport.
-   */
-  navigationMobileHeading: string;
   /**
    * Description text for mobile navigations, it is only visible in mobile viewport.
    * It supports tokens injection, the list of placeholders available are as follow:
@@ -33,7 +35,7 @@ export type WizardStepsProps = {
    * </table>
    * Example: `Step {activeStep} of {totalSteps}`, @see PlaceholderTokens
    */
-  navigationMobileDescription: string;
+  navigationDescription: string;
   /**
    * A series of ordered steps to be managed by the wizard, it relies on
    * react router for navigations
@@ -88,34 +90,66 @@ const WizardRoutes: React.FC<Pick<WizardStepsProps, 'steps'>> = ({ steps }) => {
 };
 
 const WizardSteps: React.FC<WizardStepsProps> = (props) => {
-  const { navigationMobileHeading, navigationMobileDescription, steps } = props;
+  const { navigationDescription, steps: sourceSteps } = props;
+  const { pathname } = useLocation();
+  const match = useRouteMatch();
+
+  const isNestedRoute = React.useCallback((route: string) => {
+    return route !== '/';
+  }, []);
+
+  const parentUrl: string = React.useMemo(
+    () => (isNestedRoute(match.url) ? match.url : ''),
+    [match.url, isNestedRoute]
+  );
+
+  const routes: Array<string> = React.useMemo(
+    () =>
+      sourceSteps.map<string>(
+        ({ path }: WizardStepConfig) => `${parentUrl}${path}`
+      ),
+    [parentUrl, sourceSteps]
+  );
+
   const navigations: Array<WizardNavigationData> = React.useMemo(
     () =>
-      steps.map<WizardNavigationData>(
+      sourceSteps.map<WizardNavigationData>(
         ({ label, path, data: { state } }: WizardStepConfig) => ({
           label,
-          path,
+          path: `${parentUrl}${path}`,
           state,
         })
       ),
-    [steps]
+    [parentUrl, sourceSteps]
   );
-  const routes: Array<string> = React.useMemo(
-    () => steps.map<string>(({ path }: WizardStepConfig) => path),
-    [steps]
+
+  const parentPath: string = React.useMemo(
+    () => (isNestedRoute(match.path) ? match.path : ''),
+    [match.path, isNestedRoute]
   );
+
+  // append parent path to step's path if current path is nested
+  const steps: Array<WizardStepConfig> = React.useMemo(
+    () =>
+      sourceSteps.map<WizardStepConfig>((step) => ({
+        ...step,
+        path: `${parentPath}${step.path}`,
+      })),
+    [parentPath, sourceSteps]
+  );
+
   return (
     <NavigationProvider routes={routes}>
       <div className="row no-gutters wizard-steps">
         <div className="col-12 col-md-auto">
           <WizardNavigations
-            mobileHeading={navigationMobileHeading}
-            mobileDescription={navigationMobileDescription}
+            navigationDescription={navigationDescription}
             navigations={navigations}
           />
         </div>
         <div className="col-12 col-md bg-white wizard-main-container">
           <Switch>
+            <Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} />
             <WizardRoutes steps={steps} />
           </Switch>
         </div>
