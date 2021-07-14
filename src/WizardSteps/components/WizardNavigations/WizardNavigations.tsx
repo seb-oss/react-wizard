@@ -43,7 +43,12 @@ const WizardNavigations: React.FC<WizardNavigationsProps> = ({
   navigationDescription,
   navigations,
 }) => {
-  const { activeStep, isValidStep } = useNavigationContext();
+  const {
+    activeStep,
+    isNavigableStep,
+    isValidStep,
+    nextStep,
+  } = useNavigationContext();
   const [toggle, setToggle] = React.useState<boolean>(true);
 
   React.useEffect(() => {
@@ -82,7 +87,25 @@ const WizardNavigations: React.FC<WizardNavigationsProps> = ({
                   key={`${props.path}_${props.label}`}
                   {...props}
                   step={step}
-                  onClick={() => isValidStep(step) && setToggle(false)}
+                  onClick={(event) => {
+                    if (isNavigableStep(step)) {
+                      const isForwardNavigation = step > activeStep;
+
+                      if (isForwardNavigation) {
+                        event.preventDefault();
+                        isValidStep().then((isValid) => {
+                          if (isValid !== false) {
+                            setToggle(false);
+                            nextStep();
+                          }
+                        });
+                      } else {
+                        setToggle(false);
+                      }
+                    } else {
+                      event.preventDefault();
+                    }
+                  }}
                 />
               );
             })}

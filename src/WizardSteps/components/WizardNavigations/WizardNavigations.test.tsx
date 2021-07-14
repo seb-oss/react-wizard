@@ -3,6 +3,7 @@ import {
   render,
   RenderResult,
   screen,
+  waitFor,
 } from '@testing-library/react';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
@@ -24,11 +25,14 @@ const mockedUseNavigationContext = useNavigationContext as jest.Mock<NavigationI
 
 describe('Component: WizardNavigations', () => {
   const defaultNavigationContext: NavigationInterface = {
+    activeControls: undefined,
     activeStep: 0,
     activeState: undefined,
+    isNavigableStep: jest.fn(),
     isValidStep: jest.fn(),
     nextStep: jest.fn(),
     previousStep: jest.fn(),
+    setActiveControls: jest.fn(),
     setActiveState: jest.fn(),
     setActiveStep: jest.fn(),
   };
@@ -101,6 +105,7 @@ describe('Component: WizardNavigations', () => {
       assertLinkExist(navigation.label)
     );
     expect(screen.getByText(navigationDescription)).toBeInTheDocument();
+    assertNavigationsVisibility(container, false);
     expect(container.querySelectorAll('.wizard-navigation')).toHaveLength(
       navigations.length
     );
@@ -116,38 +121,77 @@ describe('Component: WizardNavigations', () => {
     ).toBeInTheDocument();
   });
 
-  it('Should collapse navigations when toggle is inactive', () => {
-    const { container } = renderWithRouter();
-    assertNavigationsVisibility(container, false);
-  });
-
-  it('Should expand navigations when toggle is active', () => {
+  it('Should expand navigation list when toggle status is active', () => {
     const { container } = renderWithRouter();
     toggleNavigations();
     assertNavigationsVisibility(container, true);
   });
 
-  it('Should collapse navigations when valid navigation link is clicked', () => {
+  it('Should collapse navigation list when toggle status is inactive', () => {
+    const { container } = renderWithRouter();
+    toggleNavigations();
+    toggleNavigations();
+    assertNavigationsVisibility(container, false);
+  });
+
+  it('Should navigate to selected step when navigation link clicked is navigable and step handler is valid', async () => {
+    const mockNextStep: jest.Mock = jest.fn();
     mockedUseNavigationContext.mockImplementation(() => ({
       ...defaultNavigationContext,
-      isValidStep: jest.fn().mockReturnValueOnce(true),
+      isNavigableStep: jest.fn().mockReturnValueOnce(true),
+      isValidStep: jest.fn().mockResolvedValueOnce(true),
+      nextStep: mockNextStep,
+    }));
+    renderWithRouter();
+    expect(mockNextStep).not.toHaveBeenCalled();
+    await waitFor(() => {
+      navigateTo(1);
+    });
+    expect(mockNextStep).toHaveBeenCalledTimes(1);
+  });
+
+  it('Should retain at current step when navigation link clicked is navigable but step handler is invalid', async () => {
+    const mockNextStep: jest.Mock = jest.fn();
+    mockedUseNavigationContext.mockImplementation(() => ({
+      ...defaultNavigationContext,
+      isNavigableStep: jest.fn().mockReturnValueOnce(true),
+      isValidStep: jest.fn().mockResolvedValueOnce(false),
+      nextStep: mockNextStep,
+    }));
+    renderWithRouter();
+    expect(mockNextStep).not.toHaveBeenCalled();
+    await waitFor(() => {
+      navigateTo(1);
+    });
+    expect(mockNextStep).not.toHaveBeenCalled();
+  });
+
+  it('Should retain navigation list expansion when navigation link clicked is not navigable', async () => {
+    mockedUseNavigationContext.mockImplementation(() => ({
+      ...defaultNavigationContext,
+      isNavigableStep: jest.fn().mockReturnValueOnce(false),
     }));
     const { container } = renderWithRouter();
     toggleNavigations();
     assertNavigationsVisibility(container, true);
-    navigateTo(1);
-    assertNavigationsVisibility(container, false);
+    await waitFor(() => {
+      navigateTo(2);
+    });
+    assertNavigationsVisibility(container, true);
   });
 
-  it('Should retain navigations expansion when an invalid navigation link is clicked', () => {
+  it('Should collapse navigation list when navigate to previous step', async () => {
     mockedUseNavigationContext.mockImplementation(() => ({
       ...defaultNavigationContext,
-      isValidStep: jest.fn().mockReturnValueOnce(false),
+      activeStep: 2,
+      isNavigableStep: jest.fn().mockReturnValueOnce(true),
     }));
     const { container } = renderWithRouter();
     toggleNavigations();
     assertNavigationsVisibility(container, true);
-    navigateTo(2);
-    assertNavigationsVisibility(container, true);
+    await waitFor(() => {
+      navigateTo(1);
+    });
+    assertNavigationsVisibility(container, false);
   });
 });
