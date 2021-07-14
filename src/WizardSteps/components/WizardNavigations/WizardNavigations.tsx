@@ -49,6 +49,7 @@ const WizardNavigations: React.FC<WizardNavigationsProps> = ({
     isValidStep,
     nextStep,
   } = useNavigationContext();
+  const olRef = React.useRef<HTMLOListElement>(null);
   const [toggle, setToggle] = React.useState<boolean>(true);
 
   React.useEffect(() => {
@@ -79,8 +80,16 @@ const WizardNavigations: React.FC<WizardNavigationsProps> = ({
         </div>
       </div>
       {
-        <CSSTransition classNames="list-group" in={toggle} timeout={400}>
-          <ol className="list-group list-group-ordered d-md-flex mt-3">
+        <CSSTransition
+          nodeRef={olRef}
+          classNames="list-group"
+          in={toggle}
+          timeout={400}
+        >
+          <ol
+            ref={olRef}
+            className="list-group list-group-ordered d-md-flex mt-3"
+          >
             {navigations.map((props: WizardNavigationData, step: number) => {
               return (
                 <WizardNavigation
