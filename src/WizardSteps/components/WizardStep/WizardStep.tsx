@@ -31,7 +31,7 @@ export type WizardStepData = {
 };
 
 export type WizardStepProps = WizardStepData & {
-  /** The step number of the current step */
+  /** The step number of the current step; based on zero-based numbering system. */
   step: number;
 };
 
@@ -53,7 +53,11 @@ const WizardStep: React.FC<WizardStepProps> = ({
   step,
   controls,
 }) => {
-  const { setActiveState, setActiveStep } = useNavigationContext();
+  const {
+    setActiveControls,
+    setActiveState,
+    setActiveStep,
+  } = useNavigationContext();
 
   React.useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -64,8 +68,18 @@ const WizardStep: React.FC<WizardStepProps> = ({
   }, [step, setActiveStep]);
 
   React.useEffect(() => {
-    setActiveState(state);
-  }, [state, setActiveState]);
+    // initialise active states with props state if it is not yet defined
+    setActiveControls((prevControls) =>
+      prevControls ? prevControls : controls
+    );
+    setActiveState((prevState) => (prevState ? prevState : state));
+
+    // reset active states
+    return () => {
+      setActiveControls(undefined);
+      setActiveState(undefined);
+    };
+  }, [controls, state, setActiveControls, setActiveState]);
 
   return (
     <>
