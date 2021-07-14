@@ -58,7 +58,7 @@ export type WizardStepConfig = {
 };
 
 const WizardRoutes: React.FC<Pick<WizardStepsProps, 'steps'>> = ({ steps }) => {
-  const { activeStep, isValidStep } = useNavigationContext();
+  const { activeStep, isNavigableStep } = useNavigationContext();
   return (
     <>
       {steps.map(
@@ -72,7 +72,7 @@ const WizardRoutes: React.FC<Pick<WizardStepsProps, 'steps'>> = ({ steps }) => {
             path={path}
             render={() => {
               // step guard, user can only navigate to previous and immediate next step
-              if (isValidStep(step)) {
+              if (isNavigableStep(step)) {
                 return (
                   <WizardStep {...{ ...data, step }}>
                     <StepComponent />
