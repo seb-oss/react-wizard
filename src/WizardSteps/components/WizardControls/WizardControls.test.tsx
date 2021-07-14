@@ -13,6 +13,18 @@ jest.mock('../../../contexts/navigationContext', () => ({
 const mockedUseNavigationContext = useNavigationContext as jest.Mock<NavigationInterface>;
 
 describe('Component: WizardControls', () => {
+  const defaultNavigationContext: NavigationInterface = {
+    activeControls: undefined,
+    activeStep: 0,
+    activeState: undefined,
+    isNavigableStep: jest.fn(),
+    isValidStep: jest.fn(),
+    nextStep: jest.fn(),
+    previousStep: jest.fn(),
+    setActiveControls: jest.fn(),
+    setActiveState: jest.fn(),
+    setActiveStep: jest.fn(),
+  };
   let mockNextStep: jest.Mock;
   let mockPreviousStep: jest.Mock;
 
@@ -20,13 +32,9 @@ describe('Component: WizardControls', () => {
     mockNextStep = jest.fn();
     mockPreviousStep = jest.fn();
     mockedUseNavigationContext.mockImplementation(() => ({
-      activeStep: 0,
-      activeState: undefined,
-      isValidStep: jest.fn(),
+      ...defaultNavigationContext,
       nextStep: mockNextStep,
       previousStep: mockPreviousStep,
-      setActiveState: jest.fn(),
-      setActiveStep: jest.fn(),
     }));
   });
 
@@ -36,21 +44,51 @@ describe('Component: WizardControls', () => {
     expect(screen.getByText('Next')).toBeInTheDocument();
   });
 
-  it('Should render with default controls', async () => {
+  it('should render active controls when navigation context has active controls', () => {
+    mockedUseNavigationContext.mockImplementation(() => ({
+      ...defaultNavigationContext,
+      activeControls: [{ type: 'cancel', label: 'custom' }],
+    }));
+    render(<WizardControls />);
+    expect(screen.getByText('custom')).toBeInTheDocument();
+  });
+
+  it('Should render custom controls when provided', () => {
+    const controls: Array<WizardControl> = [
+      {
+        type: 'prev',
+        label: 'backward',
+      },
+      {
+        type: 'cancel',
+        label: 'cancel',
+      },
+      {
+        type: 'next',
+        label: 'forward',
+      },
+    ];
+    render(<WizardControls controls={controls} />);
+    expect(screen.getByText('backward')).toBeInTheDocument();
+    expect(screen.getByText('cancel')).toBeInTheDocument();
+    expect(screen.getByText('forward')).toBeInTheDocument();
+  });
+
+  it('Should navigate to previous step when prev button is clicked', async () => {
     render(<WizardControls />);
     expect(mockPreviousStep).not.toHaveBeenCalled();
-    await waitFor(() => {
-      fireEvent.click(screen.getByText('Back'));
-    });
+    await waitFor(() => fireEvent.click(screen.getByText('Back')));
     expect(mockPreviousStep).toHaveBeenCalledTimes(1);
+  });
+
+  it('Should navigate to next step when next button is clicked', async () => {
+    render(<WizardControls />);
     expect(mockNextStep).not.toHaveBeenCalled();
-    await waitFor(() => {
-      fireEvent.click(screen.getByText('Next'));
-    });
+    await waitFor(() => fireEvent.click(screen.getByText('Next')));
     expect(mockNextStep).toHaveBeenCalledTimes(1);
   });
 
-  it('Should render with custom controls', async () => {
+  it('Should trigger custom controls handlers when clicked', async () => {
     const controls: Array<WizardControl> = [
       {
         type: 'prev',

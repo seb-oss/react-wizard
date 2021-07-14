@@ -6,7 +6,8 @@ import './WizardControls.scss';
 export type WizardControlsProps = {
   /**
    * Add controls/actions in the footer of the step, if no controls were provided,
-   * controls for previous and next will be added by default.
+   * controls for previous and next will be added by default. Controls can also be
+   * configured via NavigationContext.setActiveControls().
    * */
   controls?: Array<WizardControl>;
 };
@@ -49,7 +50,7 @@ const DEFAULT_CONTROLS: Array<WizardControl> = [
 const WizardControls: React.FC<WizardControlsProps> = ({
   controls = DEFAULT_CONTROLS,
 }) => {
-  const { nextStep, previousStep } = useNavigationContext();
+  const { activeControls, nextStep, previousStep } = useNavigationContext();
 
   const getControlHandler = React.useCallback(
     (type: WizardControlType) => {
@@ -68,53 +69,55 @@ const WizardControls: React.FC<WizardControlsProps> = ({
   return (
     <div className="pb-3 px-md-4 px-xl-5 wizard-controls">
       <div className="form-row justify-content-between">
-        {controls.map((control: WizardControl, i: number) => {
-          const {
-            className,
-            label,
-            path,
-            type,
-            onClick = () => true,
-          } = control;
-          const isNext = type === 'next';
-          const isPrev = type === 'prev';
-          const controlContainerClass: string = classnames(
-            `col-sm-auto order-sm-${i}`,
-            {
-              'col-6': isNext || isPrev,
-              'col-12 mt-3 mt-sm-0 mr-auto order-last': !isNext && !isPrev,
-            }
-          );
-          const controlClass: string = classnames(
-            'btn w-100',
-            {
-              'btn-primary': isNext,
-              'btn-outline-primary': isPrev,
-              'btn-secondary': !isNext && !isPrev,
-            },
-            className
-          );
-          const controlHandler: GenericHandler = getControlHandler(type);
+        {(activeControls || controls).map(
+          (control: WizardControl, i: number) => {
+            const {
+              className,
+              label,
+              path,
+              type,
+              onClick = () => true,
+            } = control;
+            const isNext = type === 'next';
+            const isPrev = type === 'prev';
+            const controlContainerClass: string = classnames(
+              `col-sm-auto order-sm-${i}`,
+              {
+                'col-6': isNext || isPrev,
+                'col-12 mt-3 mt-sm-0 mr-auto order-last': !isNext && !isPrev,
+              }
+            );
+            const controlClass: string = classnames(
+              'btn w-100',
+              {
+                'btn-primary': isNext,
+                'btn-outline-primary': isPrev,
+                'btn-secondary': !isNext && !isPrev,
+              },
+              className
+            );
+            const controlHandler: GenericHandler = getControlHandler(type);
 
-          return (
-            <div key={label} className={controlContainerClass}>
-              <button
-                type="button"
-                className={controlClass}
-                onClick={async (event) => {
-                  /**
-                   * custom control handler, blocks navigation if result is false
-                   */
-                  if ((await onClick(event)) !== false) {
-                    controlHandler(path);
-                  }
-                }}
-              >
-                {label}
-              </button>
-            </div>
-          );
-        })}
+            return (
+              <div key={label} className={controlContainerClass}>
+                <button
+                  type="button"
+                  className={controlClass}
+                  onClick={async (event) => {
+                    /**
+                     * custom control handler, blocks navigation if result is false
+                     */
+                    if ((await onClick(event)) !== false) {
+                      controlHandler(path);
+                    }
+                  }}
+                >
+                  {label}
+                </button>
+              </div>
+            );
+          }
+        )}
       </div>
     </div>
   );
