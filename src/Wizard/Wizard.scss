@@ -1,9 +1,7 @@
 @import 'src/styles';
 
-@include media-breakpoint-down(sm) {
-  .wizard {
-    overflow-y: auto;
-  }
+.wizard {
+  overflow-y: auto;
 }
 
 @include media-breakpoint-up(md) {
