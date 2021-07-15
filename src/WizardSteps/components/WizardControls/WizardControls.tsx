@@ -51,6 +51,13 @@ const WizardControls: React.FC<WizardControlsProps> = ({
   controls = DEFAULT_CONTROLS,
 }) => {
   const { activeControls, nextStep, previousStep } = useNavigationContext();
+  const isSingleNavigation = React.useMemo(
+    () =>
+      (activeControls || controls).filter(({ type }: WizardControl) =>
+        ['next', 'prev'].includes(type)
+      ).length === 1,
+    [activeControls, controls]
+  );
 
   const getControlHandler = React.useCallback(
     (type: WizardControlType) => {
@@ -80,11 +87,14 @@ const WizardControls: React.FC<WizardControlsProps> = ({
             } = control;
             const isNext = type === 'next';
             const isPrev = type === 'prev';
+            const isNavigation = isNext || isPrev;
             const controlContainerClass: string = classnames(
               `col-sm-auto order-sm-${i}`,
               {
-                'col-6': isNext || isPrev,
-                'col-12 mt-3 mt-sm-0 mr-auto order-last': !isNext && !isPrev,
+                'col-6': isNavigation && !isSingleNavigation,
+                'col-12': isNavigation && isSingleNavigation,
+                'col-12 mt-3 mt-sm-0 mr-auto order-last': !isNavigation,
+                'ml-auto': isNext,
               }
             );
             const controlClass: string = classnames(
