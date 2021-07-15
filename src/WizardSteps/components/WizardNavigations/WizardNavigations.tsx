@@ -43,7 +43,13 @@ const WizardNavigations: React.FC<WizardNavigationsProps> = ({
   navigationDescription,
   navigations,
 }) => {
-  const { activeStep, isValidStep } = useNavigationContext();
+  const {
+    activeStep,
+    isNavigableStep,
+    isValidStep,
+    nextStep,
+  } = useNavigationContext();
+  const olRef = React.useRef<HTMLOListElement>(null);
   const [toggle, setToggle] = React.useState<boolean>(true);
 
   React.useEffect(() => {
@@ -74,15 +80,50 @@ const WizardNavigations: React.FC<WizardNavigationsProps> = ({
         </div>
       </div>
       {
-        <CSSTransition classNames="list-group" in={toggle} timeout={400}>
-          <ol className="list-group list-group-ordered d-md-flex mt-3">
+        <CSSTransition
+          nodeRef={olRef}
+          classNames="list-group"
+          in={toggle}
+          timeout={400}
+        >
+          <ol
+            ref={olRef}
+            className="list-group list-group-ordered d-md-flex mt-3"
+          >
             {navigations.map((props: WizardNavigationData, step: number) => {
               return (
                 <WizardNavigation
                   key={`${props.path}_${props.label}`}
                   {...props}
                   step={step}
-                  onClick={() => isValidStep(step) && setToggle(false)}
+                  onClick={(event) => {
+                    if (isNavigableStep(step)) {
+                      const isForwardNavigation = step > activeStep;
+
+                      if (isForwardNavigation) {
+                        /**
+                         * Stop react router default navigation if the user is
+                         * navigating forward and verify if the current step
+                         * has completed all the necessary checks. If completed,
+                         * navigate to next step, else retain at current step.
+                         */
+                        event.preventDefault();
+                        isValidStep().then((isValid) => {
+                          if (isValid !== false) {
+                            setToggle(false);
+                            nextStep();
+                          }
+                        });
+                      } else {
+                        setToggle(false);
+                      }
+                    } else {
+                      /**
+                       * Prevent user from navigating to non navigable step.
+                       */
+                      event.preventDefault();
+                    }
+                  }}
                 />
               );
             })}

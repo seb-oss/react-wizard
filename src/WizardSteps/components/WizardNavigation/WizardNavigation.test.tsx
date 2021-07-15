@@ -20,11 +20,14 @@ const mockedUseNavigationContext = useNavigationContext as jest.Mock<NavigationI
 
 describe('Component: WizardNavigation', () => {
   const defaultNavigationContext: NavigationInterface = {
+    activeControls: undefined,
     activeStep: 0,
     activeState: undefined,
+    isNavigableStep: jest.fn(),
     isValidStep: jest.fn(),
     nextStep: jest.fn(),
     previousStep: jest.fn(),
+    setActiveControls: jest.fn(),
     setActiveState: jest.fn(),
     setActiveStep: jest.fn(),
   };
@@ -76,7 +79,7 @@ describe('Component: WizardNavigation', () => {
   it('Should render invalid state', () => {
     mockedUseNavigationContext.mockImplementation(() => ({
       ...defaultNavigationContext,
-      isValidStep: jest.fn().mockReturnValueOnce(false),
+      isNavigableStep: jest.fn().mockReturnValueOnce(false),
     }));
     const { container } = renderWithRouter();
     expect(

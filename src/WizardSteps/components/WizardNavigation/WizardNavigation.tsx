@@ -27,15 +27,15 @@ export type WizardNavigationProps = WizardNavigationData & {
   /** The step number of the current step */
   step: number;
   /** Event triggered when navigation is click. */
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
 };
 
 const WizardNavigation: React.FC<WizardNavigationProps> = (props) => {
-  const { activeState, activeStep, isValidStep } = useNavigationContext();
+  const { activeState, activeStep, isNavigableStep } = useNavigationContext();
   const { path, label, step, onClick } = props;
   const isActive: boolean = activeStep === step;
   const isCompleted: boolean = activeStep > step;
-  const isValid: boolean = isValidStep(step);
+  const isNavigable: boolean = isNavigableStep(step);
   const state: WizardStepState = isActive
     ? activeState || props.state
     : undefined;
@@ -44,7 +44,7 @@ const WizardNavigation: React.FC<WizardNavigationProps> = (props) => {
       className={classnames('list-group-item', 'wizard-navigation', {
         'wizard-navigation--active': isActive,
         'wizard-navigation--passed': isCompleted,
-        'wizard-navigation--disabled': !isValid,
+        'wizard-navigation--disabled': !isNavigable,
         'wizard-navigation--danger': state === 'danger',
         'wizard-navigation--info': state === 'info',
         'wizard-navigation--warning': state === 'warning',

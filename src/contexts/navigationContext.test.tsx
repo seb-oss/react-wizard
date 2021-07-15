@@ -3,14 +3,17 @@ import {
   render,
   RenderResult,
   screen,
+  waitFor,
 } from '@testing-library/react';
 import { createMemoryHistory, History } from 'history';
 import React from 'react';
 import { MemoryRouter, Router } from 'react-router-dom';
+import { WizardControl } from '../WizardSteps/components/WizardControls';
 import { WizardStepState } from '../WizardSteps/components/WizardStep';
 import { NavigationProvider, useNavigationContext } from './navigationContext';
 
 type DummyComponentProps = {
+  mockControls?: Array<WizardControl>;
   mockState?: WizardStepState;
   mockStep?: number;
   nextPath?: string;
@@ -18,28 +21,51 @@ type DummyComponentProps = {
 };
 
 function DummyComponent(props: DummyComponentProps) {
-  const { mockState, mockStep, nextPath, prevPath } = props;
+  const { mockControls, mockState, mockStep, nextPath, prevPath } = props;
   const {
+    activeControls = [],
     activeState,
     activeStep,
+    isNavigableStep,
     isValidStep,
     nextStep,
     previousStep,
+    setActiveControls,
     setActiveState,
     setActiveStep,
   } = useNavigationContext();
+  const [validStep, setValidStep] = React.useState<boolean>(true);
+
+  React.useEffect(() => {
+    async function fetchValidStep() {
+      setValidStep(await isValidStep());
+    }
+
+    // use set timeout to ensure async sequence is respected
+    setTimeout(() => {
+      fetchValidStep();
+    }, 0);
+  }, [activeControls, isValidStep]);
+
   return (
     <div>
+      <p data-testid="activeControls">{activeControls.length}</p>
       <p data-testid="activeState">{activeState}</p>
       <p data-testid="activeStep">{activeStep}</p>
+      <p data-testid="isNavigableStep">
+        {isNavigableStep(mockStep) ? 'valid-next-step' : 'invalid-next-step'}
+      </p>
       <p data-testid="isValidStep">
-        {isValidStep(mockStep) ? 'valid-next-step' : 'invalid-next-step'}
+        {validStep ? 'valid-active-step' : 'invalid-active-step'}
       </p>
       <button type="button" onClick={() => nextStep(nextPath)}>
         next step
       </button>
       <button type="button" onClick={() => previousStep(prevPath)}>
         previous step
+      </button>
+      <button type="button" onClick={() => setActiveControls(mockControls)}>
+        set active controls
       </button>
       <button type="button" onClick={() => setActiveState(mockState)}>
         set active state
@@ -84,12 +110,20 @@ describe('Context: NavigationContext', () => {
     fireEvent.click(screen.getByText('previous step'));
   }
 
+  function configureActiveControls() {
+    fireEvent.click(screen.getByText('set active controls'));
+  }
+
   function configureActiveState() {
     fireEvent.click(screen.getByText('set active state'));
   }
 
   function configureActiveStep() {
     fireEvent.click(screen.getByText('set active step'));
+  }
+
+  function assertActiveControlsLength(length: number) {
+    expect(screen.getByTestId('activeControls')).toHaveTextContent(`${length}`);
   }
 
   function assertActiveState(state: WizardStepState) {
@@ -122,6 +156,11 @@ describe('Context: NavigationContext', () => {
     );
   });
 
+  it('Should return active controls', () => {
+    renderDummyComponent();
+    assertActiveControlsLength(0);
+  });
+
   it('Should return active state', () => {
     renderDummyComponent();
     assertActiveState(undefined);
@@ -132,30 +171,85 @@ describe('Context: NavigationContext', () => {
     assertActiveStep(0);
   });
 
-  describe('isValidStep', () => {
-    it('Should true when step provided is the immediate next step', () => {
+  describe('isNavigableStep', () => {
+    function assertIsNavigableStep(navigable: boolean): void {
+      expect(screen.getByTestId('isNavigableStep').textContent).toEqual(
+        navigable ? 'valid-next-step' : 'invalid-next-step'
+      );
+    }
+
+    it('Should return true when step provided is the immediate next step', () => {
       renderDummyComponent({ mockStep: 1 });
-      expect(screen.getByTestId('isValidStep').textContent).toEqual(
-        'valid-next-step'
-      );
+      assertIsNavigableStep(true);
     });
 
-    it('Should false when step provided is two or more steps ahead of current step', () => {
+    it('Should return false when step provided is two or more steps ahead of current step', () => {
       renderDummyComponent({ mockStep: 2 });
-      expect(screen.getByTestId('isValidStep').textContent).toEqual(
-        'invalid-next-step'
-      );
+      assertIsNavigableStep(false);
     });
 
-    it('Should true when step provided is any of the previous steps', () => {
+    it('Should return true when step provided is any of the previous steps', () => {
       renderDummyComponent({ mockStep: 0 });
       navigateForward();
       navigateForward();
       navigateForward();
       assertActiveStep(3);
-      expect(screen.getByTestId('isValidStep').textContent).toEqual(
-        'valid-next-step'
-      );
+      assertIsNavigableStep(true);
+    });
+  });
+
+  describe('isValidStep', () => {
+    async function assertIsValidStep(valid: boolean): Promise<void> {
+      await waitFor(() => {
+        expect(screen.getByTestId('isValidStep').textContent).toEqual(
+          valid ? 'valid-active-step' : 'invalid-active-step'
+        );
+      });
+    }
+
+    it('Should return true when default controls is used in active step', async () => {
+      renderDummyComponent();
+      await assertIsValidStep(true);
+    });
+
+    it('Should return true when custom next step handler returns truthy value', async () => {
+      renderDummyComponent({
+        mockControls: [{ type: 'next', label: 'next', onClick: () => true }],
+      });
+      configureActiveControls();
+      await assertIsValidStep(true);
+    });
+
+    it('Should return true when custom next step handler returns asynchronous truthy value', async () => {
+      renderDummyComponent({
+        mockControls: [
+          { type: 'next', label: 'next', onClick: () => Promise.resolve(true) },
+        ],
+      });
+      configureActiveControls();
+      await assertIsValidStep(true);
+    });
+
+    it('Should return false when custom next step handler returns falsy value', async () => {
+      renderDummyComponent({
+        mockControls: [{ type: 'next', label: 'next', onClick: () => false }],
+      });
+      configureActiveControls();
+      await assertIsValidStep(false);
+    });
+
+    it('Should return false when custom next step handler returns asynchronous falsy value', async () => {
+      renderDummyComponent({
+        mockControls: [
+          {
+            type: 'next',
+            label: 'next',
+            onClick: () => Promise.resolve(false),
+          },
+        ],
+      });
+      configureActiveControls();
+      await assertIsValidStep(false);
     });
   });
 
@@ -225,6 +319,17 @@ describe('Context: NavigationContext', () => {
       assertCurrentPath(history, '/signup');
       navigateBackward();
       assertCurrentPath(history, '/home');
+    });
+  });
+
+  describe('setActiveControls', () => {
+    it('Should configure controls provided as active controls', () => {
+      renderDummyComponent({
+        mockControls: [{ type: 'cancel', label: 'custom' }],
+      });
+      assertActiveControlsLength(0);
+      configureActiveControls();
+      assertActiveControlsLength(1);
     });
   });
 
