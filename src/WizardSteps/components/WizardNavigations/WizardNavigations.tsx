@@ -101,6 +101,12 @@ const WizardNavigations: React.FC<WizardNavigationsProps> = ({
                       const isForwardNavigation = step > activeStep;
 
                       if (isForwardNavigation) {
+                        /**
+                         * Stop react router default navigation if the user is
+                         * navigating forward and verify if the current step
+                         * has completed all the necessary checks. If completed,
+                         * navigate to next step, else retain at current step.
+                         */
                         event.preventDefault();
                         isValidStep().then((isValid) => {
                           if (isValid !== false) {
@@ -112,6 +118,9 @@ const WizardNavigations: React.FC<WizardNavigationsProps> = ({
                         setToggle(false);
                       }
                     } else {
+                      /**
+                       * Prevent user from navigating to non navigable step.
+                       */
                       event.preventDefault();
                     }
                   }}
