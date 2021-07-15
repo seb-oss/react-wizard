@@ -67,7 +67,7 @@ const WizardControls: React.FC<WizardControlsProps> = ({
   );
 
   return (
-    <div className="pb-3 px-md-4 px-xl-5 wizard-controls">
+    <div className="py-3 px-md-4 px-xl-5 wizard-controls">
       <div className="form-row justify-content-between">
         {(activeControls || controls).map(
           (control: WizardControl, i: number) => {

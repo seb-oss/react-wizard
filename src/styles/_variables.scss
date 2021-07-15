@@ -10,6 +10,8 @@ $wizard-navigation-width: 20rem;
 
 $wizard-step-spacing: 2rem;
 
-$wizard-secondary-content-max-width: calc(20rem - 2rem);
+$wizard-secondary-content-max-width: 18rem;
 
-$wizard-controls-height: 2.75rem;
+$wizard-controls-height: calc(
+  2.75rem + 2rem + 1px
+); // button height + button spacing + border top
