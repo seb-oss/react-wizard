@@ -84,10 +84,10 @@ const WizardStep: React.FC<WizardStepProps> = ({
   return (
     <>
       <div className="container-fluid p-3 p-md-4 wizard-step">
-        <h2 className="h5 font-weight-normal">{heading}</h2>
-        <h3 className="h2">{pageHeading || heading}</h3>
         <div className="row no-gutters">
           <div className="col-12 col-lg order-1 order-md-0 mr-lg-3 wizard-main">
+            <h2 className="h5 font-weight-normal">{heading}</h2>
+            <h3 className="h2">{pageHeading || heading}</h3>
             {children}
           </div>
           {secondaryContent && (
