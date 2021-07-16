@@ -1,6 +1,8 @@
 @import 'src/styles';
 
 .wizard-navigations {
+  background-color: $gray-200;
+
   &__toggle {
     cursor: pointer;
 
