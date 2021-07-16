@@ -57,7 +57,7 @@ const WizardNavigations: React.FC<WizardNavigationsProps> = ({
   }, [activeStep]);
 
   return (
-    <nav className="wizard-navigations bg-secondary py-3">
+    <nav className="wizard-navigations py-3">
       <div
         className={classnames(
           'd-md-none d-flex justify-content-between',

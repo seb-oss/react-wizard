@@ -6,14 +6,10 @@
 
 @include media-breakpoint-up(md) {
   .wizard-step {
-    max-height: calc(
-      100vh - #{$wizard-step-spacing} - #{$wizard-controls-height}
-    );
+    max-height: calc(100vh - #{$wizard-controls-height});
     overflow-y: auto;
-  }
 
-  // increase selector specificity to avoid storybook namespace clutter
-  .container-fluid {
+    // increase selector specificity to avoid storybook namespace clutter
     .wizard-controls {
       position: fixed;
       right: 0;

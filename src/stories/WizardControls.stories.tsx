@@ -44,3 +44,29 @@ WithCustomControls.args = {
     },
   ],
 };
+
+export const WithSingleBackControl: Story<WizardControlsProps> = Template.bind(
+  {}
+);
+WithSingleBackControl.args = {
+  controls: [
+    {
+      type: 'prev',
+      label: 'Backward',
+      onClick: action('prev-button-click'),
+    },
+  ],
+};
+
+export const WithSingleNextControl: Story<WizardControlsProps> = Template.bind(
+  {}
+);
+WithSingleNextControl.args = {
+  controls: [
+    {
+      type: 'next',
+      label: 'Forward',
+      onClick: action('next-button-click'),
+    },
+  ],
+};

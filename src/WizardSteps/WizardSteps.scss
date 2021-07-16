@@ -1,14 +1,14 @@
 @import 'src/styles';
 
-.wizard-main-container {
-  min-width: 0;
-}
-
 @include media-breakpoint-up(md) {
   .wizard-steps {
     .wizard-navigations {
       width: $wizard-navigation-width;
       height: 100vh;
+    }
+
+    .wizard-main-container {
+      max-width: calc(100vw - #{$wizard-navigation-width});
     }
   }
 }

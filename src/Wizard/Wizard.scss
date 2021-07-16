@@ -1,20 +1,20 @@
 @import 'src/styles';
 
-@include media-breakpoint-down(sm) {
-  .wizard {
-    overflow-y: auto;
-  }
+.wizard {
+  overflow-y: auto;
 }
 
 @include media-breakpoint-up(md) {
   .wizard {
+    overflow-y: hidden;
+
     .wizard-navigations {
       height: calc(100vh - #{$wizard-header-height});
     }
 
     .wizard-step {
       max-height: calc(
-        100vh - #{$wizard-header-height} - #{$wizard-step-spacing} - #{$wizard-controls-height}
+        100vh - #{$wizard-header-height} - #{$wizard-controls-height}
       );
     }
   }
