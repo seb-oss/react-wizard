@@ -1,12 +1,12 @@
 {
   "files": {
     "0.873df8da.iframe.bundle.js": "./0.873df8da.iframe.bundle.js",
-    "main.css": "./static/css/main.3b787f0f.chunk.css",
-    "main.js": "./main.4c3e4931.iframe.bundle.js",
-    "main.css.map": "./static/css/main.3b787f0f.chunk.css.map",
+    "main.css": "./static/css/main.1446984d.chunk.css",
+    "main.js": "./main.0c489a5f.iframe.bundle.js",
+    "main.css.map": "./static/css/main.1446984d.chunk.css.map",
     "runtime~main.js": "./runtime~main.7657d1af.iframe.bundle.js",
-    "vendors~main.js": "./vendors~main.c97772d8.iframe.bundle.js",
-    "vendors~main.js.map": "./vendors~main.c97772d8.iframe.bundle.js.map",
+    "vendors~main.js": "./vendors~main.0a126f79.iframe.bundle.js",
+    "vendors~main.js.map": "./vendors~main.0a126f79.iframe.bundle.js.map",
     "4.058a1e4b.iframe.bundle.js": "./4.058a1e4b.iframe.bundle.js",
     "4.058a1e4b.iframe.bundle.js.map": "./4.058a1e4b.iframe.bundle.js.map",
     "5.1673c095.iframe.bundle.js": "./5.1673c095.iframe.bundle.js",
@@ -50,12 +50,12 @@
     "static/media/plugin.d494b228.svg": "./static/media/plugin.d494b228.svg",
     "static/media/repo.6d496322.svg": "./static/media/repo.6d496322.svg",
     "static/media/stackalt.dba9fbb3.svg": "./static/media/stackalt.dba9fbb3.svg",
-    "vendors~main.c97772d8.iframe.bundle.js.LICENSE.txt": "./vendors~main.c97772d8.iframe.bundle.js.LICENSE.txt"
+    "vendors~main.0a126f79.iframe.bundle.js.LICENSE.txt": "./vendors~main.0a126f79.iframe.bundle.js.LICENSE.txt"
   },
   "entrypoints": [
     "runtime~main.7657d1af.iframe.bundle.js",
-    "vendors~main.c97772d8.iframe.bundle.js",
-    "static/css/main.3b787f0f.chunk.css",
-    "main.4c3e4931.iframe.bundle.js"
+    "vendors~main.0a126f79.iframe.bundle.js",
+    "static/css/main.1446984d.chunk.css",
+    "main.0c489a5f.iframe.bundle.js"
   ]
 }
