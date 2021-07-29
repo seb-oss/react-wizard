@@ -12,6 +12,7 @@ const neededParams = [
   'main',
   'typings',
   'repository',
+  'publishConfig',
   'keywords',
   'author',
   'license',

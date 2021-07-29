@@ -1,12 +1,13 @@
 # React Wizard
 
-<!-- [![https://img.shields.io/npm/v/@sebgroup/react-wizard](https://img.shields.io/npm/v/@sebgroup/react-wizard)](https://www.npmjs.com/package/@sebgroup/react-wizard)
-![Deployment](https://github.com/sebgroup/react-wizard/workflows/Deployment/badge.svg)
-![Github Pages](https://github.com/sebgroup/react-wizard/workflows/Github%20Pages/badge.svg) -->
+[![https://img.shields.io/npm/v/@sebgroup/react-wizard](https://img.shields.io/npm/v/@sebgroup/react-wizard)](https://www.npmjs.com/package/@sebgroup/react-wizard)
+![Build](https://github.com/sebgroup/react-wizard/workflows/Build/badge.svg)
+![Deployment](https://github.com/sebgroup/react-wizard/workflows/Release/badge.svg)
+<!-- ![Github Pages](https://github.com/sebgroup/react-wizard/workflows/Github%20Pages/badge.svg) -->
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 [![Coverage Status](https://coveralls.io/repos/github/sebgroup/react-wizard/badge.svg?branch=master)](https://coveralls.io/github/sebgroup/react-wizard?branch=master)
-<!-- [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=sebgroup/react-wizard)](https://dependabot.com) -->
+[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=sebgroup/react-wizard)](https://dependabot.com)
 
 This is a set of react wizard components some of which are based on SEB's bootstrap. The plan for this project is to increase and improve components for future usage.
 
@@ -52,8 +53,8 @@ This project uses `prettier` for a more consistent (less annoying) coding. The `
 
 1. Installation `npm ci` or `npm i --legacy-peer-deps && npm i`
 1. Development: `npm start`
-1. Check formatting rules, Compile components: `npm run build`
-1. Build and create the Documentation pages only: `npm run docs`
+1. Check formatting rules, Compile components: `npm run build:lib`
+1. Build and create the Documentation pages only: `npm run build:docs`
 1. To run the unit tests, run: `npm test`
 1. To run a unit test for a specific component you have to pass the name of the component, example: `npm test Wizard`. It can also be chained with multiple specific components, e.g. `npm test Wizard WizardHeader`
 1. To commit your changes run: `npm run commit` and follow the steps

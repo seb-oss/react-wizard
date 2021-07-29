@@ -1,15 +1,18 @@
-name: Build
+name: Github Pages
 
-on: pull_request
+on:
+  push:
+    branches: [master]
 
 jobs:
-  build_check:
+  publish:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node: ['15']
     name: Node ${{ matrix.node }}
     env:
+      CI: true
       # temporary disable preflight check until CRA loosen babel-loader version dependency that clashes with storybook babel-loader version
       # https://github.com/storybookjs/storybook/issues/5183
       SKIP_PREFLIGHT_CHECK: true
@@ -24,8 +27,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Execute unit test
-        run: npm test
+      - name: Build docs
+        run: npm run build:docs
 
-      - name: Build library
-        run: npm run build:lib
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with:
+          branch: gh-pages
+          folder: storybook-static
