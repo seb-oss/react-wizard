@@ -4,4 +4,35 @@
   .btn {
     text-transform: capitalize;
   }
+
+  .btn-next,
+  .btn-prev {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-next {
+    &::after {
+      @include icon('arrow-right');
+      margin-left: 0.5rem;
+      filter: $white-filter;
+    }
+  }
+
+  .btn-prev {
+    &::before {
+      @include icon('arrow-left');
+      margin-right: 0.5rem;
+      filter: $primary-filter;
+    }
+
+    &:active,
+    &:hover {
+      &::before {
+        filter: $white-filter;
+      }
+    }
+  }
 }
