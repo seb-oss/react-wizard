@@ -15,3 +15,10 @@ $wizard-secondary-content-max-width: 18rem;
 $wizard-controls-height: calc(
   2.75rem + 2rem + 1px
 ); // button height + button spacing + border top
+
+// generate filter colors, reference https://codepen.io/sosuke/pen/Pjoqqp
+$primary-filter: invert(49%) sepia(55%) saturate(7460%) hue-rotate(183deg)
+  brightness(88%) contrast(101%);
+
+$white-filter: invert(85%) sepia(99%) saturate(2%) hue-rotate(147deg)
+  brightness(105%) contrast(101%);

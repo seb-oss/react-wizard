@@ -1,0 +1,6 @@
+@mixin icon($icon-name) {
+  content: '';
+  width: 1rem;
+  height: 1rem;
+  background: url('../assets/icons/#{$icon-name}.svg') no-repeat center;
+}

@@ -23,26 +23,22 @@ li.list-group-item.wizard-navigation {
   }
 
   &::after {
-    content: '';
     position: absolute;
     top: 1.25rem;
     right: 1rem;
-    width: 1rem;
-    height: 1rem;
     cursor: pointer;
   }
 
   &--info {
     &::after {
-      background: url('../../../assets/icons/info-state.svg') no-repeat center;
+      @include icon('info-state');
     }
   }
 
   &--warning {
     &::after {
       border-radius: 3px;
-      background: url('../../../assets/icons/warning-state.svg') no-repeat
-        center;
+      @include icon('warning-state');
       background-color: black;
       background-size: cover;
     }
@@ -50,7 +46,7 @@ li.list-group-item.wizard-navigation {
 
   &--danger {
     &::after {
-      background: url('../../../assets/icons/danger-state.svg') no-repeat center;
+      @include icon('danger-state');
     }
   }
 
@@ -59,7 +55,7 @@ li.list-group-item.wizard-navigation {
     background-color: $gray-100;
 
     &::after {
-      background: url('../../../assets/icons/check.svg') no-repeat center;
+      @include icon('check');
     }
   }
 
