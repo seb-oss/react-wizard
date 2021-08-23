@@ -124,7 +124,7 @@ const WizardControls: React.FC<WizardControlsProps> = ({
                     }
                   }}
                 >
-                  {label}
+                  <span>{label}</span>
                 </button>
               </div>
             );
