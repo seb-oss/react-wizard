@@ -17,14 +17,22 @@ export interface NavigationInterface {
    */
   activeStep: number;
   /**
+   * Flag to indicate if the wizard is completed.
+   */
+  isWizardCompleted: boolean;
+  /**
+   * Update wizard status to complete.
+   */
+  completeWizard: () => void;
+  /**
    * Verify if the active step's next step handler is valid, it returns a
    * promise based truthy value when it is valid, false otherwise.
    */
   isValidStep: () => Promise<boolean>;
   /**
    * Verify if the step provided is the immediate next step or any of the
-   * previous step. A step is considered navigable if it satisfy any of the
-   * conditions mentioned above.
+   * previous step and the wizard has not complete. A step is considered
+   * navigable if it satisfy any of the conditions mentioned above.
    */
   isNavigableStep: (step: number) => boolean;
   /**
@@ -75,10 +83,15 @@ const NavigationProvider: React.FC<NavigationProviderProps> = ({
   >();
   const [activeState, setActiveState] = React.useState<WizardStepState>();
   const [activeStep, setActiveStep] = React.useState<number>(0);
+  const [isWizardCompleted, setWizardCompleted] = React.useState<boolean>(
+    false
+  );
+
+  const completeWizard = React.useCallback(() => setWizardCompleted(true), []);
 
   const isNavigableStep = React.useCallback(
-    (step: number) => step <= activeStep + 1,
-    [activeStep]
+    (step: number) => step <= activeStep + 1 && !isWizardCompleted,
+    [activeStep, isWizardCompleted]
   );
 
   const isValidStep = React.useCallback(async () => {
@@ -123,6 +136,8 @@ const NavigationProvider: React.FC<NavigationProviderProps> = ({
         activeControls,
         activeState,
         activeStep,
+        isWizardCompleted,
+        completeWizard,
         isValidStep,
         isNavigableStep,
         nextStep,
