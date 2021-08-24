@@ -1,7 +1,50 @@
 @import 'src/styles';
 
+@mixin capitalize-first-letter {
+  text-transform: lowercase;
+
+  &::first-letter {
+    text-transform: uppercase;
+  }
+}
+
 .wizard-controls {
   .btn {
-    text-transform: capitalize;
+    @include capitalize-first-letter;
+  }
+
+  .btn-next,
+  .btn-prev {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+
+    span {
+      @include capitalize-first-letter;
+    }
+  }
+
+  .btn-next {
+    &::after {
+      @include icon('arrow-right');
+      margin-left: 0.5rem;
+      filter: $white-filter;
+    }
+  }
+
+  .btn-prev {
+    &::before {
+      @include icon('arrow-left');
+      margin-right: 0.5rem;
+      filter: $primary-filter;
+    }
+
+    &:active,
+    &:hover {
+      &::before {
+        filter: $white-filter;
+      }
+    }
   }
 }

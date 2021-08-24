@@ -100,6 +100,8 @@ const WizardControls: React.FC<WizardControlsProps> = ({
             const controlClass: string = classnames(
               'btn w-100',
               {
+                'btn-next': isNext,
+                'btn-prev': isPrev,
                 'btn-primary': isNext,
                 'btn-outline-primary': isPrev,
                 'btn-secondary': !isNext && !isPrev,
@@ -122,7 +124,7 @@ const WizardControls: React.FC<WizardControlsProps> = ({
                     }
                   }}
                 >
-                  {label}
+                  <span>{label}</span>
                 </button>
               </div>
             );
