@@ -19,6 +19,7 @@
       padding: $spacer;
       background: $white;
       transition: all 0.4s ease-out;
+      z-index: 1; // increase z-index to overlap contents from wizard content
 
       .form-row {
         max-width: $wizard-content-max-width;

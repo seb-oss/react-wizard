@@ -26,6 +26,8 @@ function DummyComponent(props: DummyComponentProps) {
     activeControls = [],
     activeState,
     activeStep,
+    isWizardCompleted,
+    completeWizard,
     isNavigableStep,
     isValidStep,
     nextStep,
@@ -58,6 +60,12 @@ function DummyComponent(props: DummyComponentProps) {
       <p data-testid="isValidStep">
         {validStep ? 'valid-active-step' : 'invalid-active-step'}
       </p>
+      <p data-testid="isWizardCompleted">
+        {isWizardCompleted ? 'wizard-completed' : 'wizard-incomplete'}
+      </p>
+      <button type="button" onClick={completeWizard}>
+        complete wizard
+      </button>
       <button type="button" onClick={() => nextStep(nextPath)}>
         next step
       </button>
@@ -100,6 +108,10 @@ describe('Context: NavigationContext', () => {
           : ({ children }) => <MemoryRouter>{children}</MemoryRouter>,
       }
     );
+  }
+
+  function completeWizard() {
+    fireEvent.click(screen.getByText('complete wizard'));
   }
 
   function navigateForward() {
@@ -250,6 +262,25 @@ describe('Context: NavigationContext', () => {
       });
       configureActiveControls();
       await assertIsValidStep(false);
+    });
+  });
+
+  describe('isWizardCompleted', () => {
+    function assertIsWizardCompleted(completed: boolean): void {
+      expect(screen.getByTestId('isWizardCompleted').textContent).toEqual(
+        completed ? 'wizard-completed' : 'wizard-incomplete'
+      );
+    }
+
+    it('Should return false when wizard is incomplete', () => {
+      renderDummyComponent();
+      assertIsWizardCompleted(false);
+    });
+
+    it('Should return true when wizard has completed', () => {
+      renderDummyComponent();
+      completeWizard();
+      assertIsWizardCompleted(true);
     });
   });
 

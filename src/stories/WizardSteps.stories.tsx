@@ -16,7 +16,7 @@ export default {
 
 const Template: Story<WizardStepsProps> = (args) => <WizardSteps {...args} />;
 const StepComponent: React.FC = () => {
-  const { setActiveState } = useNavigationContext();
+  const { completeWizard, setActiveState } = useNavigationContext();
   return (
     <div>
       <div className="d-flex flex-column flex-sm-row justify-content-between mb-3">
@@ -102,6 +102,11 @@ const StepComponent: React.FC = () => {
         tellus. Aenean pulvinar, metus at pellentesque varius, ante felis porta
         lacus, a egestas nulla orci nec mi. Sed et orci eleifend, elementum dui
         et, pharetra neque.
+      </p>
+      <p className="text-center">
+        <button className="btn btn-primary m-auto" onClick={completeWizard}>
+          Complete
+        </button>
       </p>
     </div>
   );

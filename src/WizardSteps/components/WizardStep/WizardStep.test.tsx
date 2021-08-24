@@ -23,6 +23,8 @@ describe('Component: WizardStep', () => {
     activeControls: undefined,
     activeState: undefined,
     activeStep: 0,
+    isWizardCompleted: false,
+    completeWizard: jest.fn(),
     isNavigableStep: jest.fn(),
     isValidStep: jest.fn(),
     nextStep: jest.fn(),
