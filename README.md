@@ -51,7 +51,7 @@ For `Visual Studio Code` users, please install the [recommended plugins](.vscode
 
 This project uses `prettier` for a more consistent (less annoying) coding. The `src` folder is where the actual components exist with all their necessary dependencies.
 
-1. Installation `npm ci` or `npm i --legacy-peer-deps && npm i`
+1. Installation `npm ci` or `npm i --force`
 1. Development: `npm start`
 1. Check formatting rules, Compile components: `npm run build:lib`
 1. Build and create the Documentation pages only: `npm run build:docs`
