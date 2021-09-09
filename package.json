@@ -77,7 +77,7 @@
   },
   "peerDependencies": {
     "@sebgroup/bootstrap": "^6.0.0",
-    "@sebgroup/react-components": "^5.0.0-beta.17",
+    "@sebgroup/react-components": "^5.0.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-router-dom": "^5.2.0",
