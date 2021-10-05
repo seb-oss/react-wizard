@@ -111,7 +111,7 @@ const WizardNavigations: React.FC<WizardNavigationsProps> = ({
                         isValidStep().then((isValid) => {
                           if (isValid !== false) {
                             setToggle(false);
-                            nextStep();
+                            nextStep(props.path);
                           }
                         });
                       } else {
