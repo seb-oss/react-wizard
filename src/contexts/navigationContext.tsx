@@ -30,9 +30,10 @@ export interface NavigationInterface {
    */
   isValidStep: () => Promise<boolean>;
   /**
-   * Verify if the step provided is the immediate next step or any of the
-   * previous step and the wizard has not complete. A step is considered
-   * navigable if it satisfy any of the conditions mentioned above.
+   * When `strict` mode is enabled, this will verify if the step provided
+   * is the immediate next step or any of the previous step and the wizard
+   * has not complete. A step is considered navigable if it satisfy any of
+   * the conditions mentioned above.
    */
   isNavigableStep: (step: number) => boolean;
   /**
@@ -65,8 +66,16 @@ export interface NavigationInterface {
 }
 
 export type NavigationProviderProps = {
-  /** The list of routes path to be managed. */
+  /**
+   * The list of routes path to be managed.
+   * */
   routes: Array<string>;
+  /**
+   * Strict navigations guard toggle. If configure to `true`, user can only navigate
+   * to immediate next or previous step; when configure to `false`, user can navigate to any
+   * steps at any time. *Default* to `true`.
+   */
+  strict?: boolean;
 };
 
 const NavigationContext = React.createContext<NavigationInterface | undefined>(
@@ -76,6 +85,7 @@ const NavigationContext = React.createContext<NavigationInterface | undefined>(
 const NavigationProvider: React.FC<NavigationProviderProps> = ({
   children,
   routes,
+  strict = true,
 }) => {
   const history = useHistory();
   const [activeControls, setActiveControls] = React.useState<
@@ -90,8 +100,8 @@ const NavigationProvider: React.FC<NavigationProviderProps> = ({
   const completeWizard = React.useCallback(() => setWizardCompleted(true), []);
 
   const isNavigableStep = React.useCallback(
-    (step: number) => step <= activeStep + 1 && !isWizardCompleted,
-    [activeStep, isWizardCompleted]
+    (step: number) => (!strict || step <= activeStep + 1) && !isWizardCompleted,
+    [activeStep, isWizardCompleted, strict]
   );
 
   const isValidStep = React.useCallback(async () => {

@@ -41,6 +41,12 @@ export type WizardStepsProps = {
    * react router for navigations
    * */
   steps: Array<WizardStepConfig>;
+  /**
+   * Strict navigations guard toggle. If configure to true, user can only navigate
+   * to immediate next or previous step; when configure to false, user can navigate to any
+   * steps at any time. Default to true.
+   */
+  strict?: boolean;
 };
 
 export type WizardStepConfig = {
@@ -96,7 +102,7 @@ const WizardRoutes: React.FC<Pick<WizardStepsProps, 'steps'>> = ({ steps }) => {
 };
 
 const WizardSteps: React.FC<WizardStepsProps> = (props) => {
-  const { navigationDescription, steps: sourceSteps } = props;
+  const { navigationDescription, steps: sourceSteps, strict = true } = props;
   const { pathname } = useLocation();
   const match = useRouteMatch();
 
@@ -145,7 +151,7 @@ const WizardSteps: React.FC<WizardStepsProps> = (props) => {
   );
 
   return (
-    <NavigationProvider routes={routes}>
+    <NavigationProvider routes={routes} strict={strict}>
       <div className="row no-gutters wizard-steps">
         <div className="col-12 col-md-auto">
           <WizardNavigations

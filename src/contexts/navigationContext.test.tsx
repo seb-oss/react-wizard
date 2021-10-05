@@ -96,10 +96,11 @@ describe('Context: NavigationContext', () => {
   function renderDummyComponent(
     props?: DummyComponentProps,
     history?: History,
-    routes: Array<string> = DEFAULT_ROUTES
+    routes: Array<string> = DEFAULT_ROUTES,
+    strict?: boolean
   ): RenderResult {
     return render(
-      <NavigationProvider routes={routes}>
+      <NavigationProvider routes={routes} strict={strict}>
         <DummyComponent {...props} />
       </NavigationProvider>,
       {
@@ -195,9 +196,14 @@ describe('Context: NavigationContext', () => {
       assertIsNavigableStep(true);
     });
 
-    it('Should return false when step provided is two or more steps ahead of current step', () => {
+    it('Should return false when step provided is two or more steps ahead of current step in strict mode', () => {
       renderDummyComponent({ mockStep: 2 });
       assertIsNavigableStep(false);
+    });
+
+    it('Should return true when step provided is two or more steps ahead of current step in non strict mode', () => {
+      renderDummyComponent({ mockStep: 2 }, undefined, undefined, false);
+      assertIsNavigableStep(true);
     });
 
     it('Should return true when step provided is any of the previous steps', () => {

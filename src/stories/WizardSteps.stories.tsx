@@ -149,6 +149,7 @@ Default.args = {
       },
     },
   ],
+  strict: true,
 };
 
 export const WithSecondaryContent: Story<WizardStepsProps> = Template.bind({});
