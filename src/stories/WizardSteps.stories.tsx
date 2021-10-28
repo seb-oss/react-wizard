@@ -14,7 +14,15 @@ export default {
   ],
 } as Meta;
 
-const Template: Story<WizardStepsProps> = (args) => <WizardSteps {...args} />;
+const Template: Story<WizardStepsProps> = (args) => {
+  const [strict, setStrict] = React.useState<boolean>(!!args.strict);
+
+  React.useEffect(() => {
+    setStrict(args.strict);
+  }, [args.strict]);
+
+  return <WizardSteps {...args} strict={strict} />;
+};
 const StepComponent: React.FC = () => {
   const { completeWizard, setActiveState } = useNavigationContext();
   return (
