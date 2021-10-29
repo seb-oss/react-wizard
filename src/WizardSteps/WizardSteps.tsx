@@ -59,8 +59,10 @@ export type WizardStepConfig = {
   label: string;
   /** The component to be displayed when the route matches the step path. */
   component: React.ComponentType<any>;
-  /** Additional data for the Step component */
+  /** The additional data for Step component. */
   data: WizardStepData;
+  /** If `true`, the navigation is disabled. */
+  disabled?: boolean;
 };
 
 const WizardRoutes: React.FC<Pick<WizardStepsProps, 'steps'>> = ({ steps }) => {
@@ -126,10 +128,11 @@ const WizardSteps: React.FC<WizardStepsProps> = (props) => {
   const navigations: Array<WizardNavigationData> = React.useMemo(
     () =>
       sourceSteps.map<WizardNavigationData>(
-        ({ label, path, data: { state } }: WizardStepConfig) => ({
+        ({ label, path, data: { state }, disabled }: WizardStepConfig) => ({
           label,
           path: `${parentUrl}${path}`,
           state,
+          disabled,
         })
       ),
     [parentUrl, sourceSteps]
