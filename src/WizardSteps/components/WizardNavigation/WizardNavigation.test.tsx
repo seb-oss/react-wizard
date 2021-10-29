@@ -78,6 +78,13 @@ describe('Component: WizardNavigation', () => {
     ).toBeInTheDocument();
   });
 
+  it('Should render disabled state', () => {
+    const { container } = renderWithRouter({ disabled: true });
+    expect(
+      container.querySelector('.wizard-navigation--disabled')
+    ).toBeInTheDocument();
+  });
+
   it('Should render invalid state', () => {
     mockedUseNavigationContext.mockImplementation(() => ({
       ...defaultNavigationContext,

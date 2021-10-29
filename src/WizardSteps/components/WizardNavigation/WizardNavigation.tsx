@@ -21,6 +21,8 @@ export type WizardNavigationData = {
    * you've passed them.
    * */
   state?: WizardStepState;
+  /** If `true`, the navigation is disabled. */
+  disabled?: boolean;
 };
 
 export type WizardNavigationProps = WizardNavigationData & {
@@ -35,6 +37,7 @@ const WizardNavigation: React.FC<WizardNavigationProps> = (props) => {
   const { path, label, step, onClick } = props;
   const isActive: boolean = activeStep === step;
   const isCompleted: boolean = activeStep > step;
+  const isDisabled: boolean = !!props.disabled;
   const isNavigable: boolean = isNavigableStep(step);
   const state: WizardStepState = isActive
     ? activeState || props.state
@@ -44,7 +47,7 @@ const WizardNavigation: React.FC<WizardNavigationProps> = (props) => {
       className={classnames('list-group-item', 'wizard-navigation', {
         'wizard-navigation--active': isActive,
         'wizard-navigation--passed': isCompleted,
-        'wizard-navigation--disabled': !isNavigable,
+        'wizard-navigation--disabled': isDisabled || !isNavigable,
         'wizard-navigation--danger': state === 'danger',
         'wizard-navigation--info': state === 'info',
         'wizard-navigation--warning': state === 'warning',
