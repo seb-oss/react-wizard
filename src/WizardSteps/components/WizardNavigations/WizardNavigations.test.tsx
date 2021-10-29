@@ -137,35 +137,58 @@ describe('Component: WizardNavigations', () => {
   });
 
   it('Should navigate to selected step when navigation link clicked is navigable and step handler is valid', async () => {
-    const mockNextStep: jest.Mock = jest.fn();
     mockedUseNavigationContext.mockImplementation(() => ({
       ...defaultNavigationContext,
       isNavigableStep: jest.fn().mockReturnValueOnce(true),
       isValidStep: jest.fn().mockResolvedValueOnce(true),
-      nextStep: mockNextStep,
     }));
     renderWithRouter();
-    expect(mockNextStep).not.toHaveBeenCalled();
+    expect(defaultNavigationContext.nextStep).not.toHaveBeenCalled();
     await waitFor(() => {
       navigateTo(1);
     });
-    expect(mockNextStep).toHaveBeenCalledTimes(1);
+    expect(defaultNavigationContext.nextStep).toHaveBeenCalledTimes(1);
   });
 
   it('Should retain at current step when navigation link clicked is navigable but step handler is invalid', async () => {
-    const mockNextStep: jest.Mock = jest.fn();
     mockedUseNavigationContext.mockImplementation(() => ({
       ...defaultNavigationContext,
       isNavigableStep: jest.fn().mockReturnValueOnce(true),
       isValidStep: jest.fn().mockResolvedValueOnce(false),
-      nextStep: mockNextStep,
     }));
     renderWithRouter();
-    expect(mockNextStep).not.toHaveBeenCalled();
+    expect(defaultNavigationContext.nextStep).not.toHaveBeenCalled();
     await waitFor(() => {
       navigateTo(1);
     });
-    expect(mockNextStep).not.toHaveBeenCalled();
+    expect(defaultNavigationContext.nextStep).not.toHaveBeenCalled();
+  });
+
+  it('Should retain at current step when navigation link clicked is navigable but step is disabled', async () => {
+    mockedUseNavigationContext.mockImplementation(() => ({
+      ...defaultNavigationContext,
+      isNavigableStep: jest.fn().mockReturnValueOnce(true),
+    }));
+    renderWithRouter({
+      navigations: [
+        {
+          label: 'Initial Step',
+          path: '/initialstep',
+        },
+        {
+          label: 'Disabled Step',
+          path: '/disabledstep',
+          disabled: true,
+        },
+      ],
+    });
+    expect(defaultNavigationContext.isValidStep).not.toHaveBeenCalled();
+    expect(defaultNavigationContext.nextStep).not.toHaveBeenCalled();
+    await waitFor(() => {
+      fireEvent.click(screen.getByRole('link', { name: 'Disabled Step' }));
+    });
+    expect(defaultNavigationContext.nextStep).not.toHaveBeenCalled();
+    expect(defaultNavigationContext.isValidStep).not.toHaveBeenCalled();
   });
 
   it('Should retain navigation list expansion when navigation link clicked is not navigable', async () => {

@@ -91,13 +91,14 @@ const WizardNavigations: React.FC<WizardNavigationsProps> = ({
             className="list-group list-group-ordered d-md-flex mt-3"
           >
             {navigations.map((props: WizardNavigationData, step: number) => {
+              const isDisabled: boolean = !!props.disabled;
               return (
                 <WizardNavigation
                   key={`${props.path}_${props.label}`}
                   {...props}
                   step={step}
                   onClick={(event) => {
-                    if (isNavigableStep(step)) {
+                    if (!isDisabled && isNavigableStep(step)) {
                       const isForwardNavigation = step > activeStep;
 
                       if (isForwardNavigation) {
