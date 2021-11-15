@@ -17,18 +17,23 @@ export interface NavigationInterface {
    */
   activeStep: number;
   /**
+   * Strict navigations guard toggle. If configure to `true`, user can only navigate
+   * to immediate next or previous step; when configure to `false`, user can navigate to any
+   * steps at any time. *Default* to `true`.
+   */
+  isStrict: boolean;
+  /**
    * Flag to indicate if the wizard is completed.
    */
   isWizardCompleted: boolean;
   /**
+   * The list of routes path to be managed.
+   * */
+  routes: Array<string>;
+  /**
    * Update wizard status to complete.
    */
   completeWizard: () => void;
-  /**
-   * Verify if the active step's next step handler is valid, it returns a
-   * promise based truthy value when it is valid, false otherwise.
-   */
-  isValidStep: () => Promise<boolean>;
   /**
    * When `strict` mode is enabled, this will verify if the step provided
    * is the immediate next step or any of the previous step and the wizard
@@ -36,6 +41,11 @@ export interface NavigationInterface {
    * the conditions mentioned above.
    */
   isNavigableStep: (step: number) => boolean;
+  /**
+   * Verify if the active step's next step handler is valid, it returns a
+   * promise based truthy value when it is valid, false otherwise.
+   */
+  isValidStep: () => Promise<boolean>;
   /**
    * A navigation helper to navigation to next step. If a path is provided,
    * it will navigate to the path provided, otherwise it will load the next
@@ -63,13 +73,21 @@ export interface NavigationInterface {
    * based on zero-based numbering system.
    */
   setActiveStep: React.Dispatch<React.SetStateAction<number>>;
+  /**
+   * Configure the routes path to be managed.
+   */
+  setRoutes: React.Dispatch<React.SetStateAction<Array<string>>>;
+  /**
+   * Configure the navigation mode.
+   */
+  setStrict: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export type NavigationProviderProps = {
   /**
    * The list of routes path to be managed.
    * */
-  routes: Array<string>;
+  routes?: Array<string>;
   /**
    * Strict navigations guard toggle. If configure to `true`, user can only navigate
    * to immediate next or previous step; when configure to `false`, user can navigate to any
@@ -84,8 +102,8 @@ const NavigationContext = React.createContext<NavigationInterface | undefined>(
 
 const NavigationProvider: React.FC<NavigationProviderProps> = ({
   children,
-  routes,
-  strict = true,
+  routes: initialRoutes = [],
+  strict: initialStrict = true,
 }) => {
   const history = useHistory();
   const [activeControls, setActiveControls] = React.useState<
@@ -93,15 +111,18 @@ const NavigationProvider: React.FC<NavigationProviderProps> = ({
   >();
   const [activeState, setActiveState] = React.useState<WizardStepState>();
   const [activeStep, setActiveStep] = React.useState<number>(0);
+  const [isStrict, setStrict] = React.useState<boolean>(initialStrict);
   const [isWizardCompleted, setWizardCompleted] = React.useState<boolean>(
     false
   );
+  const [routes, setRoutes] = React.useState<Array<string>>(initialRoutes);
 
   const completeWizard = React.useCallback(() => setWizardCompleted(true), []);
 
   const isNavigableStep = React.useCallback(
-    (step: number) => (!strict || step <= activeStep + 1) && !isWizardCompleted,
-    [activeStep, isWizardCompleted, strict]
+    (step: number) =>
+      (!isStrict || step <= activeStep + 1) && !isWizardCompleted,
+    [activeStep, isWizardCompleted, isStrict]
   );
 
   const isValidStep = React.useCallback(async () => {
@@ -146,15 +167,19 @@ const NavigationProvider: React.FC<NavigationProviderProps> = ({
         activeControls,
         activeState,
         activeStep,
+        isStrict,
         isWizardCompleted,
+        routes,
         completeWizard,
-        isValidStep,
         isNavigableStep,
+        isValidStep,
         nextStep,
         previousStep,
         setActiveControls,
         setActiveState,
         setActiveStep,
+        setRoutes,
+        setStrict,
       }}
     >
       {children}
