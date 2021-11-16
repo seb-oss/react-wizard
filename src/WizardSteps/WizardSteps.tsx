@@ -39,9 +39,8 @@ export type WizardStepsProps = {
    * */
   steps: Array<WizardStepConfig>;
   /**
-   * Strict navigations guard toggle. If configure to true, user can only navigate
-   * to immediate next or previous step; when configure to false, user can navigate to any
-   * steps at any time. Default to true.
+   * @deprecated use `Wizard` component `strict` props instead
+   * @see {@link Wizard.strict}
    */
   strict?: boolean;
 };
