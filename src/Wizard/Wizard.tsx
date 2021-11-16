@@ -1,6 +1,7 @@
 import { Modal } from '@sebgroup/react-components';
 import classnames from 'classnames';
 import React from 'react';
+import { NavigationProvider } from '../contexts/navigationContext';
 import './Wizard.scss';
 
 export type WizardProps = JSX.IntrinsicElements['div'] & {
@@ -28,7 +29,7 @@ const Wizard = React.forwardRef(
           ref={ref}
           className={classnames('wizard', props.className)}
         >
-          {children}
+          <NavigationProvider>{children}</NavigationProvider>
         </div>
       </Modal>
     );
