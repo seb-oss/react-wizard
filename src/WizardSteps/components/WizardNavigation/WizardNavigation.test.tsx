@@ -12,27 +12,12 @@ import {
 } from '../../../contexts/navigationContext';
 import WizardNavigation, { WizardNavigationProps } from './WizardNavigation';
 
-jest.mock('../../../contexts/navigationContext', () => ({
-  useNavigationContext: jest.fn(),
-}));
+jest.mock('../../../contexts/navigationContext');
 
+const { defaultNavigationInterface } = global;
 const mockedUseNavigationContext = useNavigationContext as jest.Mock<NavigationInterface>;
 
 describe('Component: WizardNavigation', () => {
-  const defaultNavigationContext: NavigationInterface = {
-    activeControls: undefined,
-    activeStep: 0,
-    activeState: undefined,
-    isWizardCompleted: false,
-    completeWizard: jest.fn(),
-    isNavigableStep: jest.fn(),
-    isValidStep: jest.fn(),
-    nextStep: jest.fn(),
-    previousStep: jest.fn(),
-    setActiveControls: jest.fn(),
-    setActiveState: jest.fn(),
-    setActiveStep: jest.fn(),
-  };
   const wizardNavigationProps: WizardNavigationProps = {
     label: 'Step 1',
     path: '/step1',
@@ -51,7 +36,7 @@ describe('Component: WizardNavigation', () => {
 
   beforeEach(() => {
     mockedUseNavigationContext.mockImplementation(
-      () => defaultNavigationContext
+      () => defaultNavigationInterface
     );
   });
 
@@ -69,7 +54,7 @@ describe('Component: WizardNavigation', () => {
 
   it('Should render completed state', () => {
     mockedUseNavigationContext.mockImplementation(() => ({
-      ...defaultNavigationContext,
+      ...defaultNavigationInterface,
       activeStep: 1,
     }));
     const { container } = renderWithRouter();
@@ -87,7 +72,7 @@ describe('Component: WizardNavigation', () => {
 
   it('Should render invalid state', () => {
     mockedUseNavigationContext.mockImplementation(() => ({
-      ...defaultNavigationContext,
+      ...defaultNavigationInterface,
       isNavigableStep: jest.fn().mockReturnValueOnce(false),
     }));
     const { container } = renderWithRouter();
@@ -126,7 +111,7 @@ describe('Component: WizardNavigation', () => {
 
   it('Should render navigation context active state', () => {
     mockedUseNavigationContext.mockImplementation(() => ({
-      ...defaultNavigationContext,
+      ...defaultNavigationInterface,
       activeState: 'danger',
     }));
     const { container } = renderWithRouter();

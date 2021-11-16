@@ -6,27 +6,12 @@ import {
 } from '../../../contexts/navigationContext';
 import WizardControls, { WizardControl } from './WizardControls';
 
-jest.mock('../../../contexts/navigationContext', () => ({
-  useNavigationContext: jest.fn(),
-}));
+jest.mock('../../../contexts/navigationContext');
 
+const { defaultNavigationInterface } = global;
 const mockedUseNavigationContext = useNavigationContext as jest.Mock<NavigationInterface>;
 
 describe('Component: WizardControls', () => {
-  const defaultNavigationContext: NavigationInterface = {
-    activeControls: undefined,
-    activeStep: 0,
-    activeState: undefined,
-    isWizardCompleted: false,
-    completeWizard: jest.fn(),
-    isNavigableStep: jest.fn(),
-    isValidStep: jest.fn(),
-    nextStep: jest.fn(),
-    previousStep: jest.fn(),
-    setActiveControls: jest.fn(),
-    setActiveState: jest.fn(),
-    setActiveStep: jest.fn(),
-  };
   let mockNextStep: jest.Mock;
   let mockPreviousStep: jest.Mock;
 
@@ -34,7 +19,7 @@ describe('Component: WizardControls', () => {
     mockNextStep = jest.fn();
     mockPreviousStep = jest.fn();
     mockedUseNavigationContext.mockImplementation(() => ({
-      ...defaultNavigationContext,
+      ...defaultNavigationInterface,
       nextStep: mockNextStep,
       previousStep: mockPreviousStep,
     }));
@@ -43,18 +28,18 @@ describe('Component: WizardControls', () => {
   it('Should render correctly', () => {
     const { container } = render(<WizardControls />);
     expect(screen.getByText('Back')).toBeInTheDocument();
-    expect(container.querySelector('.btn-prev').parentElement).toHaveClass(
+    expect(container.querySelector('.btn-prev')?.parentElement).toHaveClass(
       'col-6'
     );
     expect(screen.getByText('Next')).toBeInTheDocument();
-    expect(container.querySelector('.btn-next').parentElement).toHaveClass(
+    expect(container.querySelector('.btn-next')?.parentElement).toHaveClass(
       'col-6'
     );
   });
 
   it('should render active controls when navigation context has active controls', () => {
     mockedUseNavigationContext.mockImplementation(() => ({
-      ...defaultNavigationContext,
+      ...defaultNavigationInterface,
       activeControls: [{ type: 'cancel', label: 'custom' }],
     }));
     render(<WizardControls />);
@@ -93,7 +78,7 @@ describe('Component: WizardControls', () => {
         ]}
       />
     );
-    expect(container.querySelector('.btn-next').parentElement).toHaveClass(
+    expect(container.querySelector('.btn-next')?.parentElement).toHaveClass(
       'col-12'
     );
     rerender(
@@ -106,7 +91,7 @@ describe('Component: WizardControls', () => {
         ]}
       />
     );
-    expect(container.querySelector('.btn-prev').parentElement).toHaveClass(
+    expect(container.querySelector('.btn-prev')?.parentElement).toHaveClass(
       'col-12'
     );
   });
