@@ -1,7 +1,10 @@
 import { Meta, Story } from '@storybook/react';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { useNavigationContext } from '../contexts/navigationContext';
+import {
+  NavigationProvider,
+  useNavigationContext,
+} from '../contexts/navigationContext';
 import WizardSteps, { WizardStepsProps } from '../WizardSteps';
 import * as WizardControlsStories from './WizardControls.stories';
 
@@ -10,7 +13,11 @@ export default {
   component: WizardSteps,
   argTypes: {},
   decorators: [
-    (Story) => <MemoryRouter initialEntries={['/']}>{Story()}</MemoryRouter>,
+    (Story) => (
+      <MemoryRouter initialEntries={['/']}>
+        <NavigationProvider routes={['/']}>{Story()}</NavigationProvider>
+      </MemoryRouter>
+    ),
   ],
 } as Meta;
 
