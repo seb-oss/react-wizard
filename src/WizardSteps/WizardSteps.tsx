@@ -6,10 +6,7 @@ import {
   useLocation,
   useRouteMatch,
 } from 'react-router-dom';
-import {
-  NavigationProvider,
-  useNavigationContext,
-} from '../contexts/navigationContext';
+import { useNavigationContext } from '../contexts/navigationContext';
 import { WizardNavigationData } from './components/WizardNavigation';
 import WizardNavigations from './components/WizardNavigations';
 import WizardStep, { WizardStepData } from './components/WizardStep';
@@ -42,9 +39,8 @@ export type WizardStepsProps = {
    * */
   steps: Array<WizardStepConfig>;
   /**
-   * Strict navigations guard toggle. If configure to true, user can only navigate
-   * to immediate next or previous step; when configure to false, user can navigate to any
-   * steps at any time. Default to true.
+   * @deprecated use `Wizard` component `strict` props instead
+   * @see {@link Wizard.strict}
    */
   strict?: boolean;
 };
@@ -106,6 +102,7 @@ const WizardRoutes: React.FC<Pick<WizardStepsProps, 'steps'>> = ({ steps }) => {
 const WizardSteps: React.FC<WizardStepsProps> = (props) => {
   const { navigationDescription, steps: sourceSteps, strict = true } = props;
   const { pathname } = useLocation();
+  const { setRoutes, setStrict } = useNavigationContext();
   const match = useRouteMatch();
 
   const isNestedRoute = React.useCallback((route: string) => {
@@ -153,23 +150,29 @@ const WizardSteps: React.FC<WizardStepsProps> = (props) => {
     [parentPath, sourceSteps]
   );
 
+  React.useEffect(() => {
+    setRoutes(routes);
+  }, [routes, setRoutes]);
+
+  React.useEffect(() => {
+    setStrict(strict);
+  }, [strict, setStrict]);
+
   return (
-    <NavigationProvider routes={routes} strict={strict}>
-      <div className="row no-gutters wizard-steps">
-        <div className="col-12 col-md-auto">
-          <WizardNavigations
-            navigationDescription={navigationDescription}
-            navigations={navigations}
-          />
-        </div>
-        <div className="col-12 col-md bg-white wizard-main-container">
-          <Switch>
-            <Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} />
-            <WizardRoutes steps={steps} />
-          </Switch>
-        </div>
+    <div className="row no-gutters wizard-steps">
+      <div className="col-12 col-md-auto">
+        <WizardNavigations
+          navigationDescription={navigationDescription}
+          navigations={navigations}
+        />
       </div>
-    </NavigationProvider>
+      <div className="col-12 col-md bg-white wizard-main-container">
+        <Switch>
+          <Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} />
+          <WizardRoutes steps={steps} />
+        </Switch>
+      </div>
+    </div>
   );
 };
 

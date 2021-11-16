@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { match, MemoryRouter, useRouteMatch } from 'react-router-dom';
+import { NavigationProvider } from '../contexts/navigationContext';
 import WizardSteps, { WizardStepConfig, WizardStepsProps } from './WizardSteps';
 
 jest.mock('react-router-dom', () => ({
@@ -50,7 +51,9 @@ describe('Component: WizardSteps', () => {
   function renderWithRouter(route: string = '/') {
     return render(
       <MemoryRouter initialEntries={[route]}>
-        <WizardSteps {...wizardStepsProps} />
+        <NavigationProvider>
+          <WizardSteps {...wizardStepsProps} />
+        </NavigationProvider>
       </MemoryRouter>
     );
   }

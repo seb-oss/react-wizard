@@ -6,10 +6,9 @@ import {
 } from '../../../contexts/navigationContext';
 import WizardStep, { WizardStepProps } from './WizardStep';
 
-jest.mock('../../../contexts/navigationContext', () => ({
-  useNavigationContext: jest.fn(),
-}));
+jest.mock('../../../contexts/navigationContext');
 
+const { defaultNavigationInterface } = global;
 const mockedUseNavigationContext = useNavigationContext as jest.Mock<NavigationInterface>;
 
 describe('Component: WizardStep', () => {
@@ -18,20 +17,6 @@ describe('Component: WizardStep', () => {
     heading: 'Step heading',
     pageHeading: 'Step page heading',
     state: 'info',
-  };
-  const defaultNavigationContext: NavigationInterface = {
-    activeControls: undefined,
-    activeState: undefined,
-    activeStep: 0,
-    isWizardCompleted: false,
-    completeWizard: jest.fn(),
-    isNavigableStep: jest.fn(),
-    isValidStep: jest.fn(),
-    nextStep: jest.fn(),
-    previousStep: jest.fn(),
-    setActiveControls: jest.fn(),
-    setActiveState: jest.fn(),
-    setActiveStep: jest.fn(),
   };
   let mockSetActiveControls: jest.Mock;
   let mockSetActiveState: jest.Mock;
@@ -42,7 +27,7 @@ describe('Component: WizardStep', () => {
     mockSetActiveState = jest.fn();
     mockSetActiveStep = jest.fn();
     mockedUseNavigationContext.mockImplementation(() => ({
-      ...defaultNavigationContext,
+      ...defaultNavigationInterface,
       setActiveControls: mockSetActiveControls,
       setActiveState: mockSetActiveState,
       setActiveStep: mockSetActiveStep,
