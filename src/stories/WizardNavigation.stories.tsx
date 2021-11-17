@@ -21,7 +21,7 @@ export default {
   decorators: [
     (Story) => (
       <MemoryRouter initialEntries={['/']}>
-        <NavigationProvider routes={['/']}>
+        <NavigationProvider>
           <ul className="list-group list-group-ordered">{Story()}</ul>
         </NavigationProvider>
       </MemoryRouter>

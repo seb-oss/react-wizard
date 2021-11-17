@@ -13,7 +13,7 @@ export default {
   decorators: [
     (Story) => (
       <MemoryRouter initialEntries={['/']}>
-        <NavigationProvider routes={['/']}>{Story()}</NavigationProvider>
+        <NavigationProvider>{Story()}</NavigationProvider>
       </MemoryRouter>
     ),
   ],
