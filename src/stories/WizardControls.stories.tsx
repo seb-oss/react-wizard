@@ -10,11 +10,7 @@ export default {
   title: 'components/WizardControls',
   component: WizardControls,
   argTypes: {},
-  decorators: [
-    (Story) => (
-      <NavigationProvider routes={['/']}>{Story()}</NavigationProvider>
-    ),
-  ],
+  decorators: [(Story) => <NavigationProvider>{Story()}</NavigationProvider>],
 } as Meta;
 
 const Template: Story<WizardControlsProps> = (args) => (

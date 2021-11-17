@@ -15,21 +15,12 @@ export default {
   decorators: [
     (Story) => (
       <MemoryRouter initialEntries={['/']}>
-        <NavigationProvider routes={['/']}>{Story()}</NavigationProvider>
+        <NavigationProvider>{Story()}</NavigationProvider>
       </MemoryRouter>
     ),
   ],
 } as Meta;
 
-const Template: Story<WizardStepsProps> = (args) => {
-  const [strict, setStrict] = React.useState<boolean>(!!args.strict);
-
-  React.useEffect(() => {
-    setStrict(args.strict);
-  }, [args.strict]);
-
-  return <WizardSteps {...args} strict={strict} />;
-};
 const StepComponent: React.FC = () => {
   const { completeWizard, setActiveState } = useNavigationContext();
   return (
@@ -126,6 +117,7 @@ const StepComponent: React.FC = () => {
     </div>
   );
 };
+const Template: Story<WizardStepsProps> = (args) => <WizardSteps {...args} />;
 
 export const Default: Story<WizardStepsProps> = Template.bind({});
 Default.args = {
@@ -164,7 +156,6 @@ Default.args = {
       },
     },
   ],
-  strict: true,
 };
 
 export const WithSecondaryContent: Story<WizardStepsProps> = Template.bind({});
