@@ -38,11 +38,6 @@ export type WizardStepsProps = {
    * react router for navigations
    * */
   steps: Array<WizardStepConfig>;
-  /**
-   * @deprecated use `Wizard` component `strict` props instead
-   * @see {@link Wizard.strict}
-   */
-  strict?: boolean;
 };
 
 export type WizardStepConfig = {
@@ -100,9 +95,9 @@ const WizardRoutes: React.FC<Pick<WizardStepsProps, 'steps'>> = ({ steps }) => {
 };
 
 const WizardSteps: React.FC<WizardStepsProps> = (props) => {
-  const { navigationDescription, steps: sourceSteps, strict = true } = props;
+  const { navigationDescription, steps: sourceSteps } = props;
   const { pathname } = useLocation();
-  const { setRoutes, setStrict } = useNavigationContext();
+  const { setRoutes } = useNavigationContext();
   const match = useRouteMatch();
 
   const isNestedRoute = React.useCallback((route: string) => {
@@ -153,10 +148,6 @@ const WizardSteps: React.FC<WizardStepsProps> = (props) => {
   React.useEffect(() => {
     setRoutes(routes);
   }, [routes, setRoutes]);
-
-  React.useEffect(() => {
-    setStrict(strict);
-  }, [strict, setStrict]);
 
   return (
     <div className="row no-gutters wizard-steps">
