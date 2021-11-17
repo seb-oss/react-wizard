@@ -17,27 +17,12 @@ import WizardNavigations, {
   WizardNavigationsProps,
 } from './WizardNavigations';
 
-jest.mock('../../../contexts/navigationContext', () => ({
-  useNavigationContext: jest.fn(),
-}));
+jest.mock('../../../contexts/navigationContext');
 
+const { defaultNavigationInterface } = global;
 const mockedUseNavigationContext = useNavigationContext as jest.Mock<NavigationInterface>;
 
 describe('Component: WizardNavigations', () => {
-  const defaultNavigationContext: NavigationInterface = {
-    activeControls: undefined,
-    activeStep: 0,
-    activeState: undefined,
-    isWizardCompleted: false,
-    completeWizard: jest.fn(),
-    isNavigableStep: jest.fn(),
-    isValidStep: jest.fn(),
-    nextStep: jest.fn(),
-    previousStep: jest.fn(),
-    setActiveControls: jest.fn(),
-    setActiveState: jest.fn(),
-    setActiveStep: jest.fn(),
-  };
   const wizardNavigationsProps: WizardNavigationsProps = {
     navigationDescription: 'Description',
     navigations: [
@@ -93,7 +78,7 @@ describe('Component: WizardNavigations', () => {
 
   beforeEach(() => {
     mockedUseNavigationContext.mockImplementation(
-      () => defaultNavigationContext
+      () => defaultNavigationInterface
     );
   });
 
@@ -138,35 +123,35 @@ describe('Component: WizardNavigations', () => {
 
   it('Should navigate to selected step when navigation link clicked is navigable and step handler is valid', async () => {
     mockedUseNavigationContext.mockImplementation(() => ({
-      ...defaultNavigationContext,
+      ...defaultNavigationInterface,
       isNavigableStep: jest.fn().mockReturnValueOnce(true),
       isValidStep: jest.fn().mockResolvedValueOnce(true),
     }));
     renderWithRouter();
-    expect(defaultNavigationContext.nextStep).not.toHaveBeenCalled();
+    expect(defaultNavigationInterface.nextStep).not.toHaveBeenCalled();
     await waitFor(() => {
       navigateTo(1);
     });
-    expect(defaultNavigationContext.nextStep).toHaveBeenCalledTimes(1);
+    expect(defaultNavigationInterface.nextStep).toHaveBeenCalledTimes(1);
   });
 
   it('Should retain at current step when navigation link clicked is navigable but step handler is invalid', async () => {
     mockedUseNavigationContext.mockImplementation(() => ({
-      ...defaultNavigationContext,
+      ...defaultNavigationInterface,
       isNavigableStep: jest.fn().mockReturnValueOnce(true),
       isValidStep: jest.fn().mockResolvedValueOnce(false),
     }));
     renderWithRouter();
-    expect(defaultNavigationContext.nextStep).not.toHaveBeenCalled();
+    expect(defaultNavigationInterface.nextStep).not.toHaveBeenCalled();
     await waitFor(() => {
       navigateTo(1);
     });
-    expect(defaultNavigationContext.nextStep).not.toHaveBeenCalled();
+    expect(defaultNavigationInterface.nextStep).not.toHaveBeenCalled();
   });
 
   it('Should retain at current step when navigation link clicked is navigable but step is disabled', async () => {
     mockedUseNavigationContext.mockImplementation(() => ({
-      ...defaultNavigationContext,
+      ...defaultNavigationInterface,
       isNavigableStep: jest.fn().mockReturnValueOnce(true),
     }));
     renderWithRouter({
@@ -182,18 +167,18 @@ describe('Component: WizardNavigations', () => {
         },
       ],
     });
-    expect(defaultNavigationContext.isValidStep).not.toHaveBeenCalled();
-    expect(defaultNavigationContext.nextStep).not.toHaveBeenCalled();
+    expect(defaultNavigationInterface.isValidStep).not.toHaveBeenCalled();
+    expect(defaultNavigationInterface.nextStep).not.toHaveBeenCalled();
     await waitFor(() => {
       fireEvent.click(screen.getByRole('link', { name: 'Disabled Step' }));
     });
-    expect(defaultNavigationContext.nextStep).not.toHaveBeenCalled();
-    expect(defaultNavigationContext.isValidStep).not.toHaveBeenCalled();
+    expect(defaultNavigationInterface.nextStep).not.toHaveBeenCalled();
+    expect(defaultNavigationInterface.isValidStep).not.toHaveBeenCalled();
   });
 
   it('Should retain navigation list expansion when navigation link clicked is not navigable', async () => {
     mockedUseNavigationContext.mockImplementation(() => ({
-      ...defaultNavigationContext,
+      ...defaultNavigationInterface,
       isNavigableStep: jest.fn().mockReturnValueOnce(false),
     }));
     const { container } = renderWithRouter();
@@ -207,7 +192,7 @@ describe('Component: WizardNavigations', () => {
 
   it('Should collapse navigation list when navigate to previous step', async () => {
     mockedUseNavigationContext.mockImplementation(() => ({
-      ...defaultNavigationContext,
+      ...defaultNavigationInterface,
       activeStep: 2,
       isNavigableStep: jest.fn().mockReturnValueOnce(true),
     }));

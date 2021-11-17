@@ -21,7 +21,12 @@ export default {
 } as Meta;
 
 const Template: Story<WizardProps> = ({ ref, ...args }) => {
+  const [strict, setStrict] = React.useState<boolean>(args.strict);
   const [toggle, setToggle] = React.useState<boolean>(args.toggle);
+
+  React.useEffect(() => {
+    setStrict(args.strict);
+  }, [args.strict]);
 
   React.useEffect(() => {
     setToggle(args.toggle);
@@ -34,7 +39,7 @@ const Template: Story<WizardProps> = ({ ref, ...args }) => {
           Show Wizard
         </button>
       </div>
-      <Wizard {...args} toggle={toggle}>
+      <Wizard {...args} strict={strict} toggle={toggle}>
         <WizardHeader
           heading="Wizard Title"
           actions={[
@@ -59,5 +64,6 @@ const Template: Story<WizardProps> = ({ ref, ...args }) => {
 export const Default: Story<WizardProps> = Template.bind({});
 Default.args = {
   toggle: false,
+  strict: true,
   onDismissed: action('dismissed'),
 };

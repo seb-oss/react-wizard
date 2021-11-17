@@ -1,7 +1,10 @@
 import { Meta, Story } from '@storybook/react';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { useNavigationContext } from '../contexts/navigationContext';
+import {
+  NavigationProvider,
+  useNavigationContext,
+} from '../contexts/navigationContext';
 import WizardSteps, { WizardStepsProps } from '../WizardSteps';
 import * as WizardControlsStories from './WizardControls.stories';
 
@@ -10,19 +13,14 @@ export default {
   component: WizardSteps,
   argTypes: {},
   decorators: [
-    (Story) => <MemoryRouter initialEntries={['/']}>{Story()}</MemoryRouter>,
+    (Story) => (
+      <MemoryRouter initialEntries={['/']}>
+        <NavigationProvider>{Story()}</NavigationProvider>
+      </MemoryRouter>
+    ),
   ],
 } as Meta;
 
-const Template: Story<WizardStepsProps> = (args) => {
-  const [strict, setStrict] = React.useState<boolean>(!!args.strict);
-
-  React.useEffect(() => {
-    setStrict(args.strict);
-  }, [args.strict]);
-
-  return <WizardSteps {...args} strict={strict} />;
-};
 const StepComponent: React.FC = () => {
   const { completeWizard, setActiveState } = useNavigationContext();
   return (
@@ -119,6 +117,7 @@ const StepComponent: React.FC = () => {
     </div>
   );
 };
+const Template: Story<WizardStepsProps> = (args) => <WizardSteps {...args} />;
 
 export const Default: Story<WizardStepsProps> = Template.bind({});
 Default.args = {
@@ -157,7 +156,6 @@ Default.args = {
       },
     },
   ],
-  strict: true,
 };
 
 export const WithSecondaryContent: Story<WizardStepsProps> = Template.bind({});
