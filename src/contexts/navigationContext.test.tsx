@@ -21,7 +21,7 @@ type DummyComponentProps = {
 };
 
 function DummyComponent(props: DummyComponentProps) {
-  const { mockControls, mockState, mockStep, nextPath, prevPath } = props;
+  const { mockControls, mockState, mockStep = 1, nextPath, prevPath } = props;
   const {
     activeControls = [],
     activeState,
@@ -100,7 +100,8 @@ describe('Context: NavigationContext', () => {
     strict?: boolean
   ): RenderResult {
     return render(
-      <NavigationProvider routes={routes} strict={strict}>
+      <NavigationProvider strict={strict}>
+        <RouteTracker routes={routes} />
         <DummyComponent {...props} />
       </NavigationProvider>,
       {
@@ -109,6 +110,16 @@ describe('Context: NavigationContext', () => {
           : ({ children }) => <MemoryRouter>{children}</MemoryRouter>,
       }
     );
+  }
+
+  function RouteTracker({ routes }: { routes: Array<string> }) {
+    const { setRoutes } = useNavigationContext();
+
+    React.useEffect(() => {
+      setRoutes(routes);
+    }, [routes, setRoutes]);
+
+    return <></>;
   }
 
   function completeWizard() {
