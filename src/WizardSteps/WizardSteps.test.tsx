@@ -85,9 +85,9 @@ describe('Component: WizardSteps', () => {
     expect(screen.getByText('Step 1 content')).toBeInTheDocument();
   });
 
-  it('Should render step when step is in range', () => {
+  it('Should not render the next immediate step if current step is not completed', () => {
     renderWithRouter(wizardStepsProps.steps[1].path);
-    expect(screen.getByText('Step 2 content')).toBeInTheDocument();
+    expect(screen.queryByText('Step 2 content')).not.toBeInTheDocument();
   });
 
   it('Should redirect user to previous active step when step is not in range', () => {

@@ -81,8 +81,8 @@ export interface NavigationInterface {
 
 export type NavigationProviderProps = {
   /**
-   * Strict navigations guard toggle. If configure to `true`, user can only navigate
-   * to immediate next or previous step; when configure to `false`, user can navigate to any
+   * Strict navigations guard toggle. If configure to `true`, user can navigate
+   * to current and previous step; when configure to `false`, user can navigate to any
    * steps at any time. *Default* to `true`.
    */
   strict?: boolean;
@@ -109,8 +109,9 @@ const NavigationProvider: React.FC<NavigationProviderProps> = ({
 
   const completeWizard = React.useCallback(() => setWizardCompleted(true), []);
 
+  /** Ensures if strict mode is enabled, restricts users from navigating to next step without completing the current step */
   const isNavigableStep = React.useCallback(
-    (step: number) => (!strict || step <= activeStep + 1) && !isWizardCompleted,
+    (step: number) => (!strict || step <= activeStep) && !isWizardCompleted,
     [activeStep, isWizardCompleted, strict]
   );
 
