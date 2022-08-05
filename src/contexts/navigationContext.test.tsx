@@ -202,9 +202,9 @@ describe('Context: NavigationContext', () => {
       );
     }
 
-    it('Should return true when step provided is the immediate next step', () => {
+    it('Should return false when step provided is the immediate next step', () => {
       renderDummyComponent({ mockStep: 1 });
-      assertIsNavigableStep(true);
+      assertIsNavigableStep(false);
     });
 
     it('Should return false when step provided is two or more steps ahead of current step in strict mode', () => {
