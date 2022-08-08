@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: ['15']
+        node: ['14', '16']
     name: Node ${{ matrix.node }}
     env:
       # temporary disable preflight check until CRA loosen babel-loader version dependency that clashes with storybook babel-loader version
