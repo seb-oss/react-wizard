@@ -26,7 +26,7 @@
     "wizard"
   ],
   "engines": {
-    "node": ">=15.0.0",
+    "node": ">=16.0.0",
     "npm": ">=7.0.0"
   },
   "dependencies": {
