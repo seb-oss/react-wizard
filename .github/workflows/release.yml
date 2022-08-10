@@ -25,7 +25,7 @@ jobs:
           node-version: ${{ matrix.node }}
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --omit=dev --ignore-scripts
 
       - name: Execute coverage report
         run: npm test -- --coverage
