@@ -7,22 +7,23 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: ['15']
+        node: [16]
     name: Node ${{ matrix.node }}
     env:
       # temporary disable preflight check until CRA loosen babel-loader version dependency that clashes with storybook babel-loader version
       # https://github.com/storybookjs/storybook/issues/5183
       SKIP_PREFLIGHT_CHECK: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
+          cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Execute unit test
         run: npm test

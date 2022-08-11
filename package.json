@@ -26,7 +26,7 @@
     "wizard"
   ],
   "engines": {
-    "node": ">=15.0.0",
+    "node": ">=16.0.0",
     "npm": ">=7.0.0"
   },
   "dependencies": {
@@ -76,12 +76,12 @@
     "web-vitals": "^1.1.2"
   },
   "peerDependencies": {
-    "@sebgroup/bootstrap": "^6.0.0",
-    "@sebgroup/react-components": "^5.0.0",
-    "react": "^17.0.0",
-    "react-dom": "^17.0.0",
-    "react-router-dom": "^5.2.0",
-    "typescript": "^4.1.3"
+    "@sebgroup/bootstrap": "^6.0.4",
+    "@sebgroup/react-components": "^5.0.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^5.3.3",
+    "typescript": "^4.7.4"
   },
   "scripts": {
     "start": "start-storybook -p 6006",
