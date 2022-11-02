@@ -1,11 +1,14 @@
 import { action } from '@storybook/addon-actions';
-import { Meta, Story } from '@storybook/react';
+import {
+  ComponentMeta as Meta,
+  ComponentStory as Story,
+} from '@storybook/react';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { NavigationProvider } from '../contexts/navigationContext';
-import WizardNavigation, {
-  WizardNavigationProps,
-} from '../WizardSteps/components/WizardNavigation';
+import WizardNavigation from '../WizardSteps/components/WizardNavigation';
+
+type WizardNavigationType = typeof WizardNavigation;
 
 export default {
   title: 'components/WizardNavigation',
@@ -27,16 +30,17 @@ export default {
       </MemoryRouter>
     ),
   ],
-} as Meta;
+} as Meta<WizardNavigationType>;
 
-const Template: Story<WizardNavigationProps> = (args) => (
+const Template: Story<WizardNavigationType> = (args) => (
   <WizardNavigation {...args} />
 );
 
-export const Default: Story<WizardNavigationProps> = Template.bind({});
+export const Default: Story<WizardNavigationType> = Template.bind({});
 Default.args = {
   step: 0,
   label: 'Step 1',
   path: '/',
   onClick: action('navigation-link-click'),
+  disabled: false,
 };

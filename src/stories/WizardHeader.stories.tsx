@@ -1,13 +1,16 @@
-import { Meta, Story } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
+import {
+  ComponentMeta as Meta,
+  ComponentStory as Story,
+} from '@storybook/react';
 import React from 'react';
-import WizardHeader, { WizardHeaderProps } from '../WizardHeader';
+import WizardHeader from '../WizardHeader';
 
-const actionsOptions = {
-  'Single action': [<button className="btn">x</button>],
-  'Multiple actions': [
-    <button className="btn">Save</button>,
-    <button className="btn">x</button>,
-  ],
+type WizardHeaderType = typeof WizardHeader;
+
+const ACTION_OPTIONS = {
+  'Single action': mapActions(['x']),
+  'Multiple actions': mapActions(['Save', 'x']),
 };
 
 export default {
@@ -15,24 +18,23 @@ export default {
   component: WizardHeader,
   argTypes: {
     actions: {
-      options: Object.keys(actionsOptions),
-      mapping: actionsOptions,
+      options: Object.keys(ACTION_OPTIONS),
+      mapping: ACTION_OPTIONS,
     },
   },
-} as Meta;
+} as Meta<WizardHeaderType>;
 
-const Template: Story<WizardHeaderProps> = (args) => <WizardHeader {...args} />;
+const Template: Story<WizardHeaderType> = (args) => <WizardHeader {...args} />;
 
-export const Default: Story<WizardHeaderProps> = Template.bind({});
+export const Default: Story<WizardHeaderType> = Template.bind({});
 Default.args = {
   heading: 'Wizard header',
 };
 
-export const WithActions: Story<WizardHeaderProps> = Template.bind({});
-WithActions.args = {
-  heading: 'Wizard header with actions',
-  actions: [
-    <button className="btn">Save</button>,
-    <button className="btn">x</button>,
-  ],
-};
+function mapActions(actions: Array<string>) {
+  return actions.map((text: string) => (
+    <button className="btn" onClick={action(`${text}-button-click`)}>
+      {text}
+    </button>
+  ));
+}
