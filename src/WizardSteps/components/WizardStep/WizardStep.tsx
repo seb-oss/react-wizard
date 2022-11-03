@@ -53,11 +53,8 @@ const WizardStep: React.FC<WizardStepProps> = ({
   step,
   controls,
 }) => {
-  const {
-    setActiveControls,
-    setActiveState,
-    setActiveStep,
-  } = useNavigationContext();
+  const { setActiveControls, setActiveState, setActiveStep } =
+    useNavigationContext();
 
   React.useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -91,7 +88,7 @@ const WizardStep: React.FC<WizardStepProps> = ({
             {children}
           </div>
           {secondaryContent && (
-            <div className="col-12 col-lg-auto order-last mt-3 mt-md-0 ml-lg-3 wizard-secondary-content">
+            <div className="col-12 col-lg-auto order-last mt-3 mt-lg-0 ml-lg-3 wizard-secondary-content">
               {secondaryContent}
             </div>
           )}
