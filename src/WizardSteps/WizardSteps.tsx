@@ -57,16 +57,13 @@ export type WizardStepConfig = {
 };
 
 const WizardRoutes: React.FC<Pick<WizardStepsProps, 'steps'>> = ({ steps }) => {
-  const {
-    activeStep,
-    isWizardCompleted,
-    isNavigableStep,
-  } = useNavigationContext();
+  const { activeStep, isWizardCompleted, isNavigableStep } =
+    useNavigationContext();
   return (
     <>
       {steps.map(
         (
-          { path, component: StepComponent, data }: WizardStepConfig,
+          { path, component: StepComponent, data, disabled }: WizardStepConfig,
           step: number,
           sourceSteps: Array<WizardStepConfig>
         ) => (
@@ -76,8 +73,10 @@ const WizardRoutes: React.FC<Pick<WizardStepsProps, 'steps'>> = ({ steps }) => {
             path={path}
             render={() => {
               const isFinalStep = activeStep === sourceSteps.length - 1;
+              const isCompletedStep = isFinalStep && isWizardCompleted;
+              const isRenderableStep = isNavigableStep(step) && !disabled;
 
-              if (isNavigableStep(step) || (isFinalStep && isWizardCompleted)) {
+              if (isRenderableStep || isCompletedStep) {
                 return (
                   <WizardStep {...{ ...data, step }}>
                     <StepComponent />
