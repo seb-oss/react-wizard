@@ -1,29 +1,31 @@
-import { Meta, Story } from '@storybook/react';
+import {
+  ComponentMeta as Meta,
+  ComponentStory as Story,
+} from '@storybook/react';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { NavigationProvider } from '../contexts/navigationContext';
-import WizardNavigations, {
-  WizardNavigationsProps,
-} from '../WizardSteps/components/WizardNavigations';
+import WizardNavigations from '../WizardSteps/components/WizardNavigations';
+
+type WizardNavigationsType = typeof WizardNavigations;
 
 export default {
   title: 'components/WizardNavigations',
   component: WizardNavigations,
-  argTypes: {},
   decorators: [
     (Story) => (
       <MemoryRouter initialEntries={['/']}>
-        <NavigationProvider>{Story()}</NavigationProvider>
+        <NavigationProvider strict={false}>{Story()}</NavigationProvider>
       </MemoryRouter>
     ),
   ],
-} as Meta;
+} as Meta<WizardNavigationsType>;
 
-const Template: Story<WizardNavigationsProps> = (args) => (
+const Template: Story<WizardNavigationsType> = (args) => (
   <WizardNavigations {...args} />
 );
 
-export const Default: Story<WizardNavigationsProps> = Template.bind({});
+export const Default: Story<WizardNavigationsType> = Template.bind({});
 Default.args = {
   navigationDescription: 'Step {activeStep} of {totalSteps}',
   navigations: [

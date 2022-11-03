@@ -1,12 +1,16 @@
-import { Meta, Story } from '@storybook/react';
+import {
+  ComponentMeta as Meta,
+  ComponentStory as Story,
+} from '@storybook/react';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import {
   NavigationProvider,
   useNavigationContext,
 } from '../contexts/navigationContext';
-import WizardSteps, { WizardStepsProps } from '../WizardSteps';
-import * as WizardControlsStories from './WizardControls.stories';
+import WizardSteps from '../WizardSteps';
+
+type WizardStepsType = typeof WizardSteps;
 
 export default {
   title: 'components/WizardSteps',
@@ -15,13 +19,13 @@ export default {
   decorators: [
     (Story) => (
       <MemoryRouter initialEntries={['/']}>
-        <NavigationProvider>{Story()}</NavigationProvider>
+        <NavigationProvider strict={false}>{Story()}</NavigationProvider>
       </MemoryRouter>
     ),
   ],
-} as Meta;
+} as Meta<WizardStepsType>;
 
-const StepComponent: React.FC = () => {
+const StepComponent = () => {
   const { completeWizard, setActiveState } = useNavigationContext();
   return (
     <div>
@@ -117,9 +121,9 @@ const StepComponent: React.FC = () => {
     </div>
   );
 };
-const Template: Story<WizardStepsProps> = (args) => <WizardSteps {...args} />;
+const Template: Story<WizardStepsType> = (args) => <WizardSteps {...args} />;
 
-export const Default: Story<WizardStepsProps> = Template.bind({});
+export const Default: Story<WizardStepsType> = Template.bind({});
 Default.args = {
   navigationDescription: 'Step {activeStep} of {totalSteps}',
   steps: [
@@ -158,35 +162,18 @@ Default.args = {
   ],
 };
 
-export const WithSecondaryContent: Story<WizardStepsProps> = Template.bind({});
+export const WithSecondaryContent: Story<WizardStepsType> = Template.bind({});
 WithSecondaryContent.args = {
   ...Default.args,
   steps: [
     {
-      path: '/stepWithSecondaryContent',
+      path: '/',
       label: 'Step (Secondary Content)',
       component: StepComponent,
       data: {
         heading: 'Step (Secondary Content)',
         pageHeading: 'Step with secondary content',
         secondaryContent: <div>Secondary content</div>,
-      },
-    },
-  ],
-};
-
-export const WithCustomControls: Story<WizardStepsProps> = Template.bind({});
-WithCustomControls.args = {
-  ...Default.args,
-  steps: [
-    {
-      path: '/stepWithCustomControls',
-      label: 'Step (Custom Controls)',
-      component: StepComponent,
-      data: {
-        heading: 'Step (Custom Controls)',
-        pageHeading: 'Step with custom controls',
-        controls: WizardControlsStories.WithCustomControls.args.controls,
       },
     },
   ],
