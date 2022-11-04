@@ -5,7 +5,7 @@ export type WizardHeaderProps = {
   /** Heading/text on the header. */
   heading: string;
   /** Controls/actions to be displayed on the right of the header. */
-  actions?: React.ReactNodeArray;
+  actions?: Array<React.ReactNode>;
 };
 
 const WizardHeader: React.FC<WizardHeaderProps> = ({ actions, heading }) => {

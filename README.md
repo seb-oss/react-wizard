@@ -1,13 +1,4 @@
-# React Wizard
-
-[![https://img.shields.io/npm/v/@sebgroup/react-wizard](https://img.shields.io/npm/v/@sebgroup/react-wizard)](https://www.npmjs.com/package/@sebgroup/react-wizard)
-![Build](https://github.com/sebgroup/react-wizard/workflows/Build/badge.svg)
-![Deployment](https://github.com/sebgroup/react-wizard/workflows/Release/badge.svg)
-<!-- ![Github Pages](https://github.com/sebgroup/react-wizard/workflows/Github%20Pages/badge.svg) -->
-[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
-[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
-[![Coverage Status](https://coveralls.io/repos/github/sebgroup/react-wizard/badge.svg?branch=master)](https://coveralls.io/github/sebgroup/react-wizard?branch=master)
-[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=sebgroup/react-wizard)](https://dependabot.com)
+# React Wizard · [![https://img.shields.io/npm/v/@sebgroup/react-wizard](https://img.shields.io/npm/v/@sebgroup/react-wizard)](https://www.npmjs.com/package/@sebgroup/react-wizard) ![Build](https://github.com/sebgroup/react-wizard/workflows/Build/badge.svg) ![Deployment](https://github.com/sebgroup/react-wizard/workflows/Release/badge.svg) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release) [![Coverage Status](https://coveralls.io/repos/github/sebgroup/react-wizard/badge.svg?branch=master)](https://coveralls.io/github/sebgroup/react-wizard?branch=master)
 
 This is a set of react wizard components some of which are based on SEB's bootstrap. The plan for this project is to increase and improve components for future usage.
 
@@ -44,8 +35,6 @@ npm install @sebgroup/react-components --save
 
 Then make sure you add the Main SEB bootstrap package in your main style.SCSS or index.ts as follows
 `@import '~@sebgroup/bootstrap/scss/bootstrap';`.
-
-For `Visual Studio Code` users, please install the [recommended plugins](.vscode/extensions.json)
 
 ## Development
 
