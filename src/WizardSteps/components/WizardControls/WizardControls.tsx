@@ -24,6 +24,8 @@ export type WizardControl = {
   path?: string;
   /** Add a custom class to the control/button. */
   className?: string;
+  /** Flag to disable control */
+  disabled?: boolean;
   /**
    * Event triggered when control is click. Steps navigation will be block when
    * the handler return a falsy value. This is useful when there's mandatory validation
@@ -80,6 +82,7 @@ const WizardControls: React.FC<WizardControlsProps> = ({
           (control: WizardControl, i: number) => {
             const {
               className,
+              disabled,
               label,
               path,
               type,
@@ -115,6 +118,7 @@ const WizardControls: React.FC<WizardControlsProps> = ({
                 <button
                   type="button"
                   className={controlClass}
+                  disabled={disabled}
                   onClick={async (event) => {
                     /**
                      * custom control handler, blocks navigation if result is false
