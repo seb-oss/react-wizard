@@ -38,6 +38,13 @@ const CONTROL_OPTIONS = {
       label: 'Forward',
     },
   ]),
+  'With Disabled Control': mapControls([
+    {
+      type: 'next',
+      label: 'Forward',
+      disabled: true,
+    },
+  ]),
 };
 
 export default {
@@ -61,11 +68,10 @@ Default.args = {};
 
 function mapControls(controls: Array<Partial<WizardControl>>) {
   return controls.map(
-    ({ type, label }: Partial<WizardControl>) =>
+    (control: Partial<WizardControl>) =>
       ({
-        type: type,
-        label: label,
-        onClick: action(`${type}-button-click`),
+        ...control,
+        onClick: action(`${control.type}-button-click`),
       } as WizardControl)
   );
 }
