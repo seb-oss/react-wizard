@@ -3,8 +3,34 @@ import pupa from 'pupa';
 import React from 'react';
 import { CSSTransition } from 'react-transition-group';
 import { useNavigationContext } from '../../../contexts/navigationContext';
-import WizardNavigation, { WizardNavigationData } from '../WizardNavigation';
+import WizardNavigation, { WizardNavigationProps } from '../WizardNavigation';
+import { WizardStepState } from '../WizardStep';
 import './WizardNavigations.scss';
+
+export enum PlaceholderTokens {
+  ACTIVE_STEP = 'activeStep',
+  TOTAL_STEPS = 'totalSteps',
+}
+
+export type WizardNavigationData = Pick<
+  WizardNavigationProps,
+  'disabled' | 'label' | 'path' | 'state'
+> & {
+  /**
+   * The step (index - zero-based) of the navigation, in the case where there is nested
+   * naivations, the step number are flatten (i.e. [0, [1, 2], 3, [4, 5]]).
+   */
+  step: number;
+  /**
+   * Nested navigations under the current navigation.
+   */
+  subNavigations?: Array<WizardNavigationData>;
+};
+
+type WizardNavigationListProps = JSX.IntrinsicElements['ol'] &
+  Pick<WizardNavigationsProps, 'navigations'> & {
+    setToggle: React.Dispatch<React.SetStateAction<boolean>>;
+  };
 
 export type WizardNavigationsProps = {
   /**
@@ -34,23 +60,93 @@ export type WizardNavigationsProps = {
   navigations: Array<WizardNavigationData>;
 };
 
-export enum PlaceholderTokens {
-  ACTIVE_STEP = 'activeStep',
-  TOTAL_STEPS = 'totalSteps',
-}
+const WizardNavigationList = React.forwardRef(
+  (
+    { navigations, setToggle, ...props }: WizardNavigationListProps,
+    ref: React.ForwardedRef<HTMLOListElement>
+  ) => {
+    const { activeState, activeStep, isNavigableStep, isValidStep, nextStep } =
+      useNavigationContext();
+    return (
+      <ol ref={ref} {...props}>
+        {navigations.map((navigation) => {
+          const { disabled, label, path, step, subNavigations } = navigation;
+          const isActive: boolean = activeStep === step;
+          const isCompleted: boolean = activeStep > step;
+          const isDisabled: boolean = !!disabled;
+          const isNavigable: boolean = isNavigableStep(step);
+          const state: WizardStepState = isActive
+            ? activeState || navigation.state
+            : undefined;
+          return (
+            <li key={`${path}_${label}`}>
+              <WizardNavigation
+                active={isActive}
+                completed={isCompleted}
+                disabled={isDisabled || !isNavigable}
+                label={label}
+                path={path}
+                state={state}
+                onClick={(event) => {
+                  if (!isDisabled && isNavigableStep(step)) {
+                    const isForwardNavigation = step > activeStep;
+
+                    if (isForwardNavigation) {
+                      /**
+                       * Stop react router default navigation if the user is
+                       * navigating forward and verify if the current step
+                       * has completed all the necessary checks. If completed,
+                       * navigate to next step, else retain at current step.
+                       */
+                      event.preventDefault();
+                      isValidStep().then((isValid) => {
+                        if (isValid !== false) {
+                          setToggle(false);
+                          nextStep(path);
+                        }
+                      });
+                    } else {
+                      setToggle(false);
+                    }
+                  } else {
+                    /**
+                     * Prevent user from navigating to non navigable step.
+                     */
+                    event.preventDefault();
+                  }
+                }}
+              />
+              {Array.isArray(subNavigations) && (
+                <WizardNavigationList
+                  className="list-group list-group-ordered"
+                  navigations={subNavigations}
+                  setToggle={setToggle}
+                />
+              )}
+            </li>
+          );
+        })}
+      </ol>
+    );
+  }
+);
 
 const WizardNavigations: React.FC<WizardNavigationsProps> = ({
   navigationDescription,
   navigations,
 }) => {
-  const {
-    activeStep,
-    isNavigableStep,
-    isValidStep,
-    nextStep,
-  } = useNavigationContext();
+  const { activeStep } = useNavigationContext();
   const olRef = React.useRef<HTMLOListElement>(null);
   const [toggle, setToggle] = React.useState<boolean>(true);
+
+  const flattenNavigations = React.useMemo(
+    () =>
+      navigations.flatMap((navigation) => [
+        navigation,
+        ...(navigation.subNavigations ?? []),
+      ]),
+    [navigations]
+  );
 
   React.useEffect(() => {
     setToggle(false);
@@ -66,71 +162,27 @@ const WizardNavigations: React.FC<WizardNavigationsProps> = ({
             'wizard-navigations__toggle--active': toggle,
           }
         )}
-        onClick={() => setToggle(!toggle)}
         role="button"
+        onClick={() => setToggle(!toggle)}
       >
         <div className="pl-3 pl-md-0 toggle-content">
-          <h2 className="mb-1">{navigations[activeStep].label}</h2>
+          <h2 className="mb-1">{flattenNavigations[activeStep].label}</h2>
           <span className="small">
             {pupa(navigationDescription, {
               [PlaceholderTokens.ACTIVE_STEP]: activeStep + 1,
-              [PlaceholderTokens.TOTAL_STEPS]: navigations.length,
+              [PlaceholderTokens.TOTAL_STEPS]: flattenNavigations.length,
             })}
           </span>
         </div>
       </div>
-      {
-        <CSSTransition
-          nodeRef={olRef}
-          classNames="list-group"
-          in={toggle}
-          timeout={400}
-        >
-          <ol
-            ref={olRef}
-            className="list-group list-group-ordered d-md-flex mt-3"
-          >
-            {navigations.map((props: WizardNavigationData, step: number) => {
-              const isDisabled: boolean = !!props.disabled;
-              return (
-                <WizardNavigation
-                  key={`${props.path}_${props.label}`}
-                  {...props}
-                  step={step}
-                  onClick={(event) => {
-                    if (!isDisabled && isNavigableStep(step)) {
-                      const isForwardNavigation = step > activeStep;
-
-                      if (isForwardNavigation) {
-                        /**
-                         * Stop react router default navigation if the user is
-                         * navigating forward and verify if the current step
-                         * has completed all the necessary checks. If completed,
-                         * navigate to next step, else retain at current step.
-                         */
-                        event.preventDefault();
-                        isValidStep().then((isValid) => {
-                          if (isValid !== false) {
-                            setToggle(false);
-                            nextStep(props.path);
-                          }
-                        });
-                      } else {
-                        setToggle(false);
-                      }
-                    } else {
-                      /**
-                       * Prevent user from navigating to non navigable step.
-                       */
-                      event.preventDefault();
-                    }
-                  }}
-                />
-              );
-            })}
-          </ol>
-        </CSSTransition>
-      }
+      <CSSTransition nodeRef={olRef} classNames="list-group" in={toggle} timeout={400}>
+        <WizardNavigationList
+          ref={olRef}
+          className="list-group list-group-ordered d-md-flex mt-3"
+          navigations={navigations}
+          setToggle={setToggle}
+        />
+      </CSSTransition>
     </nav>
   );
 };

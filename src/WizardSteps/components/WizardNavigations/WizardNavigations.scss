@@ -23,9 +23,41 @@
     }
   }
 
-  .list-group {
-    &.list-group-ordered {
-      counter-reset: list-order;
+  .list-group.list-group-ordered {
+    counter-reset: list-order;
+    list-style-type: none;
+
+    li {
+      position: relative;
+      padding: 0;
+
+      &::before {
+        top: 1rem;
+        left: 0.5rem;
+        z-index: 2;
+        margin: auto;
+        font-weight: normal;
+        content: counters(list-order, '.', decimal) ' ';
+      }
+
+      &:has(> .wizard-navigation--active) {
+        &::before {
+          font-weight: 500;
+        }
+      }
+    }
+
+    // nested navigation styling (second level only!)
+    .list-group.list-group-ordered {
+      li {
+        &::before {
+          margin-left: 2rem;
+        }
+
+        a {
+          padding-left: 5rem;
+        }
+      }
     }
   }
 }
