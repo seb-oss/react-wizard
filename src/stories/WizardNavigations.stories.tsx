@@ -1,7 +1,4 @@
-import {
-  ComponentMeta as Meta,
-  ComponentStory as Story,
-} from '@storybook/react';
+import { ComponentMeta as Meta, ComponentStory as Story } from '@storybook/react';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { NavigationProvider } from '../contexts/navigationContext';
@@ -21,9 +18,7 @@ export default {
   ],
 } as Meta<WizardNavigationsType>;
 
-const Template: Story<WizardNavigationsType> = (args) => (
-  <WizardNavigations {...args} />
-);
+const Template: Story<WizardNavigationsType> = (args) => <WizardNavigations {...args} />;
 
 export const Default: Story<WizardNavigationsType> = Template.bind({});
 Default.args = {

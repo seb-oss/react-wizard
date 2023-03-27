@@ -28,13 +28,9 @@ describe('Component: WizardControls', () => {
   it('Should render correctly', () => {
     const { container } = render(<WizardControls />);
     expect(screen.getByText('Back')).toBeInTheDocument();
-    expect(container.querySelector('.btn-prev')?.parentElement).toHaveClass(
-      'col-6'
-    );
+    expect(container.querySelector('.btn-prev')?.parentElement).toHaveClass('col-6');
     expect(screen.getByText('Next')).toBeInTheDocument();
-    expect(container.querySelector('.btn-next')?.parentElement).toHaveClass(
-      'col-6'
-    );
+    expect(container.querySelector('.btn-next')?.parentElement).toHaveClass('col-6');
   });
 
   it('should render active controls when navigation context has active controls', () => {
@@ -78,9 +74,7 @@ describe('Component: WizardControls', () => {
         ]}
       />
     );
-    expect(container.querySelector('.btn-next')?.parentElement).toHaveClass(
-      'col-12'
-    );
+    expect(container.querySelector('.btn-next')?.parentElement).toHaveClass('col-12');
     rerender(
       <WizardControls
         controls={[
@@ -91,9 +85,7 @@ describe('Component: WizardControls', () => {
         ]}
       />
     );
-    expect(container.querySelector('.btn-prev')?.parentElement).toHaveClass(
-      'col-12'
-    );
+    expect(container.querySelector('.btn-prev')?.parentElement).toHaveClass('col-12');
   });
 
   it('Should navigate to previous step when prev button is clicked', async () => {

@@ -30,11 +30,7 @@ const Wizard = React.forwardRef(
         onEscape={onDismissed}
         fullscreen
       >
-        <div
-          {...props}
-          ref={ref}
-          className={classnames('wizard', props.className)}
-        >
+        <div {...props} ref={ref} className={classnames('wizard', props.className)}>
           <NavigationProvider strict={strict}>{children}</NavigationProvider>
         </div>
       </Modal>
