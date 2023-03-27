@@ -13,9 +13,7 @@
     }
 
     .wizard-step {
-      max-height: calc(
-        100vh - #{$wizard-header-height} - #{$wizard-controls-height}
-      );
+      max-height: calc(100vh - #{$wizard-header-height} - #{$wizard-controls-height});
     }
   }
 }

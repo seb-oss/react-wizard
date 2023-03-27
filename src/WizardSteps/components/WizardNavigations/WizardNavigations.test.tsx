@@ -1,10 +1,4 @@
-import {
-  fireEvent,
-  render,
-  RenderResult,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { fireEvent, render, RenderResult, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import {
   NavigationInterface,
@@ -19,8 +13,7 @@ import WizardNavigations, {
 jest.mock('../../../contexts/navigationContext');
 
 const { defaultNavigationInterface } = global;
-const mockedUseNavigationContext =
-  useNavigationContext as jest.Mock<NavigationInterface>;
+const mockedUseNavigationContext = useNavigationContext as jest.Mock<NavigationInterface>;
 
 describe('Component: WizardNavigations', () => {
   const wizardNavigationsProps: WizardNavigationsProps = {
@@ -44,9 +37,7 @@ describe('Component: WizardNavigations', () => {
     ],
   };
 
-  function renderWithRouter(
-    props?: Partial<WizardNavigationsProps>
-  ): RenderResult {
+  function renderWithRouter(props?: Partial<WizardNavigationsProps>): RenderResult {
     return render(
       <MemoryRouter initialEntries={['/']}>
         <WizardNavigations {...{ ...wizardNavigationsProps, ...props }} />
@@ -80,9 +71,7 @@ describe('Component: WizardNavigations', () => {
   }
 
   beforeEach(() => {
-    mockedUseNavigationContext.mockImplementation(
-      () => defaultNavigationInterface
-    );
+    mockedUseNavigationContext.mockImplementation(() => defaultNavigationInterface);
   });
 
   it('Should render correctly', () => {
@@ -149,9 +138,7 @@ describe('Component: WizardNavigations', () => {
     const totalSteps = wizardNavigationsProps.navigations.length;
     const navigationDescription = `Step {${PlaceholderTokens.ACTIVE_STEP}} of {${PlaceholderTokens.TOTAL_STEPS}}`;
     renderWithRouter({ navigationDescription });
-    expect(
-      screen.getByText(`Step ${activeStep} of ${totalSteps}`)
-    ).toBeInTheDocument();
+    expect(screen.getByText(`Step ${activeStep} of ${totalSteps}`)).toBeInTheDocument();
   });
 
   it('Should expand navigation list when toggle status is active', () => {

@@ -37,12 +37,7 @@ export type WizardStepProps = WizardStepData & {
 
 export type WizardControlType = 'next' | 'prev' | 'cancel' | 'save' | 'close';
 
-export type WizardStepState =
-  | 'success'
-  | 'warning'
-  | 'danger'
-  | 'info'
-  | undefined;
+export type WizardStepState = 'success' | 'warning' | 'danger' | 'info' | undefined;
 
 const WizardStep: React.FC<WizardStepProps> = ({
   children,
@@ -53,8 +48,7 @@ const WizardStep: React.FC<WizardStepProps> = ({
   step,
   controls,
 }) => {
-  const { setActiveControls, setActiveState, setActiveStep } =
-    useNavigationContext();
+  const { setActiveControls, setActiveState, setActiveStep } = useNavigationContext();
 
   React.useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -66,9 +60,7 @@ const WizardStep: React.FC<WizardStepProps> = ({
 
   React.useEffect(() => {
     // initialise active states with props state if it is not yet defined
-    setActiveControls((prevControls) =>
-      prevControls ? prevControls : controls
-    );
+    setActiveControls((prevControls) => (prevControls ? prevControls : controls));
     setActiveState((prevState) => (prevState ? prevState : state));
 
     // reset active states

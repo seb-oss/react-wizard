@@ -29,16 +29,10 @@ Object.keys(pkg).forEach((param) => {
   }
 });
 
-fs.writeFileSync(
-  path.resolve(dist, 'package.json'),
-  JSON.stringify(pkg, null, 4)
-);
+fs.writeFileSync(path.resolve(dist, 'package.json'), JSON.stringify(pkg, null, 4));
 console.info('✅ Created package.json in dist folder');
 
-fs.copyFileSync(
-  path.resolve(root, 'README.md'),
-  path.resolve(dist, 'README.md')
-);
+fs.copyFileSync(path.resolve(root, 'README.md'), path.resolve(dist, 'README.md'));
 console.info('✅ Copied over README.md to dist');
 
 fs.copyFileSync(path.resolve(root, 'LICENSE'), path.resolve(dist, 'LICENSE'));

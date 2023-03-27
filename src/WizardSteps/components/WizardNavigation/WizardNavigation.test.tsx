@@ -1,9 +1,4 @@
-import {
-  fireEvent,
-  render,
-  RenderResult,
-  screen,
-} from '@testing-library/react';
+import { fireEvent, render, RenderResult, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import WizardNavigation, { WizardNavigationProps } from './WizardNavigation';
 
@@ -13,9 +8,7 @@ describe('Component: WizardNavigation', () => {
     path: '/step1',
   };
 
-  function renderWithRouter(
-    props?: Partial<WizardNavigationProps>
-  ): RenderResult {
+  function renderWithRouter(props?: Partial<WizardNavigationProps>): RenderResult {
     return render(
       <MemoryRouter initialEntries={['/']}>
         <WizardNavigation {...{ ...wizardNavigationProps, ...props }} />

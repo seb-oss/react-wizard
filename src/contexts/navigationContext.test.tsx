@@ -1,10 +1,4 @@
-import {
-  fireEvent,
-  render,
-  RenderResult,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { fireEvent, render, RenderResult, screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory, History } from 'history';
 import React from 'react';
 import { MemoryRouter, Router } from 'react-router-dom';
@@ -337,11 +331,7 @@ describe('Context: NavigationContext', () => {
       const history = createMemoryHistory({
         initialEntries: ['/third'],
       });
-      renderDummyComponent({ mockStep: 2 }, history, [
-        '/first',
-        '/second',
-        '/third',
-      ]);
+      renderDummyComponent({ mockStep: 2 }, history, ['/first', '/second', '/third']);
       // configure active step to final step
       configureActiveStep();
       // assert current step is final step

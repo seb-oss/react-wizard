@@ -1,8 +1,5 @@
 import { action } from '@storybook/addon-actions';
-import {
-  ComponentMeta as Meta,
-  ComponentStory as Story,
-} from '@storybook/react';
+import { ComponentMeta as Meta, ComponentStory as Story } from '@storybook/react';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import Wizard from '../Wizard';
@@ -19,17 +16,15 @@ export default {
     WizardHeader,
     WizardSteps,
   },
-  decorators: [
-    (Story) => <MemoryRouter initialEntries={['/']}>{Story()}</MemoryRouter>,
-  ],
+  decorators: [(Story) => <MemoryRouter initialEntries={['/']}>{Story()}</MemoryRouter>],
 } as Meta<WizardType>;
 
 const Template: Story<WizardType> = ({ ref, ...args }) => {
   return (
     <>
       <div className="w-100 text-center">
-        Swipe <code>toggle</code> to <strong>true</strong> in the control below
-        to see the Wizard component
+        Swipe <code>toggle</code> to <strong>true</strong> in the control below to see the
+        Wizard component
       </div>
       <Wizard {...args}>
         <WizardHeader heading="Wizard Title" />

@@ -18,7 +18,4 @@ const components = fs
 
 const indexes = components.map((name) => `./src/${name}/index.ts`);
 
-fs.writeFileSync(
-  path.resolve(source, 'index.json'),
-  JSON.stringify(indexes, null, 4)
-);
+fs.writeFileSync(path.resolve(source, 'index.json'), JSON.stringify(indexes, null, 4));
