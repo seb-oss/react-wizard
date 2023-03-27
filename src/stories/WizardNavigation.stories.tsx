@@ -24,9 +24,7 @@ export default {
   decorators: [
     (Story) => (
       <MemoryRouter initialEntries={['/']}>
-        <NavigationProvider>
-          <ul className="list-group list-group-ordered">{Story()}</ul>
-        </NavigationProvider>
+        <NavigationProvider>{Story()}</NavigationProvider>
       </MemoryRouter>
     ),
   ],
@@ -38,7 +36,6 @@ const Template: Story<WizardNavigationType> = (args) => (
 
 export const Default: Story<WizardNavigationType> = Template.bind({});
 Default.args = {
-  step: 0,
   label: 'Step 1',
   path: '/',
   onClick: action('navigation-link-click'),

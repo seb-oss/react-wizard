@@ -5,6 +5,7 @@
     .wizard-navigations {
       width: $wizard-navigation-width;
       height: 100vh;
+      overflow-y: auto;
     }
 
     .wizard-main-container {

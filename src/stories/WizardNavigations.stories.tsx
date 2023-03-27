@@ -32,14 +32,29 @@ Default.args = {
     {
       label: 'Step 1',
       path: '/',
+      step: 0,
     },
     {
       label: 'Step 2',
       path: '/step2',
+      step: 1,
+      subNavigations: [
+        {
+          label: 'Step 2.1',
+          path: '/step2.1',
+          step: 2,
+        },
+        {
+          label: 'Step 2.2',
+          path: '/step2.2',
+          step: 3,
+        },
+      ],
     },
     {
       label: 'Step 3',
       path: '/step3',
+      step: 4,
     },
   ],
 };
