@@ -27,7 +27,7 @@ export interface NavigationInterface {
    */
   isWizardCompleted: boolean;
   /**
-   * The list of routes path to be managed.
+   * The list of routes path to be managed. Nested routes are flatten into a single dimension array.
    * */
   routes: Array<string>;
   /**
@@ -88,23 +88,17 @@ export type NavigationProviderProps = {
   strict?: boolean;
 };
 
-const NavigationContext = React.createContext<NavigationInterface | undefined>(
-  undefined
-);
+const NavigationContext = React.createContext<NavigationInterface | undefined>(undefined);
 
 const NavigationProvider: React.FC<NavigationProviderProps> = ({
   children,
   strict = true,
 }) => {
   const history = useHistory();
-  const [activeControls, setActiveControls] = React.useState<
-    Array<WizardControl>
-  >();
+  const [activeControls, setActiveControls] = React.useState<Array<WizardControl>>();
   const [activeState, setActiveState] = React.useState<WizardStepState>();
   const [activeStep, setActiveStep] = React.useState<number>(0);
-  const [isWizardCompleted, setWizardCompleted] = React.useState<boolean>(
-    false
-  );
+  const [isWizardCompleted, setWizardCompleted] = React.useState<boolean>(false);
   const [routes, setRoutes] = React.useState<Array<string>>([]);
 
   const completeWizard = React.useCallback(() => setWizardCompleted(true), []);
@@ -180,9 +174,7 @@ function useNavigationContext() {
   const context = React.useContext(NavigationContext);
 
   if (context === undefined) {
-    throw new Error(
-      'useNavigationContext must be used within a NavigationProvider'
-    );
+    throw new Error('useNavigationContext must be used within a NavigationProvider');
   }
 
   return context;

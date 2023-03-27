@@ -1,9 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { match, MemoryRouter, useRouteMatch } from 'react-router-dom';
-import {
-  NavigationProvider,
-  useNavigationContext,
-} from '../contexts/navigationContext';
+import { NavigationProvider, useNavigationContext } from '../contexts/navigationContext';
 import WizardSteps, { WizardStepConfig, WizardStepsProps } from './WizardSteps';
 
 jest.mock('react-router-dom', () => ({
@@ -17,8 +14,7 @@ function FinalStep() {
   const { completeWizard } = useNavigationContext();
   return (
     <div>
-      Final step content{' '}
-      <button onClick={completeWizard}>complete wizard</button>
+      Final step content <button onClick={completeWizard}>complete wizard</button>
     </div>
   );
 }
@@ -69,11 +65,15 @@ describe('Component: WizardSteps', () => {
     ],
   };
 
-  function renderWithRouter(route: string = '/', strict: boolean = true) {
+  function renderWithRouter(
+    route: string = '/',
+    strict: boolean = true,
+    props: WizardStepsProps = wizardStepsProps
+  ) {
     return render(
       <MemoryRouter initialEntries={[route]}>
         <NavigationProvider strict={strict}>
-          <WizardSteps {...wizardStepsProps} />
+          <WizardSteps {...props} />
         </NavigationProvider>
       </MemoryRouter>
     );
@@ -93,6 +93,33 @@ describe('Component: WizardSteps', () => {
       assertLinkExist(step.label)
     );
     expect(screen.getByText('Step 1 content')).toBeInTheDocument();
+  });
+
+  it('Should render nested steps correctly', () => {
+    renderWithRouter('/nested', false, {
+      ...wizardStepsProps,
+      steps: [
+        {
+          path: '/parent',
+          label: 'Parent Step link',
+          component: () => <div>Parent step content</div>,
+          data: {
+            heading: 'Parent step heading',
+          },
+          steps: [
+            {
+              path: '/nested',
+              label: 'Nested Step link',
+              component: () => <div>Nested step content</div>,
+              data: {
+                heading: 'Nested step heading',
+              },
+            },
+          ],
+        },
+      ],
+    });
+    expect(screen.getByText('Nested step content')).toBeInTheDocument();
   });
 
   it('Should render nested routes correctly', () => {

@@ -142,6 +142,24 @@ Default.args = {
       data: {
         heading: 'Step 2 heading',
       },
+      steps: [
+        {
+          path: '/step2.1',
+          label: 'Step 2.1',
+          component: StepComponent,
+          data: {
+            heading: 'Step 2.1 heading',
+          },
+        },
+        {
+          path: '/step2.2',
+          label: 'Step 2.2',
+          component: StepComponent,
+          data: {
+            heading: 'Step 2.2 heading',
+          },
+        },
+      ],
     },
     {
       path: '/step3',
@@ -158,6 +176,24 @@ Default.args = {
       data: {
         heading: 'Step 4 heading',
       },
+      steps: [
+        {
+          path: '/step4.1',
+          label: 'Step 4.1',
+          component: StepComponent,
+          data: {
+            heading: 'Step 4.1 heading',
+          },
+        },
+        {
+          path: '/step4.2',
+          label: 'Step 4.2',
+          component: StepComponent,
+          data: {
+            heading: 'Step 4.2 heading',
+          },
+        },
+      ],
     },
   ],
 };
