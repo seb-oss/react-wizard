@@ -1,17 +1,10 @@
-import {
-  fireEvent,
-  render,
-  RenderResult,
-  screen,
-  waitFor,
-} from '@testing-library/react';
-import React from 'react';
+import { fireEvent, render, RenderResult, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import {
   NavigationInterface,
   useNavigationContext,
 } from '../../../contexts/navigationContext';
-import { WizardNavigationData } from '../WizardNavigation/WizardNavigation';
+import { WizardNavigationData } from '../WizardNavigations/WizardNavigations';
 import WizardNavigations, {
   PlaceholderTokens,
   WizardNavigationsProps,
@@ -29,21 +22,22 @@ describe('Component: WizardNavigations', () => {
       {
         label: 'Step 1',
         path: '/step1',
+        step: 0,
       },
       {
         label: 'Step 2',
         path: '/step2',
+        step: 1,
       },
       {
         label: 'Step 3',
         path: '/step3',
+        step: 2,
       },
     ],
   };
 
-  function renderWithRouter(
-    props?: Partial<WizardNavigationsProps>
-  ): RenderResult {
+  function renderWithRouter(props?: Partial<WizardNavigationsProps>): RenderResult {
     return render(
       <MemoryRouter initialEntries={['/']}>
         <WizardNavigations {...{ ...wizardNavigationsProps, ...props }} />
@@ -64,26 +58,24 @@ describe('Component: WizardNavigations', () => {
     expect(screen.getByRole('link', { name })).toBeInTheDocument();
   }
 
-  function assertNavigationsVisibility(
-    container: HTMLElement,
-    visible: boolean
-  ) {
-    const activeToggle = '.wizard-navigations__toggle--active';
+  function assertNavigationsVisibility(visible: boolean) {
     if (visible) {
-      expect(container.querySelector(activeToggle)).toBeInTheDocument();
+      expect(screen.getByRole('button')).toHaveClass(
+        'wizard-navigations__toggle--active'
+      );
     } else {
-      expect(container.querySelector(activeToggle)).not.toBeInTheDocument();
+      expect(screen.getByRole('button')).not.toHaveClass(
+        'wizard-navigations__toggle--active'
+      );
     }
   }
 
   beforeEach(() => {
-    mockedUseNavigationContext.mockImplementation(
-      () => defaultNavigationInterface
-    );
+    mockedUseNavigationContext.mockImplementation(() => defaultNavigationInterface);
   });
 
   it('Should render correctly', () => {
-    const { container } = renderWithRouter();
+    renderWithRouter();
     const { navigationDescription, navigations } = wizardNavigationsProps;
     expect(
       screen.getByRole('heading', { name: navigations[0].label })
@@ -92,9 +84,52 @@ describe('Component: WizardNavigations', () => {
       assertLinkExist(navigation.label)
     );
     expect(screen.getByText(navigationDescription)).toBeInTheDocument();
-    assertNavigationsVisibility(container, false);
-    expect(container.querySelectorAll('.wizard-navigation')).toHaveLength(
-      navigations.length
+    assertNavigationsVisibility(false);
+    expect(screen.getAllByRole('link')).toHaveLength(navigations.length);
+  });
+
+  it('Should render sub navigations correctly', () => {
+    const navigations = [
+      {
+        label: 'Step 1',
+        path: '/step1',
+        step: 0,
+      },
+      {
+        label: 'Step 2',
+        path: '/step2',
+        step: 1,
+        subNavigations: [
+          {
+            label: 'Step 2.1',
+            path: '/step2.1',
+            step: 2,
+          },
+          {
+            label: 'Step 2.2',
+            path: '/step2.2',
+            step: 3,
+          },
+        ],
+      },
+      {
+        label: 'Step 3',
+        path: '/step3',
+        step: 4,
+      },
+    ];
+    renderWithRouter({ navigations });
+    navigations.forEach((navigation: WizardNavigationData) => {
+      assertLinkExist(navigation.label);
+      navigation.subNavigations?.forEach((subNavigation) => {
+        assertLinkExist(subNavigation.label);
+      });
+    });
+    expect(screen.getAllByRole('link')).toHaveLength(
+      navigations.flatMap((navigation) => [
+        navigation,
+        ...(navigation.subNavigations ?? []),
+      ]).length
     );
   });
 
@@ -103,105 +138,105 @@ describe('Component: WizardNavigations', () => {
     const totalSteps = wizardNavigationsProps.navigations.length;
     const navigationDescription = `Step {${PlaceholderTokens.ACTIVE_STEP}} of {${PlaceholderTokens.TOTAL_STEPS}}`;
     renderWithRouter({ navigationDescription });
-    expect(
-      screen.getByText(`Step ${activeStep} of ${totalSteps}`)
-    ).toBeInTheDocument();
+    expect(screen.getByText(`Step ${activeStep} of ${totalSteps}`)).toBeInTheDocument();
   });
 
   it('Should expand navigation list when toggle status is active', () => {
-    const { container } = renderWithRouter();
+    renderWithRouter();
     toggleNavigations();
-    assertNavigationsVisibility(container, true);
+    assertNavigationsVisibility(true);
   });
 
   it('Should collapse navigation list when toggle status is inactive', () => {
-    const { container } = renderWithRouter();
+    renderWithRouter();
     toggleNavigations();
     toggleNavigations();
-    assertNavigationsVisibility(container, false);
+    assertNavigationsVisibility(false);
   });
 
   it('Should navigate to selected step when navigation link clicked is navigable and step handler is valid', async () => {
     mockedUseNavigationContext.mockImplementation(() => ({
       ...defaultNavigationInterface,
-      isNavigableStep: jest.fn().mockReturnValueOnce(true),
-      isValidStep: jest.fn().mockResolvedValueOnce(true),
+      isNavigableStep: jest.fn().mockReturnValue(true),
+      isValidStep: jest.fn().mockResolvedValue(true),
     }));
     renderWithRouter();
     expect(defaultNavigationInterface.nextStep).not.toHaveBeenCalled();
+    navigateTo(1);
     await waitFor(() => {
-      navigateTo(1);
+      expect(defaultNavigationInterface.nextStep).toHaveBeenCalledTimes(1);
     });
-    expect(defaultNavigationInterface.nextStep).toHaveBeenCalledTimes(1);
   });
 
   it('Should retain at current step when navigation link clicked is navigable but step handler is invalid', async () => {
     mockedUseNavigationContext.mockImplementation(() => ({
       ...defaultNavigationInterface,
-      isNavigableStep: jest.fn().mockReturnValueOnce(true),
-      isValidStep: jest.fn().mockResolvedValueOnce(false),
+      isNavigableStep: jest.fn().mockReturnValue(true),
+      isValidStep: jest.fn().mockResolvedValue(false),
     }));
     renderWithRouter();
     expect(defaultNavigationInterface.nextStep).not.toHaveBeenCalled();
+    navigateTo(1);
     await waitFor(() => {
-      navigateTo(1);
+      expect(defaultNavigationInterface.nextStep).not.toHaveBeenCalled();
     });
-    expect(defaultNavigationInterface.nextStep).not.toHaveBeenCalled();
   });
 
   it('Should retain at current step when navigation link clicked is navigable but step is disabled', async () => {
     mockedUseNavigationContext.mockImplementation(() => ({
       ...defaultNavigationInterface,
-      isNavigableStep: jest.fn().mockReturnValueOnce(true),
+      isNavigableStep: jest.fn().mockReturnValue(true),
     }));
     renderWithRouter({
       navigations: [
         {
           label: 'Initial Step',
           path: '/initialstep',
+          step: 0,
         },
         {
+          disabled: true,
           label: 'Disabled Step',
           path: '/disabledstep',
-          disabled: true,
+          step: 1,
         },
       ],
     });
     expect(defaultNavigationInterface.isValidStep).not.toHaveBeenCalled();
     expect(defaultNavigationInterface.nextStep).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('link', { name: 'Disabled Step' }));
     await waitFor(() => {
-      fireEvent.click(screen.getByRole('link', { name: 'Disabled Step' }));
+      expect(defaultNavigationInterface.nextStep).not.toHaveBeenCalled();
     });
-    expect(defaultNavigationInterface.nextStep).not.toHaveBeenCalled();
     expect(defaultNavigationInterface.isValidStep).not.toHaveBeenCalled();
   });
 
   it('Should retain navigation list expansion when navigation link clicked is not navigable', async () => {
     mockedUseNavigationContext.mockImplementation(() => ({
       ...defaultNavigationInterface,
-      isNavigableStep: jest.fn().mockReturnValueOnce(false),
+      isNavigableStep: jest.fn().mockReturnValue(false),
     }));
-    const { container } = renderWithRouter();
+    renderWithRouter();
     toggleNavigations();
-    assertNavigationsVisibility(container, true);
+    assertNavigationsVisibility(true);
+    navigateTo(2);
     await waitFor(() => {
-      navigateTo(2);
+      assertNavigationsVisibility(true);
     });
-    assertNavigationsVisibility(container, true);
   });
 
   it('Should collapse navigation list when navigate to previous step', async () => {
     mockedUseNavigationContext.mockImplementation(() => ({
       ...defaultNavigationInterface,
       activeStep: 2,
-      isNavigableStep: jest.fn().mockReturnValueOnce(true),
+      isNavigableStep: jest.fn().mockReturnValue(true),
     }));
-    const { container } = renderWithRouter();
+    renderWithRouter();
     toggleNavigations();
-    assertNavigationsVisibility(container, true);
+    assertNavigationsVisibility(true);
+    navigateTo(1);
     await waitFor(() => {
-      navigateTo(1);
+      assertNavigationsVisibility(false);
     });
-    assertNavigationsVisibility(container, false);
   });
 });

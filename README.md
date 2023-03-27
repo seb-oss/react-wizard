@@ -13,9 +13,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 This version of components has been developed with:
 
--   React
--   Typescript
--   SEB Bootstrap
+- React
+- Typescript
+- SEB Bootstrap
 
 ## Installation
 

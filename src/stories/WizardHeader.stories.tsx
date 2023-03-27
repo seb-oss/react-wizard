@@ -1,8 +1,5 @@
 import { action } from '@storybook/addon-actions';
-import {
-  ComponentMeta as Meta,
-  ComponentStory as Story,
-} from '@storybook/react';
+import { ComponentMeta as Meta, ComponentStory as Story } from '@storybook/react';
 import React from 'react';
 import WizardHeader from '../WizardHeader';
 

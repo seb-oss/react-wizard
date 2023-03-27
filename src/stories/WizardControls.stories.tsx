@@ -1,13 +1,8 @@
 import { action } from '@storybook/addon-actions';
-import {
-  ComponentMeta as Meta,
-  ComponentStory as Story,
-} from '@storybook/react';
+import { ComponentMeta as Meta, ComponentStory as Story } from '@storybook/react';
 import React from 'react';
 import { NavigationProvider } from '../contexts/navigationContext';
-import WizardControls, {
-  WizardControl,
-} from '../WizardSteps/components/WizardControls';
+import WizardControls, { WizardControl } from '../WizardSteps/components/WizardControls';
 
 type WizardControlsType = typeof WizardControls;
 
@@ -59,9 +54,7 @@ export default {
   decorators: [(Story) => <NavigationProvider>{Story()}</NavigationProvider>],
 } as Meta<WizardControlsType>;
 
-const Template: Story<WizardControlsType> = (args) => (
-  <WizardControls {...args} />
-);
+const Template: Story<WizardControlsType> = (args) => <WizardControls {...args} />;
 
 export const Default: Story<WizardControlsType> = Template.bind({});
 Default.args = {};

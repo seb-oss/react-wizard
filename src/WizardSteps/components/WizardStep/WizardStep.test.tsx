@@ -45,10 +45,7 @@ describe('Component: WizardStep', () => {
 
   it('Should render with secondary content', () => {
     render(
-      <WizardStep
-        {...wizardStepProps}
-        secondaryContent={<div>Secondary content</div>}
-      />
+      <WizardStep {...wizardStepProps} secondaryContent={<div>Secondary content</div>} />
     );
     expect(screen.getByText('Secondary content')).toBeInTheDocument();
   });

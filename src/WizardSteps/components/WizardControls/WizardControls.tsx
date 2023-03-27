@@ -78,62 +78,57 @@ const WizardControls: React.FC<WizardControlsProps> = ({
   return (
     <div className="py-3 px-md-4 px-xl-5 wizard-controls">
       <div className="form-row justify-content-between">
-        {(activeControls || controls).map(
-          (control: WizardControl, i: number) => {
-            const {
-              className,
-              disabled,
-              label,
-              path,
-              type,
-              onClick = () => true,
-            } = control;
-            const isNext = type === 'next';
-            const isPrev = type === 'prev';
-            const isNavigation = isNext || isPrev;
-            const controlContainerClass: string = classnames(
-              `col-sm-auto order-sm-${i}`,
-              {
-                'col-6': isNavigation && !isSingleNavigation,
-                'col-12': isNavigation && isSingleNavigation,
-                'col-12 mt-3 mt-sm-0 mr-auto order-last': !isNavigation,
-                'ml-auto': isNext,
-              }
-            );
-            const controlClass: string = classnames(
-              'btn w-100',
-              {
-                'btn-next': isNext,
-                'btn-prev': isPrev,
-                'btn-primary': isNext,
-                'btn-outline-primary': isPrev,
-                'btn-secondary': !isNext && !isPrev,
-              },
-              className
-            );
-            const controlHandler: GenericHandler = getControlHandler(type);
+        {(activeControls || controls).map((control: WizardControl, i: number) => {
+          const {
+            className,
+            disabled,
+            label,
+            path,
+            type,
+            onClick = () => true,
+          } = control;
+          const isNext = type === 'next';
+          const isPrev = type === 'prev';
+          const isNavigation = isNext || isPrev;
+          const controlContainerClass: string = classnames(`col-sm-auto order-sm-${i}`, {
+            'col-6': isNavigation && !isSingleNavigation,
+            'col-12': isNavigation && isSingleNavigation,
+            'col-12 mt-3 mt-sm-0 mr-auto order-last': !isNavigation,
+            'ml-auto': isNext,
+          });
+          const controlClass: string = classnames(
+            'btn w-100',
+            {
+              'btn-next': isNext,
+              'btn-prev': isPrev,
+              'btn-primary': isNext,
+              'btn-outline-primary': isPrev,
+              'btn-secondary': !isNext && !isPrev,
+            },
+            className
+          );
+          const controlHandler: GenericHandler = getControlHandler(type);
 
-            return (
-              <div key={label} className={controlContainerClass}>
-                <button
-                  type="button"
-                  className={controlClass}
-                  disabled={disabled}
-                  onClick={async (event) => {
-                    /**
-                     * custom control handler, blocks navigation if result is false
-                     */
-                    if ((await onClick(event)) !== false) {
-                      controlHandler(path);
-                    }
-                  }}
-                >
-                  <span>{label}</span>
-                </button>
-              </div>
-            );
-          }
-        )}
+          return (
+            <div key={label} className={controlContainerClass}>
+              <button
+                type="button"
+                className={controlClass}
+                disabled={disabled}
+                onClick={async (event) => {
+                  /**
+                   * custom control handler, blocks navigation if result is false
+                   */
+                  if ((await onClick(event)) !== false) {
+                    controlHandler(path);
+                  }
+                }}
+              >
+                <span>{label}</span>
+              </button>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

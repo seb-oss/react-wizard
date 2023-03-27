@@ -1,32 +1,19 @@
 @import 'src/styles';
 
-li.list-group-item.wizard-navigation {
+.list-group-item.wizard-navigation {
+  display: flex;
+  position: relative;
   border-top: 1px solid transparent;
-  padding: 0;
-
-  a {
-    display: flex;
-    position: relative;
-    padding: 1rem 2.5rem;
-    width: 100%;
-    font-weight: inherit;
-    text-decoration: none;
-    color: inherit;
-  }
-
-  &::before {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-    width: auto;
-    font-weight: inherit;
-  }
+  padding: 1rem 2.5rem;
+  width: 100%;
+  font-weight: normal;
+  text-decoration: none;
+  color: inherit;
 
   &::after {
     position: absolute;
     top: 1.25rem;
     right: 1rem;
-    cursor: pointer;
   }
 
   &--info {
@@ -59,22 +46,19 @@ li.list-group-item.wizard-navigation {
     }
   }
 
+  &--active {
+    font-weight: 500;
+  }
+
   &:hover,
   &--active {
     &:not(.list-group-item--disabled) {
-      font-weight: $font-weight-medium;
       background-color: $white;
       box-shadow: 0 0 0.5rem rgba($black, 0.15);
-
-      a {
-        font-weight: inherit;
-      }
     }
   }
 
   &--disabled {
-    a {
-      cursor: not-allowed;
-    }
+    cursor: not-allowed;
   }
 }

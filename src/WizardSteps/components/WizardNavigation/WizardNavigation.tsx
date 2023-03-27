@@ -1,19 +1,24 @@
 import classnames from 'classnames';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { useNavigationContext } from '../../../contexts/navigationContext';
 import { WizardStepState } from '../WizardStep';
 import './WizardNavigation.scss';
 
-export type WizardNavigationData = {
+export type WizardNavigationProps = {
+  /** If `true`, the navigation is activated. */
+  active?: boolean;
+  /** If `true`, the navigation is completed. */
+  completed?: boolean;
+  /** If `true`, the navigation is disabled. */
+  disabled?: boolean;
+  /** The label of the step in the navigation links. */
+  label: string;
   /**
    * The path of the navigation, a string representation of the location,
    * created by concatenating the location’s pathname, search, and hash
    * properties.
    * */
   path: string;
-  /** The label of the step in the navigation links. */
-  label: string;
   /**
    * Set state for the navigation, it is used to highlight and clarify
    * wizard progress - completed, warnings, errors etc. By default
@@ -21,43 +26,27 @@ export type WizardNavigationData = {
    * you've passed them.
    * */
   state?: WizardStepState;
-  /** If `true`, the navigation is disabled. */
-  disabled?: boolean;
-};
-
-export type WizardNavigationProps = WizardNavigationData & {
-  /** The step number of the current step */
-  step: number;
   /** Event triggered when navigation is click. */
   onClick?: React.MouseEventHandler<HTMLAnchorElement>;
 };
 
 const WizardNavigation: React.FC<WizardNavigationProps> = (props) => {
-  const { activeState, activeStep, isNavigableStep } = useNavigationContext();
-  const { path, label, step, onClick } = props;
-  const isActive: boolean = activeStep === step;
-  const isCompleted: boolean = activeStep > step;
-  const isDisabled: boolean = !!props.disabled;
-  const isNavigable: boolean = isNavigableStep(step);
-  const state: WizardStepState = isActive
-    ? activeState || props.state
-    : undefined;
   return (
-    <li
+    <NavLink
       className={classnames('list-group-item', 'wizard-navigation', {
-        'wizard-navigation--active': isActive,
-        'wizard-navigation--passed': isCompleted,
-        'wizard-navigation--disabled': isDisabled || !isNavigable,
-        'wizard-navigation--danger': state === 'danger',
-        'wizard-navigation--info': state === 'info',
-        'wizard-navigation--warning': state === 'warning',
-        'wizard-navigation--success': state === 'success',
+        'wizard-navigation--active': props.active,
+        'wizard-navigation--passed': props.completed,
+        'wizard-navigation--disabled': props.disabled,
+        'wizard-navigation--danger': props.state === 'danger',
+        'wizard-navigation--info': props.state === 'info',
+        'wizard-navigation--warning': props.state === 'warning',
+        'wizard-navigation--success': props.state === 'success',
       })}
+      to={props.path}
+      onClick={props.onClick}
     >
-      <NavLink to={path} onClick={onClick}>
-        {label}
-      </NavLink>
-    </li>
+      {props.label}
+    </NavLink>
   );
 };
 
