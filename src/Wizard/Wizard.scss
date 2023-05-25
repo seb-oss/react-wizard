@@ -8,12 +8,14 @@
   .wizard {
     overflow-y: hidden;
 
-    .wizard-navigations {
-      height: calc(100vh - #{$wizard-header-height});
-    }
+    .wizard-steps {
+      .wizard-navigations {
+        height: calc(100vh - #{$wizard-header-height});
+      }
 
-    .wizard-step {
-      max-height: calc(100vh - #{$wizard-header-height} - #{$wizard-controls-height});
+      .wizard-step {
+        max-height: calc(100vh - #{$wizard-header-height} - #{$wizard-controls-height});
+      }
     }
   }
 }
