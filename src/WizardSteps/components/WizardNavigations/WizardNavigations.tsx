@@ -166,7 +166,7 @@ const WizardNavigations: React.FC<WizardNavigationsProps> = ({
         onClick={() => setToggle(!toggle)}
       >
         <div className="pl-3 pl-md-0 toggle-content">
-          <h2 className="mb-1">{flattenNavigations[activeStep].label}</h2>
+          <h2 className="mb-1">{flattenNavigations[activeStep]?.label}</h2>
           <span className="small">
             {pupa(navigationDescription, {
               [PlaceholderTokens.ACTIVE_STEP]: activeStep + 1,
