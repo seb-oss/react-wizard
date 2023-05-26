@@ -12,6 +12,8 @@ export enum PlaceholderTokens {
   TOTAL_STEPS = 'totalSteps',
 }
 
+export type WizardNavigationType = 'group' | 'intro' | 'step';
+
 export type WizardNavigationData = Pick<
   WizardNavigationProps,
   'disabled' | 'label' | 'path' | 'state'
@@ -25,6 +27,10 @@ export type WizardNavigationData = Pick<
    * Nested navigations under the current navigation.
    */
   subNavigations?: Array<WizardNavigationData>;
+  /**
+   * The navigation's type
+   */
+  type?: WizardNavigationType;
 };
 
 type WizardNavigationListProps = JSX.IntrinsicElements['ol'] &
@@ -70,7 +76,7 @@ const WizardNavigationList = React.forwardRef(
     return (
       <ol ref={ref} {...props}>
         {navigations.map((navigation) => {
-          const { disabled, label, path, step, subNavigations } = navigation;
+          const { disabled, label, path, step, subNavigations, type } = navigation;
           const isActive: boolean = activeStep === step;
           const isCompleted: boolean = activeStep > step;
           const isDisabled: boolean = !!disabled;
@@ -79,7 +85,10 @@ const WizardNavigationList = React.forwardRef(
             ? activeState || navigation.state
             : undefined;
           return (
-            <li key={`${path}_${label}`}>
+            <li
+              key={`${path}_${label}`}
+              className={classnames({ introduction: type === 'intro' })}
+            >
               <WizardNavigation
                 active={isActive}
                 completed={isCompleted}
@@ -148,6 +157,11 @@ const WizardNavigations: React.FC<WizardNavigationsProps> = ({
     [navigations]
   );
 
+  const mainNavigationLength = React.useMemo(() => {
+    const introLength = navigations.filter(({ type }) => type === 'intro').length;
+    return navigations.length - introLength;
+  }, [navigations]);
+
   React.useEffect(() => {
     setToggle(false);
   }, [activeStep]);
@@ -170,7 +184,7 @@ const WizardNavigations: React.FC<WizardNavigationsProps> = ({
           <span className="small">
             {pupa(navigationDescription, {
               [PlaceholderTokens.ACTIVE_STEP]: activeStep + 1,
-              [PlaceholderTokens.TOTAL_STEPS]: flattenNavigations.length,
+              [PlaceholderTokens.TOTAL_STEPS]: mainNavigationLength,
             })}
           </span>
         </div>
