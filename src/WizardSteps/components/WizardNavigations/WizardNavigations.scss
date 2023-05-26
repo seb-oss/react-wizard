@@ -27,6 +27,20 @@
     counter-reset: list-order;
     list-style-type: none;
 
+    .introduction {
+      &::before {
+        content: '';
+      }
+
+      & + li {
+        counter-set: list-order 1;
+      }
+
+      a {
+        padding-inline: 1rem;
+      }
+    }
+
     li {
       position: relative;
       padding: 0;
@@ -40,7 +54,7 @@
         content: counters(list-order, '.', decimal) ' ';
       }
 
-      &:has(> .wizard-navigation--active) {
+      &:has(> .wizard-navigation--active, > .wizard-navigation--passed) {
         &::before {
           font-weight: 500;
         }

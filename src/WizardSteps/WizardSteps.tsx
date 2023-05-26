@@ -1,9 +1,12 @@
 import React from 'react';
 import { Redirect, Route, Switch, useLocation, useRouteMatch } from 'react-router-dom';
 import { useNavigationContext } from '../contexts/navigationContext';
-import WizardNavigations, { WizardNavigationData } from './components/WizardNavigations';
-import WizardStep, { WizardStepData } from './components/WizardStep';
 import './WizardSteps.scss';
+import WizardNavigations, {
+  WizardNavigationData,
+  WizardNavigationType,
+} from './components/WizardNavigations';
+import WizardStep, { WizardStepData } from './components/WizardStep';
 
 export type WizardStepConfig = {
   /**
@@ -19,6 +22,8 @@ export type WizardStepConfig = {
   data: WizardStepData;
   /** If `true`, the navigation is disabled. */
   disabled?: boolean;
+  /** The type of navigation to be rendered. */
+  navigationType?: WizardNavigationType;
   /**
    * A series of ordered sub steps to be managed by the wizard, it relies on
    * react router for navigations. Currently only two level of nested steps is supported.
@@ -114,19 +119,30 @@ const WizardSteps: React.FC<WizardStepsProps> = (props) => {
   const navigations: Array<WizardNavigationData> = React.useMemo(() => {
     let step = 0;
     return stepsConfigs.map<WizardNavigationData>(
-      ({ label, path, data: { state }, disabled, steps }: WizardStepConfig) => ({
+      ({
+        label,
+        path,
+        data: { state },
+        disabled,
+        steps,
+        navigationType,
+      }: WizardStepConfig) => ({
         label,
         path: `${parentUrl}${path}`,
         state,
         step: step++,
         disabled,
-        subNavigations: steps?.map(({ label, path, data: { state }, disabled }) => ({
-          label,
-          path: `${parentUrl}${path}`,
-          state,
-          step: step++,
-          disabled,
-        })),
+        subNavigations: steps?.map(
+          ({ label, path, data: { state }, disabled, navigationType }) => ({
+            label,
+            path: `${parentUrl}${path}`,
+            state,
+            step: step++,
+            disabled,
+            type: navigationType,
+          })
+        ),
+        type: navigationType,
       })
     );
   }, [parentUrl, stepsConfigs]);
