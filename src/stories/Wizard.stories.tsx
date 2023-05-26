@@ -31,7 +31,43 @@ const Template: Story<WizardType> = ({ ref, ...args }) => {
         <WizardSteps
           navigationDescription="Step {activeStep} of {totalSteps}"
           steps={[
+            {
+              path: '/introduction',
+              label: 'Why do we need this?',
+              component: () => <div>Intro</div>,
+              data: {
+                heading: 'Introduction',
+                pageHeading: 'Introduction Header',
+              },
+              navigationType: 'intro',
+            },
             ...WizardStepsStories.Default.args!.steps!,
+            {
+              path: '/xxx',
+              label: 'Step X',
+              component: () => <>'1111'</>,
+              data: {
+                heading: 'Step X heading',
+              },
+              steps: [
+                {
+                  path: '/xxx',
+                  label: 'Step X.1',
+                  component: () => <>'222'</>,
+                  data: {
+                    heading: 'Step X.1 heading',
+                  },
+                },
+                {
+                  path: '/yyyy',
+                  label: 'Step X.2',
+                  component: () => <>'333'</>,
+                  data: {
+                    heading: 'Step X.2 heading',
+                  },
+                },
+              ],
+            },
             {
               ...WizardStepsStories.WithSecondaryContent.args!.steps![0],
               path: '/withSecondaryContent',

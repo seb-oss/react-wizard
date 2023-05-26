@@ -88,6 +88,19 @@ describe('Component: WizardNavigations', () => {
     expect(screen.getAllByRole('link')).toHaveLength(navigations.length);
   });
 
+  it('Should render introduction correctly', () => {
+    const navigations: Array<WizardNavigationData> = [
+      {
+        label: 'Step 1',
+        path: '/step1',
+        step: 0,
+        type: 'intro',
+      },
+    ];
+    renderWithRouter({ navigations });
+    expect(screen.getByRole('listitem')).toHaveClass('introduction');
+  });
+
   it('Should render sub navigations correctly', () => {
     const navigations = [
       {
