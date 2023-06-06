@@ -127,7 +127,9 @@ const WizardNavigationList = React.forwardRef(
               />
               {Array.isArray(subNavigations) && (
                 <WizardNavigationList
-                  className="list-group list-group-ordered"
+                  className={classnames('list-group list-group-ordered', {
+                    'd-none': !(isActive || isCompleted),
+                  })}
                   navigations={subNavigations}
                   setToggle={setToggle}
                 />

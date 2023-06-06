@@ -101,7 +101,7 @@ describe('Component: WizardNavigations', () => {
     expect(screen.getByRole('listitem')).toHaveClass('introduction');
   });
 
-  it('Should render sub navigations correctly', () => {
+  describe('sub navigations', () => {
     const navigations = [
       {
         label: 'Step 1',
@@ -131,19 +131,46 @@ describe('Component: WizardNavigations', () => {
         step: 4,
       },
     ];
-    renderWithRouter({ navigations });
-    navigations.forEach((navigation: WizardNavigationData) => {
-      assertLinkExist(navigation.label);
-      navigation.subNavigations?.forEach((subNavigation) => {
-        assertLinkExist(subNavigation.label);
+
+    function assertSubNavigationsVisibility(visible: boolean) {
+      const [, subNavigations] = screen.getAllByRole('list');
+
+      if (visible) {
+        expect(subNavigations).not.toHaveClass('d-none');
+      } else {
+        expect(subNavigations).toHaveClass('d-none');
+      }
+    }
+
+    it('Should render sub navigations correctly', () => {
+      renderWithRouter({ navigations });
+      navigations.forEach((navigation: WizardNavigationData) => {
+        assertLinkExist(navigation.label);
+        navigation.subNavigations?.forEach((subNavigation) => {
+          assertLinkExist(subNavigation.label);
+        });
       });
+      expect(screen.getAllByRole('link')).toHaveLength(
+        navigations.flatMap((navigation) => [
+          navigation,
+          ...(navigation.subNavigations ?? []),
+        ]).length
+      );
     });
-    expect(screen.getAllByRole('link')).toHaveLength(
-      navigations.flatMap((navigation) => [
-        navigation,
-        ...(navigation.subNavigations ?? []),
-      ]).length
-    );
+
+    it('Should hide sub navigations when not needed', async () => {
+      renderWithRouter({ navigations });
+      assertSubNavigationsVisibility(false);
+    });
+
+    it('Should show sub navigations when needed', async () => {
+      mockedUseNavigationContext.mockImplementation(() => ({
+        ...defaultNavigationInterface,
+        activeStep: 1,
+      }));
+      renderWithRouter({ navigations });
+      assertSubNavigationsVisibility(true);
+    });
   });
 
   it('Should inject tokens into navigation description when placeholders exists', () => {
