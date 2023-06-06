@@ -22,5 +22,4 @@ global.defaultNavigationInterface = {
   setActiveState: jest.fn(),
   setActiveStep: jest.fn(),
   setRoutes: jest.fn(),
-  setStrict: jest.fn(),
 };
